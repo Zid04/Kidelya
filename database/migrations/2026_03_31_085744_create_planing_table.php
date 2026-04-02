@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id('IdPlaning'); 
             $table->string('Title', 50); 
             $table->text('Description')->nullable(); 
-            $table->date('DateStart'); 
-            $table->date('DateEnd');   
              $table->string('location', 100);
             $table->foreignId('IdUser')
                   ->constrained('users', 'IdUser')

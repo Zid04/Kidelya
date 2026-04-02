@@ -17,9 +17,6 @@ return new class extends Migration
              $table->float('Tarification', 15, 2);
              $table->integer('Duration');
              $table->text('Description')->nullable();
-             $table->foreignId('IdActivities')
-                  ->constrained('activities','IdActivities')
-                  ->onDelete('cascade');
              $table->foreignId('CreatedBy')->constrained('users', 'IdUser')->onDelete('cascade');
              $table->timestamps();
         });

@@ -16,7 +16,6 @@ return new class extends Migration
              $table->string('Title', 50);
              $table->text('Notes')->nullable();
              $table->timestamps();
-                $table->string('location', 100);
             $table->foreignId('IdUser')
                   ->constrained('users', 'IdUser')
                   ->onDelete('cascade');
