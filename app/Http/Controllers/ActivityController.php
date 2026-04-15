@@ -6,39 +6,31 @@ use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use App\Models\Activity;
 use App\Services\ActivityService;
-use Inertia\Inertia;
-use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 /**
- * Controller de gestion des activités.
+ * Controller API REST des activités
  *
- * Suit le principe de responsabilité unique (SRP) :
- * - La validation est déléguée aux Form Requests
- * - La logique métier est déléguée à ActivityService
- * - Les autorisations sont gérées par ActivityPolicy
- *
- * Ce controller ne fait qu'orchestrer et retourner des réponses Inertia.
+ * - Validation : FormRequests
+ * - Logique métier : ActivityService
+ * - Sécurité : ActivityPolicy
+ * - Réponses : JSON uniquement
  */
 class ActivityController extends Controller
 {
-    /**
-     * Injection du service via le constructeur.
-      * Cela permet de centraliser la logique métier dans ActivityService
-      * et de garder le controller léger et facile à maintenir.
-     */
     public function __construct(
         private readonly ActivityService $activityService
     ) {}
 
     /**
-     * Affiche la liste paginée des activités.
+     * GET /api/activities
+     * Liste paginée avec filtres
      */
-    public function index(Request $request): Response
+    public function index(Request $request): JsonResponse
     {
-        // Validation légère des filtres entrants
-        $request->validate([
+        // Validation des filtres 
+        $validated = $request->validate([
             'age'           => 'nullable|integer|min:0',
             'season'        => 'nullable|string|max:50',
             'themes'        => 'nullable|array',
@@ -47,93 +39,70 @@ class ActivityController extends Controller
             'competences.*' => 'integer|exists:competences,IdCompetence',
         ]);
 
-        // Extraction des filtres depuis la requête
-        $filters = $request->only(['age', 'season', 'themes', 'competences']);
-
-        return Inertia::render('Activities/Index', [
-            'activities' => $this->activityService->getPaginated($filters),
-            'filters'    => $filters, // Renvoyé au front pour pré-remplir les champs de recherche
+        return response()->json([
+            'data' => $this->activityService->getPaginated($validated),
         ]);
     }
 
     /**
-     * Affiche le formulaire de création d'une activité.
-     * Pas de logique ici — on se contente de rendre la vue.
+     * GET /api/activities/{activity}
      */
-    public function create(): Response
+    public function show(Activity $activity): JsonResponse
     {
-        return Inertia::render('Activities/Create');
-    }
+        $this->authorize('view', $activity);
 
-    /**
-     * Enregistre une nouvelle activité.
-     *
-     * La validation et l'autorisation sont gérées par StoreActivityRequest
-     * avant même d'entrer dans cette méthode.
-     */
-    public function store(StoreActivityRequest $request): RedirectResponse
-    {
-        $this->activityService->create($request->validated());
-
-        return redirect()->route('activities.index')
-            ->with('success', 'Activity created successfully.');
-    }
-
-    /**
-     * Affiche le détail d'une activité.
-     * On charge les relations nécessaires à la vue via eager loading.
-     */
-    public function show(Activity $activity): Response
-    {
-        // Chargement des relations pour éviter le N+1 dans la vue
-        $activity->load(['user', 'themes', 'competences', 'plannings', 'packs']);
-
-        return Inertia::render('Activities/Show', [
-            'activity' => $activity,
+        return response()->json([
+            'data' => $activity->load([
+                'user',
+                'themes',
+                'competences',
+                'plannings',
+                'packs'
+            ])
         ]);
     }
 
     /**
-     * Affiche le formulaire d'édition d'une activité.
-     * On précharge les relations pour pré-remplir le formulaire React.
+     * POST /api/activities
      */
-    public function edit(Activity $activity): Response
+    public function store(StoreActivityRequest $request): JsonResponse
     {
-        $activity->load(['user', 'themes', 'competences', 'plannings', 'packs']);
+        $this->authorize('create', Activity::class);
 
-        return Inertia::render('Activities/Edit', [
-            'activity' => $activity,
+        $activity = $this->activityService->create($request->validated());
+
+        return response()->json([
+            'message' => 'Activity created successfully',
+            'data'    => $activity
+        ], 201);
+    }
+
+    /**
+     * PUT /api/activities/{activity}
+     */
+    public function update(UpdateActivityRequest $request, Activity $activity): JsonResponse
+    {
+        $this->authorize('update', $activity);
+
+        $updated = $this->activityService->update($activity, $request->validated());
+
+        return response()->json([
+            'message' => 'Activity updated successfully',
+            'data'    => $updated
         ]);
     }
 
     /**
-     * Met à jour une activité existante.
-     *
-     * La validation et l'autorisation sont gérées par UpdateActivityRequest
-     * avant même d'entrer dans cette méthode.
+     * DELETE /api/activities/{activity}
      */
-    public function update(UpdateActivityRequest $request, Activity $activity): RedirectResponse
+    public function destroy(Activity $activity): JsonResponse
     {
-        $this->activityService->update($activity, $request->validated());
-
-        return redirect()->route('activities.index')
-            ->with('success', 'Activity updated successfully.');
-    }
-
-    /**
-     * Supprime une activité.
-     *
-     * L'autorisation est vérifiée explicitement ici via $this->authorize()
-     * car destroy() n'a pas de Form Request dédié.
-     */
-    public function destroy(Activity $activity): RedirectResponse
-    {
-        // Vérifie que l'utilisateur connecté est bien le propriétaire
         $this->authorize('delete', $activity);
 
         $this->activityService->delete($activity);
 
-        return redirect()->route('activities.index')
-            ->with('success', 'Activity deleted successfully.');
+        return response()->json([
+            'message' => 'Activity deleted successfully'
+        ]);
     }
 }

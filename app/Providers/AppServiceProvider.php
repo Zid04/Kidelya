@@ -51,5 +51,15 @@ class AppServiceProvider extends ServiceProvider
      protected function configurePolicies(): void
     {
         Gate::policy(Activity::class, ActivityPolicy::class);
+        Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Child::class, ChildPolicy::class);
+        Gate::policy(Competence::class, CompetencePolicy::class);
+        Gate::policy(Group::class, GroupPolicy::class);
+        Gate::policy(Guardian::class, GuardianPolicy::class);
+        Gate::policy(Idea::class, IdeaPolicy::class);
+        Gate::policy(Pack::class, PackPolicy::class);
+        Gate::policy(Planning::class, PlanningPolicy::class);
+        Gate::policy(ReportActivity::class, ReportActivityPolicy::class);
+        Gate::policy(Theme::class, ThemePolicy::class);
     }
 }

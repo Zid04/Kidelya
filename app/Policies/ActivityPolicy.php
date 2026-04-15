@@ -47,7 +47,7 @@ class ActivityPolicy
      */
     public function update(User $user, Activity $activity): bool
     {
-        return $user->IdUser === $activity->IdUser;
+         return auth()->check() && $user->IdUser === $group->IdUser;
     }
 
     /**
@@ -55,6 +55,6 @@ class ActivityPolicy
      */
     public function delete(User $user, Activity $activity): bool
     {
-        return $user->IdUser === $activity->IdUser;
+         return auth()->check() && $user->IdUser === $group->IdUser;
     }
 }

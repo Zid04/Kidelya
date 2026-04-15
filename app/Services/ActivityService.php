@@ -28,13 +28,7 @@ class ActivityService
                       ->where('AgeMax', '>=', $filters['age']);
             })
 
-            /*
-            |------------------------------------------------------------------
-            | Filter : Season
-            |------------------------------------------------------------------
-            | Filtre par saison (ex: "Summer", "Winter").
-            | Recherche insensible à la casse via LIKE.
-            */
+            //filtre par saison
             ->when(isset($filters['season']), function ($query) use ($filters) {
                 $query->where('Season', 'LIKE', '%' . $filters['season'] . '%');
             })
@@ -71,7 +65,6 @@ class ActivityService
             | withQueryString()
             |------------------------------------------------------------------
             | Conserve les paramètres de filtre dans les liens de pagination.
-            | Sans ça, la page 2 perdrait les filtres actifs.
             */
             ->withQueryString();
     }
