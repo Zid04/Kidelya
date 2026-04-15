@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pack_user', function (Blueprint $table) {
+        Schema::create('packs_user', function (Blueprint $table) {
             $table->id('IdPackUser');
             $table->foreignId('IdPack')
-                  ->constrained('pack', 'IdPack')
+                  ->constrained('packs', 'IdPack')
                   ->onDelete('cascade');
             $table->foreignId('IdUser')
                   ->constrained('users', 'IdUser')
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pack_user');
+        Schema::dropIfExists('packs_user');
     }
 };

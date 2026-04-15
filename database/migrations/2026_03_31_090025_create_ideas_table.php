@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('ideas', function (Blueprint $table) {
              $table->id('IdIdea'); 
              $table->string('Title', 50);
-             $table->text('Notes')->nullable();
-             $table->timestamps();
+             $table->text('Notes')->nullable(); 
             $table->foreignId('IdUser')
                   ->constrained('users', 'IdUser')
                   ->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

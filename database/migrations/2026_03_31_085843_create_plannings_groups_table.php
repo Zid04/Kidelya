@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('planing_group', function (Blueprint $table) {
-            $table->id('IdPlaningGroup');
-            $table->foreignId('IdPlaning')
-                  ->constrained('planing', 'IdPlaning')
+        Schema::create('plannings_groups', function (Blueprint $table) {
+            $table->id('IdPlanningGroup');
+            $table->foreignId('IdPlanning')
+                  ->constrained('plannings', 'IdPlanning')
                   ->onDelete('cascade');
             $table->foreignId('IdGroup')
-                  ->constrained('group', 'IdGroup')
+                  ->constrained('groups', 'IdGroup')
                   ->onDelete('cascade');
             $table->timestamps();
             //Empêche un doublon (même groupe dans le même planning)
-            $table->unique(['IdPlaning', 'IdGroup']);
+            $table->unique(['IdPlanning', 'IdGroup']);
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('planing_group');
+        Schema::dropIfExists('plannings_groups');
     }
 };

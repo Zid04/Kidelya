@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configurePolicies();
     }
 
     /**
@@ -46,5 +47,9 @@ class AppServiceProvider extends ServiceProvider
                 ->uncompromised()
             : null,
         );
+    }
+     protected function configurePolicies(): void
+    {
+        Gate::policy(Activity::class, ActivityPolicy::class);
     }
 }

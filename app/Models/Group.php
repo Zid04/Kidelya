@@ -3,24 +3,49 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-#[Fillable(['Name', 'Description', 'IdUser'])]
-
+/**
+ * Modèle représentant un groupe d'enfants.
+ */
 class Group extends Model
-{    protected $table = 'group';
-     protected $primaryKey = 'IdGroup';
+{
+    protected $table      = 'groups';
+    protected $primaryKey = 'IdGroup';
 
-    public function children()
+    protected $fillable = [
+        'Name',
+        'Description',
+        'IdUser',
+    ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'IdGroup';
+    }
+
+    // ─── Relations ────────────────────────────────────────────
+
+    /**
+     * L'utilisateur propriétaire du groupe.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'IdUser', 'IdUser');
+    }
+
+    /**
+     * Les enfants appartenant à ce groupe.
+     * Table pivot : groups_children
+     */
+    public function children(): BelongsToMany
     {
         return $this->belongsToMany(
-            Children::class,
-            'group_children',
+            Child::class,
+            'groups_children',
             'IdGroup',
             'IdChildren'
         );
-    }
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'IdUser');
     }
 }

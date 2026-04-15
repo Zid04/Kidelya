@@ -3,21 +3,53 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['Status','SubscriptionDate','ExpirationDate','IdPack', 'IdUser'])]
-
+/**
+ * Modèle représentant la souscription d'un utilisateur à un pack.
+ *
+ * Ce n'est pas une simple table pivot car elle possède
+ * ses propres données métier (dates, statut).
+ */
 class PackUser extends Model
 {
-    protected $table = 'pack_user';
+    protected $table      = 'pack_users';
     protected $primaryKey = 'IdPackUser';
 
-    public function pack()
+    protected $fillable = [
+        'IdPack',
+        'IdUser',
+        'SubscriptionDate',
+        'ExpirationDate',
+        'Status',
+    ];
+
+    protected $casts = [
+        'SubscriptionDate' => 'date',
+        'ExpirationDate'   => 'date',
+        'Status'           => 'string',
+    ];
+
+    public function getRouteKeyName(): string
     {
-        return $this->belongsTo(Pack::class, 'IdPack');
+        return 'IdPackUser';
     }
 
-    public function user()
+    // ─── Relations ────────────────────────────────────────────
+
+    /**
+     * Le pack auquel cette souscription appartient.
+     */
+    public function pack(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'IdUser');
+        return $this->belongsTo(Pack::class, 'IdPack', 'IdPack');
+    }
+
+    /**
+     * L'utilisateur ayant souscrit au pack.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'IdUser', 'IdUser');
     }
 }

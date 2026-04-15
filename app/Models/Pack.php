@@ -3,19 +3,66 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['Title', 'Description', 'Tarification', 'Duration','CreatedBy'])]
+/**
+ * Modèle représentant un pack d'activités.
+ */
 class Pack extends Model
 {
-    protected $table = 'pack';
+    protected $table      = 'packs';
     protected $primaryKey = 'IdPack';
 
-    public function creator()
+    protected $fillable = [
+        'Title',
+        'Description',
+        'Tarification',
+        'Duration',
+        'CreatedBy',
+    ];
+
+    protected $casts = [
+        // decimal pour éviter les erreurs d'arrondi sur les prix
+        'Tarification' => 'decimal:2',
+        'Duration'     => 'integer',
+    ];
+
+    public function getRouteKeyName(): string
     {
-        return $this->belongsTo(User::class, 'CreatedBy');
+        return 'IdPack';
     }
-    public function subscriptions()
+
+    // ─── Relations ────────────────────────────────────────────
+
+    /**
+     * L'utilisateur ayant créé le pack.
+     */
+    public function creator(): BelongsTo
     {
-        return $this->hasMany(PackUser::class, 'IdPack');
+        return $this->belongsTo(User::class, 'CreatedBy', 'IdUser');
+    }
+
+    /**
+     * Les souscriptions associées à ce pack.
+     */
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(PackUser::class, 'IdPack', 'IdPack');
+    }
+
+    /**
+     * Les activités incluses dans ce pack.
+     * Table pivot : pack_activities
+     */
+    public function activities(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Activity::class,
+            'packs_activities',
+            'IdPack',
+            'IdActivities'
+        );
     }
 }

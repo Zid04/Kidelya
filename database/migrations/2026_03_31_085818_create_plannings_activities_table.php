@@ -11,18 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('pack_activities', function (Blueprint $table) {
-            $table->id('IdPackActivities');
-
-            $table->foreignId('IdPack')
-                  ->constrained('pack', 'IdPack')
+        Schema::create('plannings_activities', function (Blueprint $table) {
+            $table->id('IdPlanningActivities'); 
+            $table->date('DateStart'); 
+            $table->date('DateEnd');   
+            $table->foreignId('IdPlanning')
+                  ->constrained('plannings', 'IdPlanning')
                   ->onDelete('cascade');
-
             $table->foreignId('IdActivities')
                   ->constrained('activities', 'IdActivities')
                   ->onDelete('cascade');
-
             $table->timestamps();
+            // Empêche un doublon (même activité dans le même planning)
+            $table->unique(['IdPlanning', 'IdActivities']);
         });
     }
 
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pack_activities');
+        Schema::dropIfExists('plannings_activities');
     }
 };

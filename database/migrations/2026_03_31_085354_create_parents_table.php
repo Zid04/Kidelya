@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('parents', function (Blueprint $table) {
             $table->id('IdParent');
             $table->string('Names', 100);
-            $table->string('Adress', 255)->nullable();
+            $table->string('Address', 255)->nullable();
             $table->string('Email', 255)->unique();
             $table->string('Phone', 50)->nullable();
             $table->timestamps();
