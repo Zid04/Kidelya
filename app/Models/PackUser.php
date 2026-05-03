@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Models;
-
+use Database\Factories\PackUserFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -13,6 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class PackUser extends Model
 {
+    use HasFactory;
+    
     protected $table      = 'pack_users';
     protected $primaryKey = 'IdPackUser';
 

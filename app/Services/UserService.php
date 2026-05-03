@@ -60,7 +60,7 @@ class UserService
             'is_active' => false
         ]);
 
-        return $user;
+        $user->fresh();
     }
 
     /**

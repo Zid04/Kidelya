@@ -16,35 +16,37 @@ class ChildController extends Controller
     /**
      * Liste des enfants assiciés a l'utilisateur connecté
      */
-    public function index()
+    public function index():JsonResponse
     {
-        return $this->childService->getAllForUser(auth()->user());
+        return response()->json(['data' => $this->childService->getAllForUser(auth()->user())]);
     }
 
     /**
      * Création
      */
-    public function store(StoreChildRequest $request)
+    public function store(StoreChildRequest $request):JsonResponse
     {
         $this->authorize('create', Child::class);
 
-        return $this->childService->create($request->validated());
+        return response()->json([
+    'message' => 'Child created successfully',
+    'data'    => $this->childService->create($request->validated())
+], 201);
     }
 
     /**
      * Détails enfant
      */
-    public function show(Child $child)
+    public function show(Child $child):JsonResponse
     {
         $this->authorize('view', $child);
-
-        return $child->load(['parents', 'groups', 'plannings']);
+return response()->json(['data' => $child->load(['parents', 'groups', 'plannings'])]);
     }
 
     /**
      * Mise à jour
      */
-    public function update(UpdateChildRequest $request, Child $child)
+    public function update(UpdateChildRequest $request, Child $child):JsonResponse
     {
         $this->authorize('update', $child);
 
@@ -54,7 +56,7 @@ class ChildController extends Controller
     /**
      * Suppression
      */
-    public function destroy(Child $child)
+    public function destroy(Child $child):JsonResponse
     {
         $this->authorize('delete', $child);
 

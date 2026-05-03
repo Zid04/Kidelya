@@ -82,11 +82,10 @@ class ThemeController extends Controller
      */
     public function addActivity(Theme $theme, Request $request): JsonResponse
     {
+         $this->authorize('update', $theme);
         $request->validate([
             'activity_id' => 'required|exists:activities,IdActivities'
         ]);
-
-        $this->authorize('update', $theme);
 
         $this->themeService->attachActivity($theme, $request->activity_id);
 

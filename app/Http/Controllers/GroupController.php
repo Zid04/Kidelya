@@ -7,6 +7,7 @@ use App\Services\GroupService;
 use App\Http\Requests\Group\StoreGroupRequest;
 use App\Http\Requests\Group\UpdateGroupRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class GroupController extends Controller
 {

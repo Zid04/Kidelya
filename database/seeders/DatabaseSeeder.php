@@ -2,22 +2,25 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * Seeder principal.
+ *
+ * Orchestre tous les seeders dans le bon ordre.
+ * L'ordre est crucial — respecter les dépendances entre tables.
+ */
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            RoleSeeder::class,        
+            UserSeeder::class,        
+            ThemeSeeder::class,       
+            CompetenceSeeder::class,  
+            ActivitySeeder::class,    
+            PackSeeder::class,        
         ]);
     }
 }

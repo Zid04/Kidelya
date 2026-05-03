@@ -19,12 +19,14 @@ class ReportActivityController extends Controller
     /**
      * LISTE
      */
-    public function index(): JsonResponse
-    {
-        return response()->json([
-            'data' => ReportActivity::with('planning')->latest()->get()
-        ]);
-    }
+   public function index(): JsonResponse
+{
+    $this->authorize('viewAny', ReportActivity::class);
+    
+    return response()->json([
+        'data' => $this->reportService->getAll()
+    ]);
+}
 
     /**
      * CREATE

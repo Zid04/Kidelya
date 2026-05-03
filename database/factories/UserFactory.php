@@ -2,42 +2,33 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<User>
+ * Factory pour le modèle User.
+ * Génère des utilisateurs avec des données réalistes.
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
-
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'two_factor_confirmed_at' => null,
+            'FirstName'          => $this->faker->firstName(),
+            'LastName'           => $this->faker->lastName(),
+            'Email'              => $this->faker->unique()->safeEmail(),
+            'email_verified_at'  => now(),
+            'Password'           => Hash::make('password'), // mot de passe par défaut
+            'AvatarUrl'          => $this->faker->imageUrl(200, 200, 'people'),
+            'is_active'          => true,
+            'IdRole'             => Role::factory(),
         ];
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Utilisateur non vérifié.
      */
     public function unverified(): static
     {
@@ -47,14 +38,12 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the model has two-factor authentication configured.
+     * Utilisateur désactivé.
      */
-    public function withTwoFactor(): static
+    public function inactive(): static
     {
         return $this->state(fn (array $attributes) => [
-            'two_factor_secret' => encrypt('secret'),
-            'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
-            'two_factor_confirmed_at' => now(),
+            'is_active' => false,
         ]);
     }
 }

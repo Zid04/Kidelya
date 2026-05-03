@@ -23,5 +23,11 @@ class ReportActivityService
     public function delete(ReportActivity $report): void
     {
         $report->delete();
+    
     }
+    //permet de récupérer tous les rapports d'activité
+    public function getAll()
+{
+    return ReportActivity::with('planning')->latest()->get();
+}
 }

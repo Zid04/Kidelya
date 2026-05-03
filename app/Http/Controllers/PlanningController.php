@@ -48,7 +48,6 @@ class PlanningController extends Controller
     public function store(StorePlanningRequest $request): JsonResponse
     {
         $user = auth()->user();
-
         $this->authorize('create', Planning::class);
 
         $planning = $this->planningService->create(
@@ -160,4 +159,53 @@ class PlanningController extends Controller
             'message' => 'Child added to planning'
         ]);
     }
+    /**
+ * REMOVE ACTIVITY FROM PLANNING
+ */
+public function removeActivity(RemoveActivityFromPlanningRequest $request, Planning $planning): JsonResponse
+{
+    $this->authorize('update', $planning);
+
+    $this->planningService->detachActivity(
+        $planning,
+        $request->activity_id
+    );
+
+    return response()->json([
+        'message' => 'Activity removed from planning'
+    ]);
+}
+/**
+ * REMOVE GROUP FROM PLANNING
+ */
+public function removeGroup(RemoveGroupFromPlanningRequest $request, Planning $planning): JsonResponse
+{
+    $this->authorize('update', $planning);
+
+    $this->planningService->detachGroup(
+        $planning,
+        $request->group_id
+    );
+
+    return response()->json([
+        'message' => 'Group removed from planning'
+    ]);
+}
+
+/**
+ * REMOVE CHILD FROM PLANNING
+ */
+public function removeChild(RemoveChildFromPlanningRequest $request, Planning $planning): JsonResponse
+{
+    $this->authorize('update', $planning);
+
+    $this->planningService->detachChild(
+        $planning,
+        $request->child_id
+    );
+
+    return response()->json([
+        'message' => 'Child removed from planning'
+    ]);
+}
 }

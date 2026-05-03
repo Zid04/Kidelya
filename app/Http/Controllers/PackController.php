@@ -22,6 +22,7 @@ class PackController extends Controller
     {
         return response()->json([
             'data' => $this->packService->getDashboardPacks(auth()->user())
+            
         ]);
     }
 
@@ -37,6 +38,7 @@ class PackController extends Controller
 
     public function show(Pack $pack): JsonResponse
     {
+        $this->authorize('view', $pack); 
         return response()->json([
             'data' => $pack->load(['creator', 'activities'])
         ]);
