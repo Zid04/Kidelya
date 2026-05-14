@@ -4,37 +4,31 @@ namespace App\Policies;
 
 use App\Models\User;
 
-/**
- * Policy de gestion des autorisations pour le modèle User.
- *
- * Logique métier :
- * - Admin : supervise (lecture globale)
- * - User : autonome (gère son propre compte)
- */
 class UserPolicy
 {
     /**
      * Voir la liste de tous les utilisateurs
-    * réservé à l’Admin
+     * Réservé à l’Admin
      */
     public function viewAny(User $user): bool
     {
-        return $user->role->Type === 'Admin';
+        return $user->role->type === 'Admin';
     }
 
     /**
      * Voir un profil
-     * soi-même OU admin
+     * - soi-même
+     * - ou admin
      */
     public function view(User $user, User $model): bool
     {
-        return $user->IdUser === $model->IdUser
-            || $user->role->Type === 'Admin';
+        return $user->iduser === $model->iduser
+            || $user->role->type === 'Admin';
     }
 
     /**
      * Création d’un utilisateur
-     * inscription public
+     * Inscription publique → pas besoin d’être connecté
      */
     public function create(?User $user = null): bool
     {
@@ -43,20 +37,22 @@ class UserPolicy
 
     /**
      * Modifier un profil
-     * soi-même 
+     * - soi-même
+     * - ou admin
      */
     public function update(User $user, User $model): bool
     {
-        return $user->IdUser === $model->IdUser
-            || $user->role->Type === 'Admin';
+        return $user->iduser === $model->iduser
+            || $user->role->type === 'Admin';
     }
 
     /**
      * Suppression (ou désactivation)
-     *  soi-même
+     * - uniquement soi-même
+     * (un admin ne peut pas supprimer un autre compte ici)
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->IdUser === $model->IdUser;
+        return $user->iduser === $model->iduser;
     }
 }

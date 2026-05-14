@@ -1,43 +1,51 @@
 <?php
 
 namespace App\Models;
+
 use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-
 class Activity extends Model
 {
     use HasFactory;
 
     protected $table      = 'activities';
-    protected $primaryKey = 'IdActivities';
+    protected $primaryKey = 'idactivities';
 
     protected $fillable = [
-        'Title',
-        'Description',
-        'AgeMin',
-        'AgeMax',
-        'Duration',
-        'Season',
-        'Location',
-        'PhotoUrl',
-        'IdUser',
+        'title',
+        'description',
+        'agemin',
+        'agemax',
+        'duration',
+        'season',
+        'location',
+        'photourl',
+        'iduser',
+
+        'credit_price',
+        'is_purchasable',
+        'is_published',
     ];
 
     protected $casts = [
-        'AgeMin'    => 'integer',
-        'AgeMax'    => 'integer',
-        'Duration'  => 'integer',
+        'agemin'         => 'integer',
+        'agemax'         => 'integer',
+        'duration'       => 'integer',
+
+        'credit_price'   => 'integer',
+        'is_purchasable' => 'boolean',
+        'is_published'   => 'boolean',
     ];
 
     // ─── Relations ────────────────────────────────────────────
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'IdUser', 'IdUser');
+        return $this->belongsTo(User::class, 'iduser', 'iduser');
     }
 
     public function themes(): BelongsToMany
@@ -45,8 +53,8 @@ class Activity extends Model
         return $this->belongsToMany(
             Theme::class,
             'themes_activities',
-            'IdActivities',
-            'IdTheme'
+            'idactivities',
+            'idtheme'
         );
     }
 
@@ -55,8 +63,8 @@ class Activity extends Model
         return $this->belongsToMany(
             Competence::class,
             'competences_activities',
-            'IdActivities',
-            'IdCompetence'
+            'idactivities',
+            'idcompetence'
         );
     }
 
@@ -65,8 +73,8 @@ class Activity extends Model
         return $this->belongsToMany(
             Planning::class,
             'plannings_activities',
-            'IdActivities',
-            'IdPlanning'
+            'idactivities',
+            'idplanning'
         );
     }
 
@@ -75,8 +83,20 @@ class Activity extends Model
         return $this->belongsToMany(
             Pack::class,
             'packs_activities',
-            'IdActivities',
-            'IdPack'
+            'idactivities',
+            'idpack'
         );
+    }
+
+    // ─── Scopes business ──────────────────────────────────────
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
+    }
+
+    public function scopePurchasable($query)
+    {
+        return $query->where('is_purchasable', true);
     }
 }

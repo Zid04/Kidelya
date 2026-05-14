@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('report_activities', function (Blueprint $table) {
-             $table->id('IdReport');
-             $table->text('Comments')->nullable();
-             $table->string('PhotoUrl', 255)->nullable();
-             $table->text('Improvements')->nullable();
-             $table->text('Positive')->nullable();
-             $table->text('Difficulties')->nullable();
-             $table->timestamps();
-        });
+       Schema::create('report_activities', function (Blueprint $table) {
+    $table->id('idreport');
+    $table->text('comments')->nullable();
+    $table->string('photourl', 255)->nullable();
+    $table->text('improvements')->nullable();
+    $table->text('positive')->nullable();
+    $table->text('difficulties')->nullable();
+    $table->timestamps();
+});
+
     }
 
     /**

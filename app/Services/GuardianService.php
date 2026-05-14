@@ -1,57 +1,55 @@
 <?php
 
-namespace App\Policies;
+namespace App\Services;
 
-use App\Models\User;
 use App\Models\Guardian;
+use Illuminate\Support\Facades\Auth;
 
-/**
- * Policy Guardian
- * Règle métier :
- * seul le user créateur du parent peut le gérer
- */
-class GuardianPolicy
+class GuardianService
 {
     /**
-     * Liste
+     * Liste tous les parents du user connecté
      */
-    public function viewAny(User $user): bool
+    public function getAllForUser()
     {
-        return auth()->check();
+        return Guardian::where('iduser', Auth::id())
+            ->latest()
+            ->get();
     }
 
     /**
-     * Voir un parent
-     *  uniquement propriétaire
+     * Voir un parent (sans autorisation, la Policy s’en charge)
      */
-    public function view(User $user, Guardian $guardian): bool
+    public function getById(int $id): ?Guardian
     {
-        return $user->IdUser === $guardian->IdUser;
+        return Guardian::find($id);
     }
 
     /**
      * Créer un parent
      */
-    public function create(User $user): bool
+    public function create(array $data): Guardian
     {
-        return auth()->check();
+        // Associer automatiquement le user connecté
+        $data['iduser'] = Auth::id();
+
+        return Guardian::create($data);
     }
 
     /**
-     * Modifier parent
-     * uniquement propriétaire
+     * Mettre à jour un parent
      */
-    public function update(User $user, Guardian $guardian): bool
+    public function update(Guardian $guardian, array $data): Guardian
     {
-        return $user->IdUser === $guardian->IdUser;
+        $guardian->update($data);
+        return $guardian->fresh();
     }
 
     /**
-     * Supprimer parent
-     * uniquement propriétaire
+     * Supprimer un parent
      */
-    public function delete(User $user, Guardian $guardian): bool
+    public function delete(Guardian $guardian): void
     {
-        return $user->IdUser === $guardian->IdUser;
+        $guardian->delete();
     }
 }

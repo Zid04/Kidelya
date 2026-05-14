@@ -1,42 +1,37 @@
 <?php
 
 namespace App\Models;
+
 use Database\Factories\CompetenceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-/**
- * Modèle représentant une compétence.
- */
 class Competence extends Model
 {
     use HasFactory;
+
     protected $table      = 'competences';
-    protected $primaryKey = 'IdCompetence';
+    protected $primaryKey = 'idcompetence';
 
     protected $fillable = [
-        'Name',
+        'name',
     ];
 
     public function getRouteKeyName(): string
     {
-        return 'IdCompetence';
+        return 'idcompetence';
     }
 
     // ─── Relations ────────────────────────────────────────────
 
-    /**
-     * Les activités associées à cette compétence.
-     * Table pivot : competences_activities
-     */
     public function activities(): BelongsToMany
     {
         return $this->belongsToMany(
             Activity::class,
             'competences_activities',
-            'IdCompetence',
-            'IdActivities'
+            'idcompetence',
+            'idactivities'
         );
     }
 }

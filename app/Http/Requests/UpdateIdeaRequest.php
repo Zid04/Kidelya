@@ -4,31 +4,25 @@ namespace App\Http\Requests\Idea;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * Validation update idée
- */
 class UpdateIdeaRequest extends FormRequest
 {
     public function authorize(): bool
     {
-         return auth()->check()
-    && $user->IdUser === $group->IdUser;
-      
-
+        return $this->user()->can('update', $this->route('idea'));
     }
 
     public function rules(): array
     {
         return [
-            'Title' => 'sometimes|string|max:150',
-            'Notes' => 'nullable|string',
+            'title' => 'sometimes|string|max:150',
+            'notes' => 'nullable|string',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'Title.string' => 'The title must be a string.',
+            'title.string' => 'The title must be a string.',
         ];
     }
 }

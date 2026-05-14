@@ -6,31 +6,24 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCompetenceRequest extends FormRequest
 {
-    
     public function authorize(): bool
     {
-         return auth()->check();
+        return $this->user()->can('create', \App\Models\Competence::class);
     }
 
-    /**
-     * Validation création compétence
-     */
     public function rules(): array
     {
         return [
-            'Name' => 'required|string|max:100|unique:competences,Name',
+            'name' => 'required|string|max:100|unique:competences,name',
         ];
     }
-    /**
-     * Messages personnalisés 
-     */
+
     public function messages(): array
     {
         return [
-            'Name.required' => 'Le nom de la compétence est obligatoire.',
-            'Name.unique'   => 'Cette compétence existe déjà.',
-            'Name.max'      => 'Le nom ne doit pas dépasser 100 caractères.',
-            'Name.unique'   => 'This competence already exists.',
+            'name.required' => 'The competence name is required.',
+            'name.unique'   => 'This competence already exists.',
+            'name.max'      => 'The competence name must not exceed 100 characters.',
         ];
     }
 }

@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Theme;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-
 use App\Services\ThemeService;
 
 use App\Http\Requests\Theme\StoreThemeRequest;
 use App\Http\Requests\Theme\UpdateThemeRequest;
+use Illuminate\Http\Request;
 
 class ThemeController extends Controller
 {
@@ -17,9 +16,6 @@ class ThemeController extends Controller
         private ThemeService $themeService
     ) {}
 
-    /**
-     * LIST
-     */
     public function index(): JsonResponse
     {
         return response()->json([
@@ -27,9 +23,6 @@ class ThemeController extends Controller
         ]);
     }
 
-    /**
-     * CREATE
-     */
     public function store(StoreThemeRequest $request): JsonResponse
     {
         $this->authorize('create', Theme::class);
@@ -40,9 +33,6 @@ class ThemeController extends Controller
         ], 201);
     }
 
-    /**
-     * SHOW
-     */
     public function show(Theme $theme): JsonResponse
     {
         return response()->json([
@@ -50,9 +40,6 @@ class ThemeController extends Controller
         ]);
     }
 
-    /**
-     * UPDATE
-     */
     public function update(UpdateThemeRequest $request, Theme $theme): JsonResponse
     {
         $this->authorize('update', $theme);
@@ -63,9 +50,6 @@ class ThemeController extends Controller
         ]);
     }
 
-    /**
-     * DELETE
-     */
     public function destroy(Theme $theme): JsonResponse
     {
         $this->authorize('delete', $theme);
@@ -77,14 +61,12 @@ class ThemeController extends Controller
         ]);
     }
 
-    /**
-     * ADD ACTIVITY
-     */
     public function addActivity(Theme $theme, Request $request): JsonResponse
     {
-         $this->authorize('update', $theme);
+        $this->authorize('update', $theme);
+
         $request->validate([
-            'activity_id' => 'required|exists:activities,IdActivities'
+            'activity_id' => 'required|exists:activities,idactivities'
         ]);
 
         $this->themeService->attachActivity($theme, $request->activity_id);
@@ -94,16 +76,13 @@ class ThemeController extends Controller
         ]);
     }
 
-    /**
-     * REMOVE ACTIVITY
-     */
     public function removeActivity(Theme $theme, Request $request): JsonResponse
     {
-        $request->validate([
-            'activity_id' => 'required|exists:activities,IdActivities'
-        ]);
-
         $this->authorize('update', $theme);
+
+        $request->validate([
+            'activity_id' => 'required|exists:activities,idactivities'
+        ]);
 
         $this->themeService->detachActivity($theme, $request->activity_id);
 

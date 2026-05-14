@@ -1,88 +1,73 @@
 <?php
 
 namespace App\Models;
+
 use Database\Factories\ChildFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-/**
- * Modèle représentant un enfant.
- * Relations   : user, parents, groups, plannings
- */
 class Child extends Model
 {
     use HasFactory;
+
     protected $table      = 'children';
-    protected $primaryKey = 'IdChildren';
+    protected $primaryKey = 'idchildren';
 
     protected $fillable = [
-        'LastName',
-        'FirstName',
-        'BirthDay',
-        'SpecificationNote',
-        'Sexe',
-        'PhotoUrl',
-        'IdUser',
+        'lastname',
+        'firstname',
+        'birthday',
+        'specificationnote',
+        'sexe',
+        'photourl',
+        'iduser',
     ];
 
     protected $casts = [
-        // Cast en date Carbon pour faciliter les calculs d'âge
-        'BirthDay' => 'date',
+        'birthday' => 'date',
     ];
 
     public function getRouteKeyName(): string
     {
-        return 'IdChildren';
+        return 'idchildren';
     }
 
     // ─── Relations ────────────────────────────────────────────
 
-    /**
-     * L'utilisateur propriétaire de la fiche enfant.
-     */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'IdUser', 'IdUser');
+        return $this->belongsTo(User::class, 'iduser', 'iduser');
     }
 
-    /**
-     * Les parents associés à cet enfant (table pivot : children_parents).
-     */
     public function parents(): BelongsToMany
     {
         return $this->belongsToMany(
-            Parent::class,
+            Guardian::class,
             'children_parents',
-            'IdChildren',
-            'IdParent'
+            'idchildren',
+            'idparent'
         );
     }
 
-    /**
-     * Les groupes auxquels appartient cet enfant (table pivot : groups_children).
-     */
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(
             Group::class,
             'groups_children',
-            'IdChildren',
-            'IdGroup'
+            'idchildren',
+            'idgroup'
         );
     }
 
-    /**
-     * Les plannings associés à cet enfant (table pivot : planning_children).
-     */
     public function plannings(): BelongsToMany
     {
         return $this->belongsToMany(
             Planning::class,
             'plannings_children',
-            'IdChildren',
-            'IdPlanning'
+            'idchildren',
+            'idplanning'
         );
     }
 }

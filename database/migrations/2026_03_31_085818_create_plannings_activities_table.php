@@ -12,19 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plannings_activities', function (Blueprint $table) {
-            $table->id('IdPlanningActivities'); 
-            $table->date('DateStart'); 
-            $table->date('DateEnd');   
-            $table->foreignId('IdPlanning')
-                  ->constrained('plannings', 'IdPlanning')
-                  ->onDelete('cascade');
-            $table->foreignId('IdActivities')
-                  ->constrained('activities', 'IdActivities')
-                  ->onDelete('cascade');
-            $table->timestamps();
-            // Empêche un doublon (même activité dans le même planning)
-            $table->unique(['IdPlanning', 'IdActivities']);
-        });
+    $table->id('idplanningactivities'); 
+    $table->date('datestart'); 
+    $table->date('dateend');   
+
+    $table->foreignId('idplanning')
+          ->constrained('plannings', 'idplanning')
+          ->onDelete('cascade');
+
+    $table->foreignId('idactivities')
+          ->constrained('activities', 'idactivities')
+          ->onDelete('cascade');
+
+    $table->timestamps();
+
+    $table->unique(['idplanning', 'idactivities']);
+});
+
     }
 
     /**

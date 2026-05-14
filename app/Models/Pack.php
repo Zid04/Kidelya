@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Database\Factories\PackFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -8,64 +9,70 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * Modèle représentant un pack d'activités.
- */
 class Pack extends Model
 {
     use HasFactory;
-    
+
     protected $table      = 'packs';
-    protected $primaryKey = 'IdPack';
+    protected $primaryKey = 'idpack';
 
     protected $fillable = [
-        'Title',
-        'Description',
-        'Tarification',
-        'Duration',
-        'CreatedBy',
+        'title',
+        'description',
+        'tarification',
+        'duration',
+        'createdby',
+
+      
+        'is_published',
+        'type',
     ];
 
     protected $casts = [
-        // decimal pour éviter les erreurs d'arrondi sur les prix
-        'Tarification' => 'decimal:2',
-        'Duration'     => 'integer',
+        'tarification' => 'decimal:2',
+        'duration'     => 'integer',
+
+       
+        'is_published' => 'boolean',
+        'type'         => 'string',
     ];
 
     public function getRouteKeyName(): string
     {
-        return 'IdPack';
+        return 'idpack';
     }
 
     // ─── Relations ────────────────────────────────────────────
 
-    /**
-     * L'utilisateur ayant créé le pack.
-     */
     public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'CreatedBy', 'IdUser');
+        return $this->belongsTo(User::class, 'createdby', 'iduser');
     }
 
-    /**
-     * Les souscriptions associées à ce pack.
-     */
     public function subscriptions(): HasMany
     {
-        return $this->hasMany(PackUser::class, 'IdPack', 'IdPack');
+        return $this->hasMany(PackUser::class, 'idpack', 'idpack');
     }
 
-    /**
-     * Les activités incluses dans ce pack.
-     * Table pivot : pack_activities
-     */
     public function activities(): BelongsToMany
     {
         return $this->belongsToMany(
             Activity::class,
             'packs_activities',
-            'IdPack',
-            'IdActivities'
+            'idpack',
+            'idactivities'
         );
+    }
+
+    // ─── Scopes business ──────────────────────────────────────
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
+    }
+
+    public function scopeOfType($query, string $type)
+    {
+        return $query->where('type', $type);
     }
 }

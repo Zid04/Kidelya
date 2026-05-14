@@ -6,7 +6,7 @@ use App\Models\Competence;
 use App\Services\CompetenceService;
 use App\Http\Requests\Competence\StoreCompetenceRequest;
 use App\Http\Requests\Competence\UpdateCompetenceRequest;
-
+use Illuminate\Http\JsonResponse;
 
 class CompetenceController extends Controller
 {
@@ -14,19 +14,15 @@ class CompetenceController extends Controller
         private CompetenceService $competenceService
     ) {}
 
-    /**
-     * Liste des compétences
-     */
     public function index(): JsonResponse
     {
         $this->authorize('viewAny', Competence::class);
-return response()->json(['data' => $this->competenceService->getAll()]);
 
+        return response()->json([
+            'data' => $this->competenceService->getAll()
+        ]);
     }
 
-    /**
-     * Création
-     */
     public function store(StoreCompetenceRequest $request): JsonResponse
     {
         $this->authorize('create', Competence::class);
@@ -37,19 +33,15 @@ return response()->json(['data' => $this->competenceService->getAll()]);
         ], 201);
     }
 
-    /**
-     * Détails
-     */
     public function show(Competence $competence): JsonResponse
     {
         $this->authorize('view', $competence);
 
-        return response()->json(['data' => $competence->load('activities')]);
+        return response()->json([
+            'data' => $competence->load('activities')
+        ]);
     }
 
-    /**
-     * Mise à jour
-     */
     public function update(UpdateCompetenceRequest $request, Competence $competence): JsonResponse
     {
         $this->authorize('update', $competence);
@@ -60,9 +52,6 @@ return response()->json(['data' => $this->competenceService->getAll()]);
         ]);
     }
 
-    /**
-     * Suppression
-     */
     public function destroy(Competence $competence): JsonResponse
     {
         $this->authorize('delete', $competence);

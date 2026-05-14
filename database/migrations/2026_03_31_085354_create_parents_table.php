@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('parents', function (Blueprint $table) {
-            $table->id('IdParent');
-            $table->string('Names', 100);
-            $table->string('Address', 255)->nullable();
-            $table->string('Email', 255)->unique();
-            $table->string('Phone', 50)->nullable();
-            $table->timestamps();
-        });
+    $table->id('idparent');
+    $table->string('names', 100);
+    $table->string('address', 255)->nullable();
+    $table->string('email', 255)->unique();
+    $table->string('phone', 50)->nullable();
+    $table->timestamps();
+});
+
     }
 
     /**

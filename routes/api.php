@@ -4,15 +4,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\CompetenceController;
+use App\Http\Controllers\CreditTransactionController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\PackController;
+use App\Http\Controllers\PackUserController;
 use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\ReportActivityController;
+use App\Http\Controllers\StatsController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
-
 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -31,6 +33,10 @@ Route::middleware('auth:sanctum')->group(function () {
     |----------------------------------------------------------------------
     */
     Route::apiResource('activities', ActivityController::class);
+    Route::patch('activities/{activity}/publish', [ActivityController::class, 'publish'])
+        ->name('activities.publish');
+    Route::patch('activities/{activity}/unpublish', [ActivityController::class, 'unpublish'])
+        ->name('activities.unpublish');
 
     /*
     |----------------------------------------------------------------------
@@ -49,6 +55,10 @@ Route::middleware('auth:sanctum')->group(function () {
     |----------------------------------------------------------------------
     */
     Route::apiResource('competences', CompetenceController::class);
+    Route::post('competences/{competence}/activities', [CompetenceController::class, 'addActivity'])
+        ->name('competences.activities.add');
+    Route::delete('competences/{competence}/activities', [CompetenceController::class, 'removeActivity'])
+        ->name('competences.activities.remove');
 
     /*
     |----------------------------------------------------------------------
@@ -99,6 +109,46 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /*
     |----------------------------------------------------------------------
+    | Subscriptions (Pack Users)
+    |----------------------------------------------------------------------
+    */
+    Route::get('subscriptions', [PackUserController::class, 'index'])
+        ->name('subscriptions.index');
+    Route::get('subscriptions/{subscription}', [PackUserController::class, 'show'])
+        ->name('subscriptions.show');
+    Route::post('subscriptions', [PackUserController::class, 'activate'])
+        ->name('subscriptions.activate');
+    Route::patch('subscriptions/{subscription}/renew', [PackUserController::class, 'renew'])
+        ->name('subscriptions.renew');
+    Route::patch('subscriptions/{subscription}/deactivate', [PackUserController::class, 'deactivate'])
+        ->name('subscriptions.deactivate');
+
+    /*
+    |----------------------------------------------------------------------
+    | Credits
+    |----------------------------------------------------------------------
+    */
+    Route::get('credits', [CreditTransactionController::class, 'index'])
+        ->name('credits.index');
+    Route::get('credits/{transaction}', [CreditTransactionController::class, 'show'])
+        ->name('credits.show');
+
+    /*
+    |----------------------------------------------------------------------
+    | Statistics
+    |----------------------------------------------------------------------
+    */
+    Route::prefix('stats')->name('stats.')->group(function () {
+        Route::get('/', [StatsController::class, 'index'])
+            ->name('index');
+        Route::get('today', [StatsController::class, 'today'])
+            ->name('today');
+        Route::get('summary', [StatsController::class, 'summary'])
+            ->name('summary');
+    });
+
+    /*
+    |----------------------------------------------------------------------
     | Plannings
     |----------------------------------------------------------------------
     */
@@ -122,5 +172,10 @@ Route::middleware('auth:sanctum')->group(function () {
     |----------------------------------------------------------------------
     */
     Route::apiResource('report-activities', ReportActivityController::class);
+
+    Route::patch('packs/{pack}/publish', [PackController::class, 'publish'])
+    ->name('packs.publish');
+Route::patch('packs/{pack}/unpublish', [PackController::class, 'unpublish'])
+    ->name('packs.unpublish');
 
 });

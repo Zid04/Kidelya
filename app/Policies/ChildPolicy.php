@@ -9,7 +9,6 @@ class ChildPolicy
 {
     /**
      * Voir la liste des enfants
-     * uniquement le propriétaire
      */
     public function viewAny(User $user): bool
     {
@@ -17,16 +16,15 @@ class ChildPolicy
     }
 
     /**
-     * Voir un enfant
-     *  uniquement le propriétaire 
+     * Voir un enfant — uniquement le propriétaire
      */
     public function view(User $user, Child $child): bool
     {
-        return $user->IdUser === $child->IdUser;
+        return $user->iduser === $child->iduser;
     }
 
     /**
-     * Création d’un enfant  (tout utilisateur connecté)
+     * Création d’un enfant
      */
     public function create(User $user): bool
     {
@@ -34,18 +32,18 @@ class ChildPolicy
     }
 
     /**
-     * Modification (seulement propriétaire)
+     * Modification — uniquement propriétaire
      */
     public function update(User $user, Child $child): bool
     {
-        return $user->IdUser === $child->IdUser;
+        return $user->iduser === $child->iduser;
     }
 
     /**
-     * Suppression (seulement propriétaire)
+     * Suppression — uniquement propriétaire
      */
     public function delete(User $user, Child $child): bool
     {
-        return $user->IdUser === $child->IdUser;
+        return $user->iduser === $child->iduser;
     }
 }

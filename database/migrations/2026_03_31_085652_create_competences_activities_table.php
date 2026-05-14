@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('competences_activities', function (Blueprint $table) {
-             $table->id('IdCompetenceActivities'); 
-             $table->foreignId('IdCompetence')
-                  ->constrained('competences', 'IdCompetence')
-                  ->onDelete('cascade');
+      Schema::create('competences_activities', function (Blueprint $table) {
+    $table->id('idcompetenceactivities'); 
 
-          
-             $table->foreignId('IdActivities')
-                  ->constrained('activities', 'IdActivities')
-                  ->onDelete('cascade');
+    $table->foreignId('idcompetence')
+          ->constrained('competences', 'idcompetence')
+          ->onDelete('cascade');
 
-             $table->timestamps();
+    $table->foreignId('idactivities')
+          ->constrained('activities', 'idactivities')
+          ->onDelete('cascade');
 
-             //Empêche une compétence d'être associée 2 fois à la même activité
-             $table->unique(['IdCompetence', 'IdActivities']);
-        });
+    $table->timestamps();
+
+    // Empêche une compétence d'être associée 2 fois à la même activité
+    $table->unique(['idcompetence', 'idactivities']);
+});
     }
 
     /**

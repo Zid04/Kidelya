@@ -6,39 +6,31 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreChildRequest extends FormRequest
 {
-    /**
-     * Autorisation :
-     * seul un utilisateur connecté peut créer un enfant
-     */
     public function authorize(): bool
     {
-        return auth()->check();
+        return $this->user()->can('create', \App\Models\Child::class);
     }
 
-    /**
-     * Validation des données de création d'un enfant
-     */
     public function rules(): array
     {
         return [
-            'LastName'          => 'required|string|max:50',
-            'FirstName'         => 'required|string|max:50',
-            'BirthDay'          => 'required|date',
-            'SpecificationNote' => 'nullable|string',
-            'Sexe'              => 'required|in:M,F',
-            'PhotoUrl'          => 'nullable|url',
+            'lastname'          => 'required|string|max:50',
+            'firstname'         => 'required|string|max:50',
+            'birthday'          => 'required|date',
+            'specificationnote' => 'nullable|string',
+            'sexe'              => 'required|in:M,F',
+            'photourl'          => 'nullable|url',
         ];
     }
-    /// Messages personnalisés pour les erreurs de validation
-    
+
     public function messages(): array
-{
-    return [
-        'LastName.required'  => 'The last name is required.',
-        'FirstName.required' => 'The first name is required.',
-        'BirthDay.required'  => 'The birth date is required.',
-        'BirthDay.date'      => 'The birth date must be a valid date.',
-        'Sexe.in'            => 'Sexe must be M or F.',
-    ];
-}
+    {
+        return [
+            'lastname.required'  => 'The last name is required.',
+            'firstname.required' => 'The first name is required.',
+            'birthday.required'  => 'The birth date is required.',
+            'birthday.date'      => 'The birth date must be a valid date.',
+            'sexe.in'            => 'Sexe must be M or F.',
+        ];
+    }
 }

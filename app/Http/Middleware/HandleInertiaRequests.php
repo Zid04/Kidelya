@@ -7,41 +7,50 @@ use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
-    /**
-     * The root template that's loaded on the first page visit.
-     *
-     * @see https://inertiajs.com/server-side-setup#root-template
-     *
-     * @var string
-     */
     protected $rootView = 'app';
 
-    /**
-     * Determines the current asset version.
-     *
-     * @see https://inertiajs.com/asset-versioning
-     */
     public function version(Request $request): ?string
     {
         return parent::version($request);
     }
 
-    /**
-     * Define the props that are shared by default.
-     *
-     * @see https://inertiajs.com/shared-data
-     *
-     * @return array<string, mixed>
-     */
     public function share(Request $request): array
     {
         return [
             ...parent::share($request),
-            'name' => config('app.name'),
+
+            // Nom de l'application
+            'appName' => config('app.name'),
+
+            // Utilisateur connecté + rôle
             'auth' => [
                 'user' => $request->user(),
+                'role' => $request->user()?->role?->type,
             ],
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+
+            // Permissions globales (exemples)
+            'can' => [
+                'manageUsers'   => fn () => $request->user()?->can('viewAny', \App\Models\User::class),
+                'createPack'    => fn () => $request->user()?->can('create', \App\Models\Pack::class),
+                'createGroup'   => fn () => $request->user()?->can('create', \App\Models\Group::class),
+                'createActivity'=> fn () => $request->user()?->can('create', \App\Models\Activity::class),
+            ],
+
+            // Messages flash
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error'   => fn () => $request->session()->get('error'),
+            ],
+
+            // Erreurs de validation
+            'errors' => fn () =>
+                $request->session()->get('errors')
+                    ? $request->session()->get('errors')->getBag('default')->getMessages()
+                    : (object) [],
+
+            // État du sidebar
+            'sidebarOpen' => ! $request->hasCookie('sidebar_state')
+                || $request->cookie('sidebar_state') === 'true',
         ];
     }
 }

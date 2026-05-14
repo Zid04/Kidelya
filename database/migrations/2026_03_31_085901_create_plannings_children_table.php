@@ -11,18 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('planing_children', function (Blueprint $table) {
-              $table->id('IdPlaningChildren');
-            $table->foreignId('IdPlaning')
-                  ->constrained('planing', 'IdPlaning')
-                  ->onDelete('cascade');
-            $table->foreignId('IdChildren')
-                  ->constrained('children', 'IdChildren')
-                  ->onDelete('cascade');
-            $table->timestamps();
-            //Empêche un doublon (même enfant dans le même planning)
-            $table->unique(['IdPlaning', 'IdChildren']);
-        });
+        Schema::create('plannings_children', function (Blueprint $table) {
+    $table->id('idplanningchildren');
+
+    $table->foreignId('idplanning')
+          ->constrained('plannings', 'idplanning')
+          ->onDelete('cascade');
+
+    $table->foreignId('idchildren')
+          ->constrained('children', 'idchildren')
+          ->onDelete('cascade');
+
+    $table->timestamps();
+
+    $table->unique(['idplanning', 'idchildren']);
+});
+
     }
 
     /**
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('planing_children');
+        Schema::dropIfExists('plannings_children');
     }
 };

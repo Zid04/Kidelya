@@ -14,14 +14,16 @@ class GuardianController extends Controller
     public function __construct(
         private GuardianService $guardianService
     ) {}
-//   afficher tous les parents
+
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', Guardian::class);
+
         return response()->json([
             'data' => $this->guardianService->getAll()
         ]);
     }
-//   créer un parent
+
     public function store(StoreGuardianRequest $request): JsonResponse
     {
         $this->authorize('create', Guardian::class);
@@ -31,7 +33,7 @@ class GuardianController extends Controller
             'data' => $this->guardianService->create($request->validated())
         ], 201);
     }
-//   afficher un parent
+
     public function show(Guardian $guardian): JsonResponse
     {
         $this->authorize('view', $guardian);
@@ -40,7 +42,7 @@ class GuardianController extends Controller
             'data' => $guardian->load('children')
         ]);
     }
-//   modifier un parent
+
     public function update(UpdateGuardianRequest $request, Guardian $guardian): JsonResponse
     {
         $this->authorize('update', $guardian);
@@ -50,8 +52,7 @@ class GuardianController extends Controller
             'data' => $this->guardianService->update($guardian, $request->validated())
         ]);
     }
-//   supprimer un parent
-     
+
     public function destroy(Guardian $guardian): JsonResponse
     {
         $this->authorize('delete', $guardian);
@@ -63,13 +64,12 @@ class GuardianController extends Controller
         ]);
     }
 
-    /**
-     * lier enfant
-     */
     public function addChild(Guardian $guardian, Request $request): JsonResponse
     {
+        $this->authorize('update', $guardian);
+
         $request->validate([
-            'child_id' => 'required|exists:children,IdChildren'
+            'child_id' => 'required|exists:children,idchildren'
         ]);
 
         $this->guardianService->attachChild($guardian, $request->child_id);
@@ -79,13 +79,12 @@ class GuardianController extends Controller
         ]);
     }
 
-    /**
-     * delier enfant
-     */
     public function removeChild(Guardian $guardian, Request $request): JsonResponse
     {
+        $this->authorize('update', $guardian);
+
         $request->validate([
-            'child_id' => 'required|exists:children,IdChildren'
+            'child_id' => 'required|exists:children,idchildren'
         ]);
 
         $this->guardianService->detachChild($guardian, $request->child_id);

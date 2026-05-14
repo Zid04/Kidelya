@@ -9,14 +9,6 @@ use App\Services\ActivityService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-/**
- * Controller API REST des activités
- *
- * - Validation : FormRequests
- * - Logique métier : ActivityService
- * - Sécurité : ActivityPolicy
- * - Réponses : JSON uniquement
- */
 class ActivityController extends Controller
 {
     public function __construct(
@@ -24,19 +16,21 @@ class ActivityController extends Controller
     ) {}
 
     /**
-     * GET /api/activities
-     * Liste paginée avec filtres
+     * Liste paginée des activités (admin + filtres)
      */
     public function index(Request $request): JsonResponse
     {
-        // Validation des filtres 
+        $this->authorize('viewAny', Activity::class);
+        
         $validated = $request->validate([
             'age'           => 'nullable|integer|min:0',
             'season'        => 'nullable|string|max:50',
             'themes'        => 'nullable|array',
-            'themes.*'      => 'integer|exists:themes,IdTheme',
+            'themes.*'      => 'integer|exists:themes,idtheme',
             'competences'   => 'nullable|array',
-            'competences.*' => 'integer|exists:competences,IdCompetence',
+            'competences.*' => 'integer|exists:competences,idcompetence',
+            'published'     => 'nullable|boolean',
+            'purchasable'   => 'nullable|boolean',
         ]);
 
         return response()->json([
@@ -45,7 +39,7 @@ class ActivityController extends Controller
     }
 
     /**
-     * GET /api/activities/{activity}
+     * Afficher une activité
      */
     public function show(Activity $activity): JsonResponse
     {
@@ -63,7 +57,7 @@ class ActivityController extends Controller
     }
 
     /**
-     * POST /api/activities
+     * Créer une activité
      */
     public function store(StoreActivityRequest $request): JsonResponse
     {
@@ -78,7 +72,7 @@ class ActivityController extends Controller
     }
 
     /**
-     * PUT /api/activities/{activity}
+     * Modifier une activité
      */
     public function update(UpdateActivityRequest $request, Activity $activity): JsonResponse
     {
@@ -93,7 +87,7 @@ class ActivityController extends Controller
     }
 
     /**
-     * DELETE /api/activities/{activity}
+     * Supprimer une activité
      */
     public function destroy(Activity $activity): JsonResponse
     {
@@ -103,6 +97,36 @@ class ActivityController extends Controller
 
         return response()->json([
             'message' => 'Activity deleted successfully'
+        ]);
+    }
+
+    /**
+     * Publier une activité
+     */
+    public function publish(Activity $activity): JsonResponse
+    {
+        $this->authorize('update', $activity);
+
+        $updated = $this->activityService->publish($activity);
+
+        return response()->json([
+            'message' => 'Activity published successfully',
+            'data'    => $updated
+        ]);
+    }
+
+    /**
+     * Dépublier une activité
+     */
+    public function unpublish(Activity $activity): JsonResponse
+    {
+        $this->authorize('update', $activity);
+
+        $updated = $this->activityService->unpublish($activity);
+
+        return response()->json([
+            'message' => 'Activity unpublished successfully',
+            'data'    => $updated
         ]);
     }
 }

@@ -12,18 +12,22 @@ return new class extends Migration
     public function up(): void
     {
       Schema::create('packs_activities', function (Blueprint $table) {
-            $table->id('IdPackActivities');
+    $table->id('idpackactivities');
 
-            $table->foreignId('IdPack')
-                  ->constrained('packs', 'IdPack')
-                  ->onDelete('cascade');
+    $table->foreignId('idpack')
+          ->constrained('packs', 'idpack')
+          ->onDelete('cascade');
 
-            $table->foreignId('IdActivities')
-                  ->constrained('activities', 'IdActivities')
-                  ->onDelete('cascade');
+    $table->foreignId('idactivities')
+          ->constrained('activities', 'idactivities')
+          ->onDelete('cascade');
 
-            $table->timestamps();
-        });
+    $table->timestamps();
+
+    // Empêche un doublon (même activité dans le même pack)
+    $table->unique(['idpack', 'idactivities']);
+});
+
     }
 
     /**

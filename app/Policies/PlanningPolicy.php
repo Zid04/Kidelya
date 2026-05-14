@@ -7,30 +7,43 @@ use App\Models\Planning;
 
 class PlanningPolicy
 {
-    // Les méthodes d'autorisation pour les actions sur les plannings
-    // Chaque méthode retourne un booléen indiquant si l'utilisateur est autorisé à effectuer l'action
+    /**
+     * Voir la liste des plannings
+     */
     public function viewAny(User $user): bool
     {
-        return auth()->check() && $user->IdUser === $planning->IdUser;
+        return true;
     }
-//permet de vérifier si l'utilisateur connecté est le propriétaire du planning pour autoriser la visualisation, la création, la mise à jour et la suppression du planning.
+
+    /**
+     * Voir un planning — uniquement propriétaire
+     */
     public function view(User $user, Planning $planning): bool
     {
-        return auth()->check() && $user->IdUser === $planning->IdUser;
+        return $user->iduser === $planning->iduser;
     }
 
+    /**
+     * Créer un planning
+     */
     public function create(User $user): bool
     {
-        return auth()->check();
+        return true;
     }
 
+    /**
+     * Modifier un planning — uniquement propriétaire
+     */
     public function update(User $user, Planning $planning): bool
     {
-        return auth()->check() && $user->IdUser === $planning->IdUser;
+        return $user->iduser === $planning->iduser;
     }
 
+    /**
+     * Supprimer un planning — uniquement propriétaire
+     */
     public function delete(User $user, Planning $planning): bool
     {
-        return auth()->check() && $user->IdUser === $planning->IdUser;
+        return $user->iduser === $planning->iduser;
     }
 }

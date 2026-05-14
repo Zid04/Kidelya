@@ -4,20 +4,17 @@ namespace App\Http\Requests\Pack;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * Validation ajout activité dans pack
- */
 class AddActivityToPackRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth()->check();
+        return $this->user()->can('update', $this->route('pack'));
     }
 
     public function rules(): array
     {
         return [
-            'activity_id' => 'required|exists:activities,IdActivities',
+            'activity_id' => 'required|exists:activities,idactivities',
         ];
     }
 

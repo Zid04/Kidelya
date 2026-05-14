@@ -1,53 +1,43 @@
 <?php
 
 namespace App\Models;
+
 use Database\Factories\PlanningActivityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Modèle représentant l'association entre un planning et une activité.
- */
 class PlanningActivity extends Model
 {
     use HasFactory;
-    
+
     protected $table      = 'plannings_activities';
-    protected $primaryKey = 'IdPlanningActivities';
+    protected $primaryKey = 'idplanningactivities';
 
     protected $fillable = [
-        'IdPlanning',
-        'IdActivities',
-        'DateStart',
-        'DateEnd',
+        'idplanning',
+        'idactivities',
+        'datestart',
+        'dateend',
     ];
 
     protected $casts = [
-        'DateStart' => 'date',
-        'DateEnd'   => 'date',
+        'datestart' => 'date',
+        'dateend'   => 'date',
     ];
 
     public function getRouteKeyName(): string
     {
-        return 'IdPlanningActivities';
+        return 'idplanningactivities';
     }
 
-    // ─── Relations ────────────────────────────────────────────
-
-    /**
-     * Le planning auquel cette entrée appartient.
-     */
     public function planning(): BelongsTo
     {
-        return $this->belongsTo(Planning::class, 'IdPlanning', 'IdPlanning');
+        return $this->belongsTo(Planning::class, 'idplanning', 'idplanning');
     }
 
-    /**
-     * L'activité associée à cette entrée.
-     */
     public function activity(): BelongsTo
     {
-        return $this->belongsTo(Activity::class, 'IdActivities', 'IdActivities');
+        return $this->belongsTo(Activity::class, 'idactivities', 'idactivities');
     }
 }

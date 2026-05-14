@@ -9,26 +9,26 @@ class ThemePolicy
 {
     public function viewAny(User $user): bool
     {
-        return auth()->check();
+        return true;
     }
 
     public function view(User $user, Theme $theme): bool
     {
-        return auth()->check();
+        return true;
     }
 
     public function create(User $user): bool
     {
-        return auth()->check();
+        return true;
     }
 
     public function update(User $user, Theme $theme): bool
     {
-        return $user->IdUser === $group->IdUser;
+        return true; 
     }
 
     public function delete(User $user, Theme $theme): bool
     {
-        return $user->IdUser === $group->IdUser;
+        return true; 
     }
 }

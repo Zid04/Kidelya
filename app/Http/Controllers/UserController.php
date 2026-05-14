@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-
 use App\Services\UserService;
-
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 
@@ -54,9 +52,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        $user = $this->userService->create(
-            $request->validated()
-        );
+        $user = $this->userService->create($request->validated());
 
         return response()->json([
             'message' => 'User created successfully',

@@ -10,12 +10,12 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('themes', function (Blueprint $table) {
-            $table->id('IdTheme'); 
-            $table->string('Name', 50); 
-            $table->timestamps();
-        });
+    {Schema::create('themes', function (Blueprint $table) {
+    $table->id('idtheme'); 
+    $table->string('name', 50); 
+    $table->timestamps();
+});
+
     }
 
     /**

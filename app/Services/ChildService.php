@@ -13,7 +13,7 @@ class ChildService
      */
     public function getAllForUser(User $user)
     {
-        return Child::where('IdUser', $user->IdUser)
+        return Child::where('iduser', $user->iduser)
             ->with(['parents', 'groups'])
             ->latest()
             ->get();
@@ -25,7 +25,7 @@ class ChildService
     public function create(array $data): Child
     {
         // On associe automatiquement l'utilisateur connecté
-        $data['IdUser'] = Auth::id();
+        $data['iduser'] = Auth::id();
 
         return Child::create($data);
     }

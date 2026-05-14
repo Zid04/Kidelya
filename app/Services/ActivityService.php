@@ -10,65 +10,40 @@ class ActivityService
     /**
      * Récupère les activités paginées avec leurs relations.
      */
-
     public function getPaginated(array $filters = [], int $perPage = 10): LengthAwarePaginator
     {
         return Activity::with(['user', 'themes', 'competences', 'plannings', 'packs'])
 
-            /*
-            |------------------------------------------------------------------
-            | Filter : Age
-            |------------------------------------------------------------------
-            | Retourne les activités dont la tranche d'âge
-            | correspond à l'âge recherché.
-            | Ex: age=8 → AgeMin <= 8 <= AgeMax
-            */
+            // Filtre : âge
             ->when(isset($filters['age']), function ($query) use ($filters) {
-                $query->where('AgeMin', '<=', $filters['age'])
-                      ->where('AgeMax', '>=', $filters['age']);
+                $query->where('agemin', '<=', $filters['age'])
+                      ->where('agemax', '>=', $filters['age']);
             })
 
-            //filtre par saison
+            // Filtre : saison
             ->when(isset($filters['season']), function ($query) use ($filters) {
-                $query->where('Season', 'LIKE', '%' . $filters['season'] . '%');
+                $query->where('season', 'LIKE', '%' . $filters['season'] . '%');
             })
 
-            /*
-            |------------------------------------------------------------------
-            | Filter : Themes
-            |------------------------------------------------------------------
-            | Filtre les activités ayant au moins un des thèmes sélectionnés.
-            */
+            // Filtre : thèmes
             ->when(isset($filters['themes']), function ($query) use ($filters) {
                 $query->whereHas('themes', function ($q) use ($filters) {
-                    $q->whereIn('IdTheme', (array) $filters['themes']);
+                    $q->whereIn('idtheme', (array) $filters['themes']);
                 });
             })
 
-            /*
-            |------------------------------------------------------------------
-            | Filter : Competences
-            |------------------------------------------------------------------
-            | Filtre les activités ayant au moins une des compétences sélectionnées.
-            */
+            // Filtre : compétences
             ->when(isset($filters['competences']), function ($query) use ($filters) {
                 $query->whereHas('competences', function ($q) use ($filters) {
-                    $q->whereIn('IdCompetence', (array) $filters['competences']);
+                    $q->whereIn('idcompetence', (array) $filters['competences']);
                 });
             })
 
             ->latest()
             ->paginate($perPage)
-
-            /*
-            |------------------------------------------------------------------
-            | withQueryString()
-            |------------------------------------------------------------------
-            | Conserve les paramètres de filtre dans les liens de pagination.
-            */
             ->withQueryString();
     }
-   
+
     /**
      * Crée une nouvelle activité.
      */
@@ -83,7 +58,6 @@ class ActivityService
     public function update(Activity $activity, array $data): Activity
     {
         $activity->update($data);
-
         return $activity->fresh();
     }
 

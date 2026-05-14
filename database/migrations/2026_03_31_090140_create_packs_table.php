@@ -12,14 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('packs', function (Blueprint $table) {
-             $table->id('IdPack'); 
-             $table->string('Title', 50);
-             $table->float('Tarification', 15, 2);
-             $table->integer('Duration');
-             $table->text('Description')->nullable();
-             $table->foreignId('CreatedBy')->constrained('users', 'IdUser')->onDelete('cascade');
-             $table->timestamps();
-        });
+    $table->id('idpack'); 
+    $table->string('title', 50);
+    $table->float('tarification', 15, 2);
+    $table->integer('duration');
+    $table->text('description')->nullable();
+ $table->boolean('is_published')->default(false); 
+    $table->string('type', 50)->default('subscription'); 
+    $table->foreignId('createdby')
+          ->constrained('users', 'iduser')
+          ->onDelete('cascade');
+
+    $table->timestamps();
+});
+
     }
 
     /**

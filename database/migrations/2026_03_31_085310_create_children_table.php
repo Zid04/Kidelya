@@ -10,18 +10,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('children', function (Blueprint $table) {
-             $table->id('IdChildren');
-             $table->string('LastName', 50);
-             $table->string('FirstName', 50);
-             $table->date('BirthDay');
-             $table->text('SpecificationNote')->nullable();
-             $table->enum('Sexe', ['Male','Female','Other']);
-             $table->string('PhotoUrl', 255)->nullable();
-             $table->foreignId('IdUser')->constrained('users', 'IdUser')->onDelete('cascade');
-             $table->timestamps();
-        });
+    {Schema::create('children', function (Blueprint $table) {
+    $table->id('idchildren');
+    $table->string('lastname', 50);
+    $table->string('firstname', 50);
+    $table->date('birthday');
+    $table->text('specification_note')->nullable();
+    $table->enum('sexe', ['male','female','other']);
+    $table->string('photourl', 255)->nullable();
+    $table->foreignId('iduser')->constrained('users', 'iduser')->onDelete('cascade');
+    $table->timestamps();
+});
+
     }
 
     /**

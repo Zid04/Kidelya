@@ -6,24 +6,23 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateThemeRequest extends FormRequest
 {
-    //determine si l'utilisateur est autorisé à faire cette requete
     public function authorize(): bool
     {
-        return auth()->check();
+        return $this->user()->can('update', $this->route('theme'));
     }
-//les regles de validation pour les champs du formulaire
+
     public function rules(): array
     {
         return [
-            'Name' => 'sometimes|string|max:100|unique:themes,Name',
+            'name' => 'sometimes|string|max:100|unique:themes,name,' . $this->route('theme')->idtheme . ',idtheme',
         ];
     }
-//les messages d'erreur personnalisés pour les règles de validation
+
     public function messages(): array
     {
         return [
-            'Name.string' => 'The theme name must be a string.',
-            'Name.unique' => 'This theme already exists.',
+            'name.string' => 'The theme name must be a string.',
+            'name.unique' => 'This theme already exists.',
         ];
     }
 }

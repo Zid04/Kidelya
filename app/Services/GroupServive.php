@@ -12,7 +12,7 @@ class GroupService
      */
     public function getAllForUser(User $user)
     {
-        return Group::where('IdUser', $user->IdUser)
+        return Group::where('iduser', $user->iduser)
             ->with('children')
             ->latest()
             ->get();
@@ -23,7 +23,7 @@ class GroupService
      */
     public function create(array $data, User $user): Group
     {
-        $data['IdUser'] = $user->IdUser;
+        $data['iduser'] = $user->iduser;
 
         return Group::create($data);
     }
@@ -37,18 +37,24 @@ class GroupService
 
         return $group->fresh();
     }
-    // Ajout enfant au groupe
+
+    /**
+     * Ajout enfant au groupe
+     */
     public function addChild(Group $group, int $childId): void
-   {
-      // évite doublons
-       if (!$group->children()->where('IdChildren', $childId)->exists()) {
+    {
+        // évite doublons
+        if (!$group->children()->where('idchildren', $childId)->exists()) {
             $group->children()->attach($childId);
         }
-   }
-   // Retrait enfant du groupe
-   public function removeChild(Group $group, int $childId): void
-     {
-         $group->children()->detach($childId);
+    }
+
+    /**
+     * Retrait enfant du groupe
+     */
+    public function removeChild(Group $group, int $childId): void
+    {
+        $group->children()->detach($childId);
     }
 
     /**

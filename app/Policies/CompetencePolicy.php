@@ -5,9 +5,6 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\Competence;
 
-/**
- * Gestion des permissions sur Competence
- */
 class CompetencePolicy
 {
     /**
@@ -31,7 +28,7 @@ class CompetencePolicy
      */
     public function create(User $user): bool
     {
-        return auth()->check();
+        return true; // à affiner selon rôle si besoin
     }
 
     /**
@@ -39,7 +36,7 @@ class CompetencePolicy
      */
     public function update(User $user, Competence $competence): bool
     {
-        return auth()->check();
+        return true; // à affiner selon rôle si besoin
     }
 
     /**
@@ -47,6 +44,6 @@ class CompetencePolicy
      */
     public function delete(User $user, Competence $competence): bool
     {
-        return auth()->check();
+        return true; // à affiner selon rôle si besoin
     }
 }

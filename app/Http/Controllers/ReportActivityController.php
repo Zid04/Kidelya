@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\ReportActivity;
 use Illuminate\Http\JsonResponse;
-
 use App\Services\ReportActivityService;
 
 use App\Http\Requests\ReportActivity\StoreReportActivityRequest;
@@ -16,21 +15,15 @@ class ReportActivityController extends Controller
         private ReportActivityService $reportService
     ) {}
 
-    /**
-     * LISTE
-     */
-   public function index(): JsonResponse
-{
-    $this->authorize('viewAny', ReportActivity::class);
-    
-    return response()->json([
-        'data' => $this->reportService->getAll()
-    ]);
-}
+    public function index(): JsonResponse
+    {
+        $this->authorize('viewAny', ReportActivity::class);
 
-    /**
-     * CREATE
-     */
+        return response()->json([
+            'data' => $this->reportService->getAll()
+        ]);
+    }
+
     public function store(StoreReportActivityRequest $request): JsonResponse
     {
         $this->authorize('create', ReportActivity::class);
@@ -43,9 +36,6 @@ class ReportActivityController extends Controller
         ], 201);
     }
 
-    /**
-     * SHOW
-     */
     public function show(ReportActivity $reportActivity): JsonResponse
     {
         $this->authorize('view', $reportActivity);
@@ -55,9 +45,6 @@ class ReportActivityController extends Controller
         ]);
     }
 
-    /**
-     * UPDATE
-     */
     public function update(UpdateReportActivityRequest $request, ReportActivity $reportActivity): JsonResponse
     {
         $this->authorize('update', $reportActivity);
@@ -68,9 +55,6 @@ class ReportActivityController extends Controller
         ]);
     }
 
-    /**
-     * DELETE
-     */
     public function destroy(ReportActivity $reportActivity): JsonResponse
     {
         $this->authorize('delete', $reportActivity);

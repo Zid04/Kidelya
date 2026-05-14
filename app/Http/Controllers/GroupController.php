@@ -15,9 +15,6 @@ class GroupController extends Controller
         private GroupService $groupService
     ) {}
 
-    /**
-     * GET /api/groups
-     */
     public function index(): JsonResponse
     {
         return response()->json([
@@ -25,9 +22,6 @@ class GroupController extends Controller
         ]);
     }
 
-    /**
-     * POST /api/groups
-     */
     public function store(StoreGroupRequest $request): JsonResponse
     {
         $this->authorize('create', Group::class);
@@ -43,9 +37,6 @@ class GroupController extends Controller
         ], 201);
     }
 
-    /**
-     * GET /api/groups/{group}
-     */
     public function show(Group $group): JsonResponse
     {
         $this->authorize('view', $group);
@@ -55,9 +46,6 @@ class GroupController extends Controller
         ]);
     }
 
-    /**
-     * PUT /api/groups/{group}
-     */
     public function update(UpdateGroupRequest $request, Group $group): JsonResponse
     {
         $this->authorize('update', $group);
@@ -68,9 +56,6 @@ class GroupController extends Controller
         ]);
     }
 
-    /**
-     * DELETE /api/groups/{group}
-     */
     public function destroy(Group $group): JsonResponse
     {
         $this->authorize('delete', $group);
@@ -81,34 +66,34 @@ class GroupController extends Controller
             'message' => 'Group deleted successfully'
         ]);
     }
-    // POST /api/groups/{group}/children
+
     public function addChild(Group $group, Request $request): JsonResponse
-{
-    $this->authorize('update', $group);
+    {
+        $this->authorize('update', $group);
 
-    $request->validate([
-        'child_id' => 'required|exists:children,IdChildren',
-    ]);
+        $request->validate([
+            'child_id' => 'required|exists:children,idchildren',
+        ]);
 
-    $this->groupService->addChild($group, $request->child_id);
+        $this->groupService->addChild($group, $request->child_id);
 
-    return response()->json([
-        'message' => 'Child added to group successfully'
-    ]);
-}
-// DELETE /api/groups/{group}/children
-public function removeChild(Group $group, Request $request): JsonResponse
-{
-    $this->authorize('update', $group);
+        return response()->json([
+            'message' => 'Child added to group successfully'
+        ]);
+    }
 
-    $request->validate([
-        'child_id' => 'required|exists:children,IdChildren',
-    ]);
+    public function removeChild(Group $group, Request $request): JsonResponse
+    {
+        $this->authorize('update', $group);
 
-    $this->groupService->removeChild($group, $request->child_id);
+        $request->validate([
+            'child_id' => 'required|exists:children,idchildren',
+        ]);
 
-    return response()->json([
-        'message' => 'Child removed from group successfully'
-    ]);
-}
+        $this->groupService->removeChild($group, $request->child_id);
+
+        return response()->json([
+            'message' => 'Child removed from group successfully'
+        ]);
+    }
 }

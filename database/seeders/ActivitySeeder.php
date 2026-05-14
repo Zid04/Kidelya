@@ -8,94 +8,88 @@ use App\Models\Theme;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-/**
- * Seeder pour les activités.
- *
- * Crée des activités de démonstration avec leurs
- * thèmes et compétences associés.
- * Dépend de UserSeeder, ThemeSeeder, CompetenceSeeder.
- */
 class ActivitySeeder extends Seeder
 {
     public function run(): void
     {
-        // Récupération de l'admin pour associer les activités
-        $admin  = User::where('Email', 'admin@kidelya.com')->first();
+        // Récupération de l'admin
+        $admin = User::where('email', 'admin@kidelya.com')->first();
+
         $themes = Theme::all();
         $competences = Competence::all();
 
         $activities = [
             [
-                'Title'       => 'Atelier peinture',
-                'Description' => 'Découverte de la peinture aquarelle pour les enfants.',
-                'AgeMin'      => 5,
-                'AgeMax'      => 12,
-                'Duration'    => 60,
-                'Season'      => 'Spring',
-                'Location'    => 'Salle d\'art',
-                'PhotoUrl'    => null,
-                'IdUser'      => $admin->IdUser,
+                'title'       => 'Atelier peinture',
+                'description' => 'Découverte de la peinture aquarelle pour les enfants.',
+                'agemin'      => 5,
+                'agemax'      => 12,
+                'duration'    => 60,
+                'season'      => 'Spring',
+                'location'    => 'Salle d\'art',
+                'photourl'    => null,
+                'iduser'      => $admin->iduser,
             ],
             [
-                'Title'       => 'Randonnée en forêt',
-                'Description' => 'Exploration de la nature et découverte de la faune locale.',
-                'AgeMin'      => 6,
-                'AgeMax'      => 15,
-                'Duration'    => 120,
-                'Season'      => 'Summer',
-                'Location'    => 'Forêt de Soignes',
-                'PhotoUrl'    => null,
-                'IdUser'      => $admin->IdUser,
+                'title'       => 'Randonnée en forêt',
+                'description' => 'Exploration de la nature et découverte de la faune locale.',
+                'agemin'      => 6,
+                'agemax'      => 15,
+                'duration'    => 120,
+                'season'      => 'Summer',
+                'location'    => 'Forêt de Soignes',
+                'photourl'    => null,
+                'iduser'      => $admin->iduser,
             ],
             [
-                'Title'       => 'Initiation à la musique',
-                'Description' => 'Apprentissage des bases musicales avec instruments.',
-                'AgeMin'      => 4,
-                'AgeMax'      => 10,
-                'Duration'    => 45,
-                'Season'      => 'Winter',
-                'Location'    => 'Salle de musique',
-                'PhotoUrl'    => null,
-                'IdUser'      => $admin->IdUser,
+                'title'       => 'Initiation à la musique',
+                'description' => 'Apprentissage des bases musicales avec instruments.',
+                'agemin'      => 4,
+                'agemax'      => 10,
+                'duration'    => 45,
+                'season'      => 'Winter',
+                'location'    => 'Salle de musique',
+                'photourl'    => null,
+                'iduser'      => $admin->iduser,
             ],
             [
-                'Title'       => 'Atelier cuisine',
-                'Description' => 'Préparation de recettes simples et saines.',
-                'AgeMin'      => 7,
-                'AgeMax'      => 14,
-                'Duration'    => 90,
-                'Season'      => 'Autumn',
-                'Location'    => 'Cuisine pédagogique',
-                'PhotoUrl'    => null,
-                'IdUser'      => $admin->IdUser,
+                'title'       => 'Atelier cuisine',
+                'description' => 'Préparation de recettes simples et saines.',
+                'agemin'      => 7,
+                'agemax'      => 14,
+                'duration'    => 90,
+                'season'      => 'Autumn',
+                'location'    => 'Cuisine pédagogique',
+                'photourl'    => null,
+                'iduser'      => $admin->iduser,
             ],
             [
-                'Title'       => 'Initiation au code',
-                'Description' => 'Découverte de la programmation via des jeux interactifs.',
-                'AgeMin'      => 8,
-                'AgeMax'      => 16,
-                'Duration'    => 60,
-                'Season'      => 'Winter',
-                'Location'    => 'Salle informatique',
-                'PhotoUrl'    => null,
-                'IdUser'      => $admin->IdUser,
+                'title'       => 'Initiation au code',
+                'description' => 'Découverte de la programmation via des jeux interactifs.',
+                'agemin'      => 8,
+                'agemax'      => 16,
+                'duration'    => 60,
+                'season'      => 'Winter',
+                'location'    => 'Salle informatique',
+                'photourl'    => null,
+                'iduser'      => $admin->iduser,
             ],
         ];
 
-        foreach ($activities as $activityData) {
+        foreach ($activities as $data) {
             $activity = Activity::firstOrCreate(
-                ['Title' => $activityData['Title']],
-                $activityData
+                ['title' => $data['title']],
+                $data
             );
 
-            // Association aléatoire de 1 à 3 thèmes par activité
+            // Associer 1 à 3 thèmes
             $activity->themes()->syncWithoutDetaching(
-                $themes->random(rand(1, 3))->pluck('IdTheme')->toArray()
+                $themes->random(rand(1, 3))->pluck('idtheme')->toArray()
             );
 
-            // Association aléatoire de 1 à 3 compétences par activité
+            // Associer 1 à 3 compétences
             $activity->competences()->syncWithoutDetaching(
-                $competences->random(rand(1, 3))->pluck('IdCompetence')->toArray()
+                $competences->random(rand(1, 3))->pluck('idcompetence')->toArray()
             );
         }
     }

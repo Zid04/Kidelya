@@ -5,31 +5,22 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\Group;
 
-/**
- * Policy Group
- *
- * Règle métier :
- * seul le user créateur du groupe peut le gérer
- */
 class GroupPolicy
 {
     /**
-     * Liste des groupes
+     * Voir la liste des groupes
      */
     public function viewAny(User $user): bool
     {
-    
-        return auth()->check() && $user->IdUser === $group->IdUser;
+        return true;
     }
 
     /**
-     * Voir un groupe
-     * uniquement propriétaire 
+     * Voir un groupe — uniquement propriétaire
      */
     public function view(User $user, Group $group): bool
     {
-            return auth()->check() && $user->IdUser === $group->IdUser;
-       
+        return $user->iduser === $group->iduser;
     }
 
     /**
@@ -37,34 +28,38 @@ class GroupPolicy
      */
     public function create(User $user): bool
     {
-        return auth()->check();
+        return true;
     }
 
     /**
-     * Modifier un groupe
-     * uniquement propriétaire
+     * Modifier un groupe — uniquement propriétaire
      */
     public function update(User $user, Group $group): bool
     {
-         return auth()->check() && $user->IdUser === $group->IdUser;
+        return $user->iduser === $group->iduser;
     }
 
     /**
-     * Supprimer un groupe
-     * uniquement propriétaire
+     * Supprimer un groupe — uniquement propriétaire
      */
     public function delete(User $user, Group $group): bool
     {
-         return auth()->check() && $user->IdUser === $group->IdUser;
+        return $user->iduser === $group->iduser;
     }
-//ajouter un enfant à un groupe
+
+    /**
+     * Ajouter un enfant au groupe — uniquement propriétaire
+     */
     public function attachChild(User $user, Group $group): bool
     {
-        return auth()->check() && $user->IdUser === $group->IdUser;
+        return $user->iduser === $group->iduser;
     }
-    // retirer un enfant d'un groupe
+
+    /**
+     * Retirer un enfant du groupe — uniquement propriétaire
+     */
     public function detachChild(User $user, Group $group): bool
     {
-        return auth()->check() && $user->IdUser === $group->IdUser;
+        return $user->iduser === $group->iduser;
     }
 }

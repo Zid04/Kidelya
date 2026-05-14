@@ -16,16 +16,20 @@ class PackController extends Controller
     ) {}
 
     /**
-     * DASHBOARD PACKS
+     * Liste des packs (admin)
      */
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', Pack::class);
+
         return response()->json([
             'data' => $this->packService->getDashboardPacks(auth()->user())
-            
         ]);
     }
 
+    /**
+     * Créer un pack
+     */
     public function store(StorePackRequest $request): JsonResponse
     {
         $this->authorize('create', Pack::class);
@@ -36,14 +40,21 @@ class PackController extends Controller
         ], 201);
     }
 
+    /**
+     * Afficher un pack
+     */
     public function show(Pack $pack): JsonResponse
     {
-        $this->authorize('view', $pack); 
+        $this->authorize('view', $pack);
+
         return response()->json([
             'data' => $pack->load(['creator', 'activities'])
         ]);
     }
 
+    /**
+     * Modifier un pack
+     */
     public function update(UpdatePackRequest $request, Pack $pack): JsonResponse
     {
         $this->authorize('update', $pack);
@@ -54,6 +65,9 @@ class PackController extends Controller
         ]);
     }
 
+    /**
+     * Supprimer un pack
+     */
     public function destroy(Pack $pack): JsonResponse
     {
         $this->authorize('delete', $pack);
@@ -66,12 +80,14 @@ class PackController extends Controller
     }
 
     /**
-     * Ajouter activité
+     * Ajouter une activité dans un pack
      */
     public function addActivity(Pack $pack, Request $request): JsonResponse
     {
+        $this->authorize('update', $pack);
+
         $request->validate([
-            'activity_id' => 'required|exists:activities,IdActivities'
+            'activity_id' => 'required|exists:activities,idactivities'
         ]);
 
         $this->packService->attachActivity($pack, $request->activity_id);
@@ -82,18 +98,50 @@ class PackController extends Controller
     }
 
     /**
-     * Retirer activité
+     * Retirer une activité d’un pack
      */
     public function removeActivity(Pack $pack, Request $request): JsonResponse
     {
+        $this->authorize('update', $pack);
+
         $request->validate([
-            'activity_id' => 'required|exists:activities,IdActivities'
+            'activity_id' => 'required|exists:activities,idactivities'
         ]);
 
         $this->packService->detachActivity($pack, $request->activity_id);
 
         return response()->json([
             'message' => 'Activity removed from pack'
+        ]);
+    }
+
+    /**
+     * Publier un pack
+     */
+    public function publish(Pack $pack): JsonResponse
+    {
+        $this->authorize('update', $pack);
+
+        $updated = $this->packService->publish($pack);
+
+        return response()->json([
+            'message' => 'Pack published successfully',
+            'data'    => $updated
+        ]);
+    }
+
+    /**
+     * Dépublier un pack
+     */
+    public function unpublish(Pack $pack): JsonResponse
+    {
+        $this->authorize('update', $pack);
+
+        $updated = $this->packService->unpublish($pack);
+
+        return response()->json([
+            'message' => 'Pack unpublished successfully',
+            'data'    => $updated
         ]);
     }
 }

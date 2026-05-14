@@ -19,7 +19,7 @@ class PlanningService
                 'user',
                 'reportActivity'
             ])
-            ->where('IdUser', $user->IdUser)
+            ->where('iduser', $user->iduser)
             ->latest()
             ->get();
     }
@@ -29,7 +29,7 @@ class PlanningService
      */
     public function create(array $data, User $user): Planning
     {
-        $data['IdUser'] = $user->IdUser;
+        $data['iduser'] = $user->iduser;
 
         $planning = Planning::create($data);
 

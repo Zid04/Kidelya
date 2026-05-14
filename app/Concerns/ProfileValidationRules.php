@@ -8,33 +8,33 @@ use Illuminate\Validation\Rule;
 trait ProfileValidationRules
 {
     /**
-     * Get the validation rules used to validate user profiles.
-     *
-     * @return array<string, array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>>
+     * Validation rules for user profile fields.
      */
     protected function profileRules(?int $userId = null): array
     {
         return [
-            'name' => $this->nameRules(),
-            'email' => $this->emailRules($userId),
+            'firstname' => $this->firstnameRules(),
+            'lastname'  => $this->lastnameRules(),
+            'email'     => $this->emailRules($userId),
+            'avatarurl' => $this->avatarRules(),
         ];
     }
 
-    /**
-     * Get the validation rules used to validate user names.
-     *
-     * @return array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>
-     */
-    protected function nameRules(): array
+    protected function firstnameRules(): array
     {
-        return ['required', 'string', 'max:255'];
+        return ['required', 'string', 'max:50'];
     }
 
-    /**
-     * Get the validation rules used to validate user emails.
-     *
-     * @return array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>
-     */
+    protected function lastnameRules(): array
+    {
+        return ['required', 'string', 'max:50'];
+    }
+
+    protected function avatarRules(): array
+    {
+        return ['nullable', 'string', 'max:255'];
+    }
+
     protected function emailRules(?int $userId = null): array
     {
         return [
@@ -43,8 +43,8 @@ trait ProfileValidationRules
             'email',
             'max:255',
             $userId === null
-                ? Rule::unique(User::class)
-                : Rule::unique(User::class)->ignore($userId),
+                ? Rule::unique(User::class, 'email')
+                : Rule::unique(User::class, 'email')->ignore($userId, 'iduser'),
         ];
     }
 }

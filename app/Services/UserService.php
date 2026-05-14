@@ -24,11 +24,11 @@ class UserService
     public function create(array $data): User
     {
         // Hash du mot de passe
-        if (!empty($data['Password'])) {
-            $data['Password'] = Hash::make($data['Password']);
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
         }
 
-        // Valeur par défaut (optionnel)
+        // Valeur par défaut
         $data['is_active'] = true;
 
         return User::create($data);
@@ -40,10 +40,10 @@ class UserService
     public function update(User $user, array $data): User
     {
         // Gestion mot de passe
-        if (!empty($data['Password'])) {
-            $data['Password'] = Hash::make($data['Password']);
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
         } else {
-            unset($data['Password']);
+            unset($data['password']);
         }
 
         $user->update($data);
@@ -52,7 +52,7 @@ class UserService
     }
 
     /**
-     * Désactivation d’un utilisateur (soft delete)
+     * Désactivation d’un utilisateur
      */
     public function deactivate(User $user): User
     {
@@ -60,11 +60,11 @@ class UserService
             'is_active' => false
         ]);
 
-        $user->fresh();
+        return $user->fresh();
     }
 
     /**
-     * Suppression 
+     * Suppression
      */
     public function delete(User $user): void
     {

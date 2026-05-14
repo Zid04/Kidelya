@@ -12,21 +12,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('themes_activities', function (Blueprint $table) {
-            $table->id('idThemeActivities');
+       Schema::create('themes_activities', function (Blueprint $table) {
+    $table->id('idthemeactivities');
 
-            $table->foreignId('IdTheme')
-                  ->constrained('themes', 'IdTheme')
-                  ->onDelete('cascade');
+    $table->foreignId('idtheme')
+          ->constrained('themes', 'idtheme')
+          ->onDelete('cascade');
 
-            $table->foreignId('IdActivities')
-                  ->constrained('activities', 'IdActivities')
-                  ->onDelete('cascade');
+    $table->foreignId('idactivities')
+          ->constrained('activities', 'idactivities')
+          ->onDelete('cascade');
 
-            $table->timestamps();
+    $table->timestamps();
 
-            $table->unique(['IdTheme', 'IdActivities']);
-        });
+    $table->unique(['idtheme', 'idactivities']);
+});
+
     }
 
     /**

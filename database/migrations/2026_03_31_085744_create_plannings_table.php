@@ -12,19 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plannings', function (Blueprint $table) {
-            $table->id('IdPlanning'); 
-            $table->string('Title', 50); 
-            $table->text('Description')->nullable(); 
-             $table->string('location', 100);
-            $table->foreignId('IdUser')
-                  ->constrained('users', 'IdUser')
-                  ->onDelete('cascade');
-            $table->foreignId('IdReport')
-                  ->constrained('report_activities', 'IdReport')
-                  ->onDelete('cascade');
+    $table->id('idplanning'); 
+    $table->string('title', 50); 
+    $table->text('description')->nullable(); 
+    $table->string('location', 100);
 
-            $table->timestamps();
-        });
+    $table->foreignId('iduser')
+          ->constrained('users', 'iduser')
+          ->onDelete('cascade');
+
+    $table->foreignId('idreport')
+          ->constrained('report_activities', 'idreport')
+          ->onDelete('cascade');
+
+    $table->timestamps();
+});
+
     }
 
     /**

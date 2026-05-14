@@ -6,26 +6,23 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreThemeRequest extends FormRequest
 {
-    //determine si l'utilisateur est autorisé à faire cette requete
     public function authorize(): bool
     {
-        return auth()->check();
+        return $this->user()->can('create', \App\Models\Theme::class);
     }
-
-    //les regles de validation pour les champs du formulaire
 
     public function rules(): array
     {
         return [
-            'Name' => 'required|string|max:100|unique:themes,Name',
+            'name' => 'required|string|max:100|unique:themes,name',
         ];
     }
-//les messages d'erreur personnalisés pour les règles de validation
+
     public function messages(): array
     {
         return [
-            'Name.required' => 'The theme name is required.',
-            'Name.unique'   => 'This theme already exists.',
+            'name.required' => 'The theme name is required.',
+            'name.unique'   => 'This theme already exists.',
         ];
     }
 }

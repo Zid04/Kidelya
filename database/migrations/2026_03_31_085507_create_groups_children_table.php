@@ -11,18 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('groups_children', function (Blueprint $table) {
-            $table->id('IdGroupChildren');
-            $table->foreignId('IdGroup')
-                  ->constrained('groups', 'IdGroup')
-                  ->onDelete('cascade');
-            $table->foreignId('IdChildren')
-                  ->constrained('children', 'IdChildren')
-                  ->onDelete('cascade');
-            // Empêcher les doublons (un enfant ne peut pas être ajouté 2 fois au même groupe)
-            $table->unique(['IdGroup', 'IdChildren']);
-            $table->timestamps();
-        });
+       Schema::create('groups_children', function (Blueprint $table) {
+    $table->id('idgroupchildren');
+
+    $table->foreignId('idgroup')
+          ->constrained('groups', 'idgroup')
+          ->onDelete('cascade');
+
+    $table->foreignId('idchildren')
+          ->constrained('children', 'idchildren')
+          ->onDelete('cascade');
+
+    // Empêcher les doublons
+    $table->unique(['idgroup', 'idchildren']);
+
+    $table->timestamps();
+});
+
     }
 
     /**

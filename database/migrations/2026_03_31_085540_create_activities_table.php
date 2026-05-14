@@ -12,21 +12,26 @@ return new class extends Migration
     
     public function up(): void
     {
-        Schema::create('activities', function (Blueprint $table) {
-             $table->id('IdActivities'); 
-             $table->string('Title', 50);
-             $table->text('Description')->nullable();
-             $table->integer('AgeMin')->nullable();
-             $table->integer('AgeMax')->nullable();
-             $table->integer('Duration')->nullable(); 
-             $table->string('Season', 50)->nullable();
-             $table->string('Location', 100)->nullable();
-             $table->string('PhotoUrl', 255)->nullable();
-             $table->foreignId('IdUser')
-                  ->constrained('users', 'IdUser')
-                  ->onDelete('cascade');
-             $table->timestamps();
-        });
+       Schema::create('activities', function (Blueprint $table) {
+    $table->id('idactivities'); 
+    $table->string('title', 50);
+    $table->text('description')->nullable();
+    $table->integer('agemin')->nullable();
+    $table->integer('agemax')->nullable();
+    $table->integer('duration')->nullable(); 
+    $table->string('season', 50)->nullable();
+    $table->string('location', 100)->nullable();
+    $table->string('photourl', 255)->nullable();
+  $table->integer('credit_price')->nullable();      
+    $table->boolean('is_purchasable')->default(false); 
+    $table->boolean('is_published')->default(true);    
+    $table->foreignId('iduser')
+          ->constrained('users', 'iduser')
+          ->onDelete('cascade');
+
+    $table->timestamps();
+});
+
     }
 
     /**

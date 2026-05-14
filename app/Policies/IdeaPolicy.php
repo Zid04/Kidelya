@@ -5,39 +5,45 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\Idea;
 
-/**
- * Policy Idea
- *
- * Règle métier :
- * une idée appartient à un user
- *seul le propriétaire peut la gérer
- */
 class IdeaPolicy
 {
-    // ─── Permissions ─────────────────────────────────────────
-    // Seul le propriétaire de l'idée peut la voir, la modifier ou la supprimer.
+    /**
+     * Voir la liste des idées
+     */
     public function viewAny(User $user): bool
     {
-         return auth()->check() && $user->IdUser === $group->IdUser;
+        return true;
     }
-// Seul les utilisateurs authentifiés peuvent créer des idées.
+
+    /**
+     * Voir une idée — uniquement propriétaire
+     */
     public function view(User $user, Idea $idea): bool
     {
-         return auth()->check() && $user->IdUser === $group->IdUser;
+        return $user->iduser === $idea->iduser;
     }
 
+    /**
+     * Créer une idée
+     */
     public function create(User $user): bool
     {
-        return auth()->check();
+        return true;
     }
 
+    /**
+     * Modifier une idée — uniquement propriétaire
+     */
     public function update(User $user, Idea $idea): bool
     {
-        return auth()->check() && $user->IdUser === $group->IdUser;
+        return $user->iduser === $idea->iduser;
     }
 
+    /**
+     * Supprimer une idée — uniquement propriétaire
+     */
     public function delete(User $user, Idea $idea): bool
     {
-         return auth()->check() && $user->IdUser === $group->IdUser;
+        return $user->iduser === $idea->iduser;
     }
 }

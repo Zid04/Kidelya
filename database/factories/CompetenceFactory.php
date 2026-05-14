@@ -4,10 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * Factory pour le modèle Competence.
- * Génère des compétences avec des noms réalistes.
- */
 class CompetenceFactory extends Factory
 {
     public function definition(): array
@@ -19,7 +15,7 @@ class CompetenceFactory extends Factory
         ];
 
         return [
-            'Name' => $this->faker->unique()->randomElement($competences),
+            'name' => $this->faker->unique()->randomElement($competences),
         ];
     }
 }

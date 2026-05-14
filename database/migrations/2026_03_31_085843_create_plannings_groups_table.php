@@ -12,17 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plannings_groups', function (Blueprint $table) {
-            $table->id('IdPlanningGroup');
-            $table->foreignId('IdPlanning')
-                  ->constrained('plannings', 'IdPlanning')
-                  ->onDelete('cascade');
-            $table->foreignId('IdGroup')
-                  ->constrained('groups', 'IdGroup')
-                  ->onDelete('cascade');
-            $table->timestamps();
-            //Empêche un doublon (même groupe dans le même planning)
-            $table->unique(['IdPlanning', 'IdGroup']);
-        });
+    $table->id('idplanninggroup');
+
+    $table->foreignId('idplanning')
+          ->constrained('plannings', 'idplanning')
+          ->onDelete('cascade');
+
+    $table->foreignId('idgroup')
+          ->constrained('groups', 'idgroup')
+          ->onDelete('cascade');
+
+    $table->timestamps();
+
+    $table->unique(['idplanning', 'idgroup']);
+});
+
     }
 
     /**

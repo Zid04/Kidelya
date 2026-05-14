@@ -5,35 +5,45 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\Guardian;
 
-/**
- * Sécurité Guardian (parents/tuteurs)
- */
 class GuardianPolicy
 {
-    // ─── Permissions ─────────────────────────────────────────
-    // Seul le propriétaire du groupe peut voir, modifier ou supprimer les tuteurs associés .
+    /**
+     * Voir la liste des tuteurs
+     */
     public function viewAny(User $user): bool
     {
-          return auth()->check() && $user->IdUser === $group->IdUser;
+        return true;
     }
 
+    /**
+     * Voir un tuteur — uniquement propriétaire
+     */
     public function view(User $user, Guardian $guardian): bool
     {
-          return auth()->check() && $user->IdUser === $group->IdUser;
+        return $user->iduser === $guardian->iduser;
     }
 
+    /**
+     * Créer un tuteur
+     */
     public function create(User $user): bool
     {
-        return auth()->check();
+        return true;
     }
 
+    /**
+     * Modifier un tuteur — uniquement propriétaire
+     */
     public function update(User $user, Guardian $guardian): bool
     {
-          return auth()->check() && $user->IdUser === $group->IdUser;
+        return $user->iduser === $guardian->iduser;
     }
 
+    /**
+     * Supprimer un tuteur — uniquement propriétaire
+     */
     public function delete(User $user, Guardian $guardian): bool
     {
-         return auth()->check() && $user->IdUser === $group->IdUser;
+        return $user->iduser === $guardian->iduser;
     }
 }

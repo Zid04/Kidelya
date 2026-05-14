@@ -7,54 +7,48 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Seeder pour les utilisateurs.
- *
- * Crée un Admin, un User et un Partner de test.
- * Dépend de RoleSeeder.
- */
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
         // Récupération des rôles créés par RoleSeeder
-        $adminRole   = Role::where('Type', 'Admin')->first();
-        $userRole    = Role::where('Type', 'User')->first();
-        $partnerRole = Role::where('Type', 'Partner')->first();
+        $adminRole   = Role::where('type', 'Admin')->first();
+        $userRole    = Role::where('type', 'User')->first();
+        $partnerRole = Role::where('type', 'Partner')->first();
 
         // Compte Admin
         User::firstOrCreate(
-            ['Email' => 'admin@kidelya.com'],
+            ['email' => 'admin@kidelya.com'],
             [
-                'FirstName' => 'first',
-                'LastName'  => 'Admin',
-                'Password'  => Hash::make('password'),
+                'firstname' => 'first',
+                'lastname'  => 'admin',
+                'password'  => Hash::make('password'),
                 'is_active' => true,
-                'IdRole'    => $adminRole->IdRole,
+                'idrole'    => $adminRole->idrole,
             ]
         );
 
         // Compte User standard
         User::firstOrCreate(
-            ['Email' => 'user@kidelya.com'],
+            ['email' => 'user@kidelya.com'],
             [
-                'FirstName' => 'jonh',
-                'LastName'  => 'smith',
-                'Password'  => Hash::make('password'),
+                'firstname' => 'john',
+                'lastname'  => 'smith',
+                'password'  => Hash::make('password'),
                 'is_active' => true,
-                'IdRole'    => $userRole->IdRole,
+                'idrole'    => $userRole->idrole,
             ]
         );
 
         // Compte Partner
         User::firstOrCreate(
-            ['Email' => 'partner@kidelya.com'],
+            ['email' => 'partner@kidelya.com'],
             [
-                'FirstName' => 'Jane',
-                'LastName'  => 'wilson',
-                'Password'  => Hash::make('password'),
+                'firstname' => 'jane',
+                'lastname'  => 'wilson',
+                'password'  => Hash::make('password'),
                 'is_active' => true,
-                'IdRole'    => $partnerRole->IdRole,
+                'idrole'    => $partnerRole->idrole,
             ]
         );
     }

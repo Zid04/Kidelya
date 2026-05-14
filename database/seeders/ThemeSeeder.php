@@ -5,12 +5,6 @@ namespace Database\Seeders;
 use App\Models\Theme;
 use Illuminate\Database\Seeder;
 
-/**
- * Seeder pour les thèmes.
- *
- * Crée les thèmes de base utilisés pour catégoriser les activités.
- * Données de référence — indépendant des autres seeders.
- */
 class ThemeSeeder extends Seeder
 {
     public function run(): void
@@ -31,7 +25,7 @@ class ThemeSeeder extends Seeder
         ];
 
         foreach ($themes as $theme) {
-            Theme::firstOrCreate(['Name' => $theme]);
+            Theme::firstOrCreate(['name' => $theme]);
         }
     }
 }

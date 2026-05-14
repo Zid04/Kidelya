@@ -7,55 +7,51 @@ use App\Models\Pack;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-/**
- * Seeder pour les packs.
- *
- * Crée des packs de démonstration avec leurs activités associées.
- * Dépend de UserSeeder et ActivitySeeder.
- */
 class PackSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin      = User::where('Email', 'admin@kidelya.com')->first();
+        // Récupération de l'admin
+        $admin = User::where('email', 'admin@kidelya.com')->first();
         $activities = Activity::all();
 
         $packs = [
             [
-                'Title'        => 'Pack Découverte',
-                'Description'  => 'Idéal pour débuter avec des activités variées.',
-                'Tarification' => 29.99,
-                'Duration'     => 30,
-                'CreatedBy'    => $admin->IdUser,
+                'title'        => 'Pack Découverte',
+                'description'  => 'Idéal pour débuter avec des activités variées.',
+                'tarification' => 29.99,
+                'duration'     => 30,
+                'createdby'    => $admin->iduser,
             ],
             [
-                'Title'        => 'Pack Premium',
-                'Description'  => 'Accès illimité à toutes les activités pendant 3 mois.',
-                'Tarification' => 79.99,
-                'Duration'     => 90,
-                'CreatedBy'    => $admin->IdUser,
+                'title'        => 'Pack Premium',
+                'description'  => 'Accès illimité à toutes les activités pendant 3 mois.',
+                'tarification' => 79.99,
+                'duration'     => 90,
+                'createdby'    => $admin->iduser,
             ],
             [
-                'Title'        => 'Pack Annuel',
-                'Description'  => 'Le meilleur rapport qualité/prix pour une année complète.',
-                'Tarification' => 199.99,
-                'Duration'     => 365,
-                'CreatedBy'    => $admin->IdUser,
+                'title'        => 'Pack Annuel',
+                'description'  => 'Le meilleur rapport qualité/prix pour une année complète.',
+                'tarification' => 199.99,
+                'duration'     => 365,
+                'createdby'    => $admin->iduser,
             ],
         ];
 
-        foreach ($packs as $packData) {
+        foreach ($packs as $data) {
             $pack = Pack::firstOrCreate(
-                ['Title' => $packData['Title']],
-                $packData
+                ['title' => $data['title']],
+                $data
             );
 
-            // Association de 2 à 3 activités par pack
+            // Associer 2 à 3 activités
             if ($activities->count() > 0) {
                 $pack->activities()->syncWithoutDetaching(
-                    $activities->random(min(2, $activities->count()))
-                               ->pluck('IdActivities')
-                               ->toArray()
+                    $activities
+                        ->random(min(3, max(2, $activities->count())))
+                        ->pluck('idactivities')
+                        ->toArray()
                 );
             }
         }

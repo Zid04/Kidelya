@@ -6,28 +6,38 @@ use App\Models\ReportActivity;
 
 class ReportActivityService
 {
-    //permet de créer un rapport d'activité
-
+    /**
+     * Créer un rapport d'activité
+     */
     public function create(array $data): ReportActivity
     {
         return ReportActivity::create($data);
     }
-//permet de mettre à jour un rapport d'activité
+
+    /**
+     * Mettre à jour un rapport d'activité
+     */
     public function update(ReportActivity $report, array $data): ReportActivity
     {
         $report->update($data);
-
         return $report->fresh();
     }
-//permet de supprimer un rapport d'activité
+
+    /**
+     * Supprimer un rapport d'activité
+     */
     public function delete(ReportActivity $report): void
     {
         $report->delete();
-    
     }
-    //permet de récupérer tous les rapports d'activité
+
+    /**
+     * Récupérer tous les rapports d'activité
+     */
     public function getAll()
-{
-    return ReportActivity::with('planning')->latest()->get();
-}
+    {
+        return ReportActivity::with('planning')
+            ->latest()
+            ->get();
+    }
 }

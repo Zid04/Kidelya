@@ -4,9 +4,6 @@ namespace App\Services;
 
 use App\Models\Pack;
 
-/**
- * Service Pack
- */
 class PackService
 {
     /**
@@ -24,7 +21,7 @@ class PackService
      */
     public function getOwnedPacks($user)
     {
-        return Pack::where('CreatedBy', $user->IdUser)
+        return Pack::where('createdby', $user->iduser)
             ->with(['creator', 'activities'])
             ->latest()
             ->get();
@@ -36,7 +33,7 @@ class PackService
     public function getSubscribedPacks($user)
     {
         return Pack::whereHas('subscriptions', function ($q) use ($user) {
-            $q->where('IdUser', $user->IdUser);
+            $q->where('iduser', $user->iduser);
         })
         ->with(['activities'])
         ->latest()
@@ -44,19 +41,17 @@ class PackService
     }
 
     /**
-     * DASHBOARD GLOBAL -> selon rôle
+     * Dashboard global selon rôle
      */
     public function getDashboardPacks($user)
     {
-        return match ($user->role->Type) {
+        return match ($user->role->type) {
 
-            'Admin' => $this->getAllForAdmin(),
-
+            'Admin'   => $this->getAllForAdmin(),
             'Partner' => $this->getOwnedPacks($user),
+            'User'    => $this->getSubscribedPacks($user),
 
-            'User' => $this->getSubscribedPacks($user),
-
-            default => collect(),
+            default   => collect(),
         };
     }
 
@@ -66,21 +61,26 @@ class PackService
     public function create(array $data, $user): Pack
     {
         return Pack::create([
-            'Title'        => $data['Title'],
-            'Description'  => $data['Description'] ?? null,
-            'Tarification' => $data['Tarification'],
-            'Duration'     => $data['Duration'],
-            'CreatedBy'    => $user->IdUser,
+            'title'        => $data['title'],
+            'description'  => $data['description'] ?? null,
+            'tarification' => $data['tarification'],
+            'duration'     => $data['duration'],
+            'createdby'    => $user->iduser,
         ]);
     }
 
+    /**
+     * UPDATE
+     */
     public function update(Pack $pack, array $data): Pack
     {
         $pack->update($data);
-
         return $pack->fresh();
     }
 
+    /**
+     * DELETE
+     */
     public function delete(Pack $pack): void
     {
         $pack->delete();
@@ -91,7 +91,7 @@ class PackService
      */
     public function attachActivity(Pack $pack, int $activityId): void
     {
-        if (!$pack->activities()->where('IdActivities', $activityId)->exists()) {
+        if (!$pack->activities()->where('idactivities', $activityId)->exists()) {
             $pack->activities()->attach($activityId);
         }
     }

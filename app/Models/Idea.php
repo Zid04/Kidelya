@@ -1,39 +1,32 @@
 <?php
 
 namespace App\Models;
+
 use Database\Factories\IdeaFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Modèle représentant une idée d'activité.
- */
 class Idea extends Model
 {
     use HasFactory;
-    
+
     protected $table      = 'ideas';
-    protected $primaryKey = 'IdIdea';
+    protected $primaryKey = 'ididea';
 
     protected $fillable = [
-        'Title',
-        'Notes',
-        'IdUser',
+        'title',
+        'notes',
+        'iduser',
     ];
 
     public function getRouteKeyName(): string
     {
-        return 'IdIdea';
+        return 'ididea';
     }
 
-    // ─── Relations ────────────────────────────────────────────
-
-    /**
-     * L'utilisateur propriétaire de l'idée.
-     */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'IdUser', 'IdUser');
+        return $this->belongsTo(User::class, 'iduser', 'iduser');
     }
 }
