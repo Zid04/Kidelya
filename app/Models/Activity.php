@@ -25,10 +25,14 @@ class Activity extends Model
         'location',
         'photourl',
         'iduser',
-
+'steps',
+    'category',
+    'difficulty',
+    'materials',
         'credit_price',
         'is_purchasable',
         'is_published',
+        'included_in_subscription',
     ];
 
     protected $casts = [
@@ -39,6 +43,8 @@ class Activity extends Model
         'credit_price'   => 'integer',
         'is_purchasable' => 'boolean',
         'is_published'   => 'boolean',
+        'included_in_subscription' => 'boolean',
+
     ];
 
     // ─── Relations ────────────────────────────────────────────

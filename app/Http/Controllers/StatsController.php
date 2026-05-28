@@ -36,21 +36,35 @@ class StatsController extends Controller
         ]);
     }
 
-    public function summary(): JsonResponse
-    {
-        $data = Cache::remember('stats_summary_' . now()->format('Ymd'), 300, function () {
-            return [
-                'total_active'  => SubscriptionStat::latest()->value('total_active') ?? 0,
-                'revenue_month' => SubscriptionStat::whereMonth('date', now()->month)->sum('revenue'),
-                'new_subs'      => SubscriptionStat::whereMonth('date', now()->month)->sum('new_subscriptions'),
-                'churned'       => SubscriptionStat::whereMonth('date', now()->month)->sum('churned'),
-            ];
-        });
+  public function summary(): JsonResponse
+{
+    $data = Cache::remember('stats_summary_' . now()->format('Ymd'), 300, function () {
 
-        return response()->json([
-            'data' => [
-                'data' => $data
-            ]
-        ]);
-    }
+        // Abonnements aux packs (packs_user)
+        $packActive = \App\Models\PackUser::where('status', 'active')->count();
+
+        // Abonnements aux plans (user_subscriptions)
+        $planActive = \App\Models\UserSubscription::where('status', 'active')->count();
+
+        return [
+            // total_active = packs actifs + plans actifs
+            'total_active'  => ($packActive + $planActive),
+
+            // revenu du mois (déjà correct)
+            'revenue_month' => SubscriptionStat::whereMonth('date', now()->month)->sum('revenue'),
+
+            // nouveaux abonnements du mois (déjà correct)
+            'new_subs'      => SubscriptionStat::whereMonth('date', now()->month)->sum('new_subscriptions'),
+
+            //  churn (déjà correct)
+            'churned'       => SubscriptionStat::whereMonth('date', now()->month)->sum('churned'),
+        ];
+    });
+
+    return response()->json([
+        'data' => [
+            'data' => $data
+        ]
+    ]);
+}
 }

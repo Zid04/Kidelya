@@ -1,58 +1,87 @@
 import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva } from "class-variance-authority"
+import type { VariantProps } from "class-variance-authority"
 import * as React from "react"
+import type { ButtonHTMLAttributes } from "react"
 
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center font-semibold rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed gap-2",
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
-        outline:
-          "border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
+        primary:
+          "bg-[#E94E6F] hover:bg-[#d63f5f] text-white focus:ring-[#E94E6F] shadow-md hover:shadow-lg",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-[#0094A8] hover:bg-[#007c8e] text-white focus:ring-[#0094A8] shadow-md hover:shadow-lg",
+        outline:
+          "bg-white border-2 border-[#E94E6F] text-[#E94E6F] hover:bg-[#E94E6F] hover:text-white focus:ring-[#E94E6F]",
+        ghost:
+          "bg-transparent text-[#93197D] hover:bg-[#FDC600]/20 focus:ring-[#93197D]",
+        success:
+          "bg-[#6F8D4C] hover:bg-[#5c763f] text-white focus:ring-[#6F8D4C]",
+        warning:
+          "bg-[#FDC600] hover:bg-[#e0b100] text-[#93197D] focus:ring-[#FDC600]",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9",
+        sm: "text-sm px-4 py-2",
+        md: "text-base px-6 py-3",
+        lg: "text-lg px-8 py-4",
+        icon: "size-10 rounded-full",
+      },
+      fullWidth: {
+        true: "w-full",
+        false: "",
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: "primary",
+      size: "md",
+      fullWidth: false,
     },
   }
 )
+
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+    loading?: boolean
+  }
 
 function Button({
   className,
   variant,
   size,
+  fullWidth,
+  loading = false,
   asChild = false,
+  disabled,
+  children,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
+}: ButtonProps) {
   const Comp = asChild ? Slot : "button"
 
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      disabled={disabled || loading}
+      className={cn(buttonVariants({ variant, size, fullWidth }), className)}
       {...props}
-    />
+    >
+      {loading ? (
+        <span className="flex items-center gap-2">
+          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+          </svg>
+          Chargement...
+        </span>
+      ) : (
+        children
+      )}
+    </Comp>
   )
 }
 
-export { Button, buttonVariants }
+export { Button }

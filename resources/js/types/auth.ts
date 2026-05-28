@@ -12,7 +12,15 @@ export type User = {
 
 export type Auth = {
     user: User;
+
+    //  Ajout du plan actif envoyé par le backend
+    plan?: {
+        name: string;
+        price: number;
+        interval?: string;
+    } | null;
 };
+
 
 export type TwoFactorSetupData = {
     svg: string;

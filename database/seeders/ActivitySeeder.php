@@ -26,169 +26,189 @@ class ActivitySeeder extends Seeder
         $themes      = Theme::all();
         $competences = Competence::all();
 
-        $activities = [
+        // ───────────────────────────────────────────────
+        // ACTIVITÉS PUBLIÉES (vendues par crédits)
+        // ───────────────────────────────────────────────
+        $published = [
+
+            // 🌿 Nature & Printemps
             [
-                'title'          => 'Atelier peinture',
-                'description'    => 'Découverte de la peinture aquarelle pour les enfants.',
-                'agemin'         => 5,
-                'agemax'         => 12,
-                'duration'       => 60,
-                'season'         => 'Spring',
-                'location'       => 'Salle d\'art',
-                'photourl'       => null,
-                'credit_price'   => 10,
-                'is_purchasable' => true,
-                'is_published'   => true,
-                'iduser'         => $admin->iduser,
+                'title' => 'Plantation de graines',
+                'description' => 'Découverte du jardinage : planter, arroser et observer la croissance.',
+                'agemin' => 4, 'agemax' => 12, 'duration' => 45,
+                'season' => 'Spring', 'location' => 'Jardin pédagogique',
+                'photourl' => '/assets/activities/plantation.jpg',
+                'steps' => json_encode(['Préparer le pot', 'Mettre la terre', 'Planter les graines', 'Arroser']),
+                'category' => 'Nature', 'difficulty' => 'Facile',
+                'credit_price' => 8, 'is_purchasable' => true, 'is_published' => true,
+                'iduser' => $admin->iduser,
             ],
             [
-                'title'          => 'Randonnée en forêt',
-                'description'    => 'Exploration de la nature et découverte de la faune locale.',
-                'agemin'         => 6,
-                'agemax'         => 15,
-                'duration'       => 120,
-                'season'         => 'Summer',
-                'location'       => 'Forêt de Soignes',
-                'photourl'       => null,
-                'credit_price'   => 15,
-                'is_purchasable' => true,
-                'is_published'   => true,
-                'iduser'         => $admin->iduser,
+                'title' => 'Découverte des insectes',
+                'description' => 'Observation des insectes du jardin avec loupes et fiches explicatives.',
+                'agemin' => 5, 'agemax' => 14, 'duration' => 60,
+                'season' => 'Spring', 'location' => 'Parc municipal',
+                'photourl' => '/assets/activities/insectes.jpg',
+                'steps' => json_encode(['Observer', 'Identifier', 'Noter les découvertes']),
+                'category' => 'Nature', 'difficulty' => 'Moyen',
+                'credit_price' => 10, 'is_purchasable' => true, 'is_published' => true,
+                'iduser' => $admin->iduser,
+            ],
+
+            // 🐰 Pâques & Créations
+            [
+                'title' => 'Peinture d’œufs de Pâques',
+                'description' => 'Décoration d’œufs avec peinture, paillettes et autocollants.',
+                'agemin' => 3, 'agemax' => 12, 'duration' => 40,
+                'season' => 'Spring', 'location' => 'Salle d\'art',
+                'photourl' => '/assets/activities/oeufs.jpg',
+                'steps' => json_encode(['Préparer les œufs', 'Peindre', 'Décorer']),
+                'category' => 'Pâques', 'difficulty' => 'Facile',
+                'credit_price' => 6, 'is_purchasable' => true, 'is_published' => true,
+                'iduser' => $admin->iduser,
             ],
             [
-                'title'          => 'Initiation à la musique',
-                'description'    => 'Apprentissage des bases musicales avec instruments.',
-                'agemin'         => 4,
-                'agemax'         => 10,
-                'duration'       => 45,
-                'season'         => 'Winter',
-                'location'       => 'Salle de musique',
-                'photourl'       => null,
-                'credit_price'   => 8,
-                'is_purchasable' => true,
-                'is_published'   => true,
-                'iduser'         => $admin->iduser,
+                'title' => 'Chasse aux œufs',
+                'description' => 'Parcours ludique avec indices pour retrouver les œufs cachés.',
+                'agemin' => 4, 'agemax' => 14, 'duration' => 60,
+                'season' => 'Spring', 'location' => 'Parc extérieur',
+                'photourl' => '/assets/activities/chasse.jpg',
+                'steps' => json_encode(['Lire les indices', 'Chercher', 'Valider']),
+                'category' => 'Pâques', 'difficulty' => 'Moyen',
+                'credit_price' => 5, 'is_purchasable' => true, 'is_published' => true,
+                'iduser' => $admin->iduser,
+            ],
+
+            // 🎨 Arts & Couleurs
+            [
+                'title' => 'Peinture arc‑en‑ciel',
+                'description' => 'Création d’un arc‑en‑ciel avec peinture et éponges.',
+                'agemin' => 3, 'agemax' => 10, 'duration' => 30,
+                'season' => 'All', 'location' => 'Salle d\'art',
+                'photourl' => '/assets/activities/arcenciel.jpg',
+                'steps' => json_encode(['Préparer les couleurs', 'Peindre', 'Sécher']),
+                'category' => 'Art', 'difficulty' => 'Facile',
+                'credit_price' => 7, 'is_purchasable' => true, 'is_published' => true,
+                'iduser' => $admin->iduser,
             ],
             [
-                'title'          => 'Atelier cuisine',
-                'description'    => 'Préparation de recettes simples et saines.',
-                'agemin'         => 7,
-                'agemax'         => 14,
-                'duration'       => 90,
-                'season'         => 'Autumn',
-                'location'       => 'Cuisine pédagogique',
-                'photourl'       => null,
-                'credit_price'   => 12,
-                'is_purchasable' => true,
-                'is_published'   => true,
-                'iduser'         => $admin->iduser,
+                'title' => 'Atelier pâte à sel',
+                'description' => 'Modelage créatif avec pâte à sel colorée.',
+                'agemin' => 4, 'agemax' => 12, 'duration' => 50,
+                'season' => 'All', 'location' => 'Maison',
+                'photourl' => '/assets/activities/patesel.jpg',
+                'steps' => json_encode(['Préparer la pâte', 'Modeler', 'Sécher']),
+                'category' => 'Art', 'difficulty' => 'Moyen',
+                'credit_price' => 6, 'is_purchasable' => true, 'is_published' => true,
+                'iduser' => $admin->iduser,
             ],
+
+            // 🪁 Plein air
             [
-                'title'          => 'Initiation au code',
-                'description'    => 'Découverte de la programmation via des jeux interactifs.',
-                'agemin'         => 8,
-                'agemax'         => 16,
-                'duration'       => 60,
-                'season'         => 'Winter',
-                'location'       => 'Salle informatique',
-                'photourl'       => null,
-                'credit_price'   => 20,
-                'is_purchasable' => true,
-                'is_published'   => true,
-                'iduser'         => $admin->iduser,
+                'title' => 'Atelier cerf‑volant',
+                'description' => 'Fabrication et décoration d’un cerf‑volant.',
+                'agemin' => 6, 'agemax' => 15, 'duration' => 90,
+                'season' => 'Summer', 'location' => 'Terrain de sport',
+                'photourl' => '/assets/activities/cerfvolant.jpg',
+                'steps' => json_encode(['Assembler', 'Décorer', 'Tester']),
+                'category' => 'Plein air', 'difficulty' => 'Difficile',
+                'credit_price' => 12, 'is_purchasable' => true, 'is_published' => true,
+                'iduser' => $admin->iduser,
             ],
+
+            // 🌻 Jardinage
             [
-                'title'          => 'Yoga enfants',
-                'description'    => 'Séance de yoga adaptée aux enfants.',
-                'agemin'         => 4,
-                'agemax'         => 12,
-                'duration'       => 45,
-                'season'         => 'Spring',
-                'location'       => 'Salle de sport',
-                'photourl'       => null,
-                'credit_price'   => 5,
-                'is_purchasable' => true,
-                'is_published'   => true,
-                'iduser'         => $admin->iduser,
+                'title' => 'Semis en pot',
+                'description' => 'Apprendre à faire germer des graines en intérieur.',
+                'agemin' => 4, 'agemax' => 12, 'duration' => 30,
+                'season' => 'Spring', 'location' => 'Maison',
+                'photourl' => '/assets/activities/semis.jpg',
+                'steps' => json_encode(['Mettre la terre', 'Planter', 'Arroser']),
+                'category' => 'Nature', 'difficulty' => 'Facile',
+                'credit_price' => 5, 'is_purchasable' => true, 'is_published' => true,
+                'iduser' => $admin->iduser,
             ],
+
+            // 🎵 Musique
             [
-                'title'          => 'Sortie au parc',
-                'description'    => 'Activité plein air au parc avec jeux libres.',
-                'agemin'         => 3,
-                'agemax'         => 10,
-                'duration'       => 90,
-                'season'         => 'Spring',
-                'location'       => 'Parc municipal',
-                'photourl'       => null,
-                'credit_price'   => null,
-                'is_purchasable' => false,
-                'is_published'   => false,
-                'iduser'         => $user1->iduser,
+                'title' => 'Initiation à la musique',
+                'description' => 'Découverte des instruments et des rythmes.',
+                'agemin' => 4, 'agemax' => 10, 'duration' => 45,
+                'season' => 'Winter', 'location' => 'Salle de musique',
+                'photourl' => '/assets/activities/musique.jpg',
+                'steps' => json_encode(['Découvrir les sons', 'Essayer les instruments', 'Créer un rythme']),
+                'category' => 'Musique', 'difficulty' => 'Facile',
+                'credit_price' => 8, 'is_purchasable' => true, 'is_published' => true,
+                'iduser' => $admin->iduser,
             ],
+
+            // 🍳 Cuisine
             [
-                'title'          => 'Lecture illustrée',
-                'description'    => 'Séance de lecture avec livres illustrés.',
-                'agemin'         => 2,
-                'agemax'         => 6,
-                'duration'       => 30,
-                'season'         => 'Winter',
-                'location'       => 'Bibliothèque',
-                'photourl'       => null,
-                'credit_price'   => null,
-                'is_purchasable' => false,
-                'is_published'   => false,
-                'iduser'         => $user1->iduser,
-            ],
-            [
-                'title'          => 'Atelier dessin',
-                'description'    => 'Dessin libre avec crayons de couleur.',
-                'agemin'         => 4,
-                'agemax'         => 10,
-                'duration'       => 45,
-                'season'         => 'Autumn',
-                'location'       => 'Maison',
-                'photourl'       => null,
-                'credit_price'   => null,
-                'is_purchasable' => false,
-                'is_published'   => false,
-                'iduser'         => $user2->iduser,
-            ],
-            [
-                'title'          => 'Jeux de société',
-                'description'    => 'Soirée jeux de société en famille.',
-                'agemin'         => 5,
-                'agemax'         => 14,
-                'duration'       => 120,
-                'season'         => 'Winter',
-                'location'       => 'Salon',
-                'photourl'       => null,
-                'credit_price'   => null,
-                'is_purchasable' => false,
-                'is_published'   => false,
-                'iduser'         => $user2->iduser,
+                'title' => 'Atelier cuisine enfants',
+                'description' => 'Préparation de recettes simples et amusantes.',
+                'agemin' => 6, 'agemax' => 14, 'duration' => 60,
+                'season' => 'Autumn', 'location' => 'Cuisine pédagogique',
+                'photourl' => '/assets/activities/cuisine.jpg',
+                'steps' => json_encode(['Préparer', 'Mélanger', 'Cuire']),
+                'category' => 'Cuisine', 'difficulty' => 'Moyen',
+                'credit_price' => 10, 'is_purchasable' => true, 'is_published' => true,
+                'iduser' => $admin->iduser,
             ],
         ];
 
+        // ───────────────────────────────────────────────
+        // ACTIVITÉS NON PUBLIÉES
+        // ───────────────────────────────────────────────
+        $unpublished = [
+            [
+                'title' => 'Sortie au parc',
+                'description' => 'Jeux libres et activités plein air.',
+                'agemin' => 3, 'agemax' => 10, 'duration' => 90,
+                'season' => 'Spring', 'location' => 'Parc municipal',
+                'photourl' => null,
+                'steps' => json_encode(['Jeux libres', 'Course', 'Observation']),
+                'category' => 'Plein air', 'difficulty' => 'Facile',
+                'credit_price' => null, 'is_purchasable' => false, 'is_published' => false,
+                'iduser' => $user1->iduser,
+            ],
+            [
+                'title' => 'Lecture illustrée',
+                'description' => 'Lecture animée pour les plus petits.',
+                'agemin' => 2, 'agemax' => 6, 'duration' => 30,
+                'season' => 'Winter', 'location' => 'Bibliothèque',
+                'photourl' => null,
+                'steps' => json_encode(['Choisir un livre', 'Lire', 'Discuter']),
+                'category' => 'Lecture', 'difficulty' => 'Facile',
+                'credit_price' => null, 'is_purchasable' => false, 'is_published' => false,
+                'iduser' => $user1->iduser,
+            ],
+        ];
+
+        // Fusion
+        $activities = array_merge($published, $unpublished);
+
+        // ───────────────────────────────────────────────
+        // INSERTION + RELATIONS
+        // ───────────────────────────────────────────────
         foreach ($activities as $data) {
+
             $activity = Activity::firstOrCreate(
                 ['title' => $data['title'], 'iduser' => $data['iduser']],
                 $data
             );
 
-            // Thèmes — collect() force toujours une collection
             if ($themes->count() > 0) {
-                $count    = min(rand(1, 2), $themes->count());
-                $selected = $themes->random($count);
-                $themeIds = collect($selected)->pluck('idtheme')->toArray();
-                $activity->themes()->syncWithoutDetaching($themeIds);
+                $selected = $themes->random(min(2, $themes->count()));
+                $activity->themes()->syncWithoutDetaching(
+                    collect($selected)->pluck('idtheme')->toArray()
+                );
             }
 
-            // Compétences — collect() force toujours une collection
             if ($competences->count() > 0) {
-                $count         = min(rand(1, 2), $competences->count());
-                $selected      = $competences->random($count);
-                $competenceIds = collect($selected)->pluck('idcompetence')->toArray();
-                $activity->competences()->syncWithoutDetaching($competenceIds);
+                $selected = $competences->random(min(2, $competences->count()));
+                $activity->competences()->syncWithoutDetaching(
+                    collect($selected)->pluck('idcompetence')->toArray()
+                );
             }
         }
     }

@@ -71,4 +71,28 @@ public function getKey(): mixed
 {
     return $this->iduser;
 }
+
+public function subscription()
+{
+    return $this->hasOne(UserSubscription::class, 'iduser')->latestOfMany();
+}
+
+public function activeSubscription()
+{
+    return $this->hasOne(\App\Models\UserSubscription::class, 'iduser', 'iduser')
+        ->where('status', 'active')
+        ->latest('starts_at');
+}
+
+
+public function favorites()
+{
+    return $this->hasMany(Favorite::class, 'iduser', 'iduser');
+}
+
+public function cartItems()
+{
+    return $this->hasMany(CartItem::class, 'iduser', 'iduser');
+}
+
 }

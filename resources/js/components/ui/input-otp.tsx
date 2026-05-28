@@ -11,7 +11,7 @@ const InputOTP = React.forwardRef<
   <OTPInput
     ref={ref}
     containerClassName={cn(
-      "flex items-center gap-2 has-[:disabled]:opacity-50",
+      "flex items-center gap-3 has-[:disabled]:opacity-50",
       containerClassName
     )}
     className={cn("disabled:cursor-not-allowed", className)}
@@ -24,7 +24,7 @@ const InputOTPGroup = React.forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div">
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("flex items-center", className)} {...props} />
+  <div ref={ref} className={cn("flex items-center gap-3", className)} {...props} />
 ))
 InputOTPGroup.displayName = "InputOTPGroup"
 
@@ -39,16 +39,29 @@ const InputOTPSlot = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
-        isActive && "z-10 ring-1 ring-ring",
+        `
+        relative flex h-12 w-12 items-center justify-center
+        rounded-xl border-2 shadow-sm text-lg font-semibold
+        transition-all duration-200
+
+        bg-white text-[#93197D] border-[#FDC600]/40
+        hover:border-[#FDC600]
+
+        data-[state=active]:ring-2 data-[state=active]:ring-[#E94E6F]/40
+        data-[state=active]:border-[#E94E6F]
+
+        disabled:opacity-50 disabled:cursor-not-allowed
+        `,
+        isActive && "ring-2 ring-[#E94E6F]/40 border-[#E94E6F]",
         className
       )}
       {...props}
     >
       {char}
+
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
+          <div className="h-5 w-px animate-caret-blink bg-[#93197D]" />
         </div>
       )}
     </div>
@@ -59,9 +72,14 @@ InputOTPSlot.displayName = "InputOTPSlot"
 const InputOTPSeparator = React.forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div">
->(({ ...props }, ref) => (
-  <div ref={ref} role="separator" {...props}>
-    <Minus />
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    role="separator"
+    className={cn("text-[#93197D] opacity-60", className)}
+    {...props}
+  >
+    <Minus className="size-5" />
   </div>
 ))
 InputOTPSeparator.displayName = "InputOTPSeparator"

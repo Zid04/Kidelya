@@ -7,6 +7,7 @@ use App\Services\IdeaService;
 use App\Http\Requests\Idea\StoreIdeaRequest;
 use App\Http\Requests\Idea\UpdateIdeaRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class IdeaController extends Controller
 {

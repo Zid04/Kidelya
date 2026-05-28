@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PackUser;
 use App\Models\Pack;
 use App\Models\User;
+use App\Models\UserSubscription;
 use App\Services\PackUserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,15 +19,58 @@ class PackUserController extends Controller
         private readonly PackUserService $packUserService
     ) {}
 
+    /**
+     * LISTE DES ABONNEMENTS (PACKS + PLANS)
+     */
     public function index(): JsonResponse
     {
         $this->authorize('viewAny', PackUser::class);
 
+        // Abonnements aux packs
+        $packSubs = PackUser::with(['user', 'pack'])
+            ->get()
+            ->map(function ($s) {
+                return [
+                    'idpackuser' => $s->idpackuser,
+                    'user' => $s->user,
+                    'pack' => [
+                        'title' => $s->pack->title,
+                        'tarification' => $s->pack->tarification,
+                    ],
+                    'subscriptiondate' => $s->subscriptiondate,
+                    'expirationdate' => $s->expirationdate,
+                    'status' => $s->status,
+                ];
+            });
+
+        // Abonnements aux plans (Free / Monthly / Annual)
+        $planSubs = UserSubscription::with(['user', 'plan'])
+            ->get()
+            ->map(function ($s) {
+                return [
+                    'idpackuser' => $s->idsubscription, 
+                    'user' => $s->user,
+                    'pack' => [
+                        'title' => $s->plan->name,       
+                        'tarification' => $s->plan->price,
+                    ],
+                    'subscriptiondate' => $s->starts_at,
+                    'expirationdate' => $s->ends_at,
+                    'status' => $s->status,
+                ];
+            });
+
+        // Fusion des deux
+        $all = $packSubs->merge($planSubs);
+
         return response()->json([
-            'data' => PackUser::with(['user', 'pack'])->paginate(20)
+            'data' => $all
         ]);
     }
 
+    /**
+     * AFFICHER UN ABONNEMENT PACK
+     */
     public function show(PackUser $subscription): JsonResponse
     {
         $this->authorize('view', $subscription);
@@ -36,6 +80,9 @@ class PackUserController extends Controller
         ]);
     }
 
+    /**
+     * ACTIVER UN ABONNEMENT PACK
+     */
     public function activate(Request $request): JsonResponse
     {
         $this->authorize('create', PackUser::class);
@@ -56,6 +103,9 @@ class PackUserController extends Controller
         ], 201);
     }
 
+    /**
+     * RENOUVELER UN ABONNEMENT PACK
+     */
     public function renew(PackUser $subscription): JsonResponse
     {
         $this->authorize('update', $subscription);
@@ -68,6 +118,9 @@ class PackUserController extends Controller
         ]);
     }
 
+    /**
+     * DÉSACTIVER UN ABONNEMENT PACK
+     */
     public function deactivate(PackUser $subscription): JsonResponse
     {
         $this->authorize('update', $subscription);

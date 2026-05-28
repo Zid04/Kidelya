@@ -117,5 +117,5 @@
         "resources/js/**/*.ts",
         "resources/js/**/*.d.ts",
         "resources/js/**/*.tsx"
-, "resources/js/pages/DashboardUser.jsx"    ]
+, "resources/js/pages/DashboardUser.tsx", "kidelya-user/src/Components/KidelyaFlowerMini.tsx"    ]
 }

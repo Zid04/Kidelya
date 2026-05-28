@@ -23,8 +23,13 @@ class StoreActivityRequest extends FormRequest
             'location'       => 'nullable|string|max:100',
             'photourl'       => 'nullable|url|max:255',
             'iduser'         => 'required|exists:users,iduser',
+            'steps'          => 'nullable|array',
+'steps.*'        => 'string|max:255',
+'category'       => 'nullable|string|max:50',
+'difficulty'     => 'required|in:facile,moyen,difficile',
+'materials'      => 'nullable|array',
+'materials.*'    => 'string|max:255',
 
-            
             'credit_price'   => 'required|integer|min:0',
             'is_purchasable' => 'required|boolean',
             'is_published'   => 'required|boolean',

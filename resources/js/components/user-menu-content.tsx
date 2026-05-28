@@ -1,63 +1,68 @@
-import { Link, router } from '@inertiajs/react';
-import { LogOut, Settings } from 'lucide-react';
-import {
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
-import { UserInfo } from '@/components/user-info';
-import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
-import { logout } from '@/routes';
-import { edit } from '@/routes/profile';
-import type { User } from '@/types';
+import { Link } from "@inertiajs/react"
+import { User, Settings, HelpCircle, LogOut } from "lucide-react"
+import { DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
+import { UserInfo } from "@/components/user-info"
+import type { User as UserType } from "@/types"
 
-type Props = {
-    user: User;
-};
+export function UserMenuContent({ user }: { user: UserType }) {
+  return (
+    <div className="py-1">
 
-export function UserMenuContent({ user }: Props) {
-    const cleanup = useMobileNavigation();
+      {/* En-tête du menu */}
+      <DropdownMenuLabel className="p-0 font-normal">
+        <div className="flex items-center gap-3 px-3 py-2">
+          <UserInfo user={user} />
+        </div>
+      </DropdownMenuLabel>
 
-    const handleLogout = () => {
-        cleanup();
-        router.flushAll();
-    };
+      <DropdownMenuSeparator />
 
-    return (
-        <>
-            <DropdownMenuLabel className="p-0 font-normal">
-                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <UserInfo user={user} showEmail={true} />
-                </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-                <DropdownMenuItem asChild>
-                    <Link
-                        className="block w-full cursor-pointer"
-                        href={edit()}
-                        prefetch
-                        onClick={cleanup}
-                    >
-                        <Settings className="mr-2" />
-                        Settings
-                    </Link>
-                </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-                <Link
-                    className="block w-full cursor-pointer"
-                    href={logout()}
-                    as="button"
-                    onClick={handleLogout}
-                    data-test="logout-button"
-                >
-                    <LogOut className="mr-2" />
-                    Log out
-                </Link>
-            </DropdownMenuItem>
-        </>
-    );
+      {/* Profil */}
+      <DropdownMenuItem asChild>
+        <Link
+          href="/profile"
+          className="flex items-center gap-2 cursor-pointer text-[#6F8D4C] hover:text-[#93197D]"
+        >
+          <User className="h-4 w-4" />
+          Profil
+        </Link>
+      </DropdownMenuItem>
+
+      {/* Paramètres */}
+      <DropdownMenuItem asChild>
+        <Link
+          href="/settings"
+          className="flex items-center gap-2 cursor-pointer text-[#6F8D4C] hover:text-[#93197D]"
+        >
+          <Settings className="h-4 w-4" />
+          Paramètres
+        </Link>
+      </DropdownMenuItem>
+
+      {/* Aide / FAQ */}
+      <DropdownMenuItem asChild>
+        <Link
+          href="/help"
+          className="flex items-center gap-2 cursor-pointer text-[#6F8D4C] hover:text-[#93197D]"
+        >
+          <HelpCircle className="h-4 w-4" />
+          Aide / FAQ
+        </Link>
+      </DropdownMenuItem>
+
+      <DropdownMenuSeparator />
+
+      {/* Déconnexion */}
+      <DropdownMenuItem asChild>
+        <Link
+          href="/logout"
+          as="button"
+          className="flex items-center gap-2 cursor-pointer text-[#E94E6F] hover:text-[#93197D]"
+        >
+          <LogOut className="h-4 w-4" />
+          Déconnexion
+        </Link>
+      </DropdownMenuItem>
+    </div>
+  )
 }

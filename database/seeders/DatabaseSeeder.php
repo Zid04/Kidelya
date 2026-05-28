@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             PackSeeder::class,           
             SubscriptionSeeder::class,   
             CreditTransactionSeeder::class, 
-            SettingsSeeder::class,       
+            SettingsSeeder::class,    
+            SubscriptionPlanSeeder::class,   
         ]);
     }
 }

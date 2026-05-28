@@ -12,6 +12,14 @@ interface Activity {
   credit_price: number
   is_purchasable: boolean
   is_published: boolean
+
+  // AJOUTS
+  category: string
+  difficulty: string
+  agemin: number
+  agemax: number
+  duration: number
+  photourl: string
 }
 
 export default function ActivitiesIndex() {
@@ -82,26 +90,69 @@ export default function ActivitiesIndex() {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Activité</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Prix crédits</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Achat unitaire</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Statut</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium">Illustration</th>
+                <th className="px-6 py-3 text-left text-xs font-medium">Activité</th>
+                <th className="px-6 py-3 text-left text-xs font-medium">Catégorie</th>
+                <th className="px-6 py-3 text-left text-xs font-medium">Difficulté</th>
+                <th className="px-6 py-3 text-left text-xs font-medium">Âge</th>
+                <th className="px-6 py-3 text-left text-xs font-medium">Durée</th>
+                <th className="px-6 py-3 text-left text-xs font-medium">Prix crédits</th>
+                <th className="px-6 py-3 text-left text-xs font-medium">Achat unitaire</th>
+                <th className="px-6 py-3 text-left text-xs font-medium">Statut</th>
+                <th className="px-6 py-3 text-left text-xs font-medium">Actions</th>
               </tr>
             </thead>
 
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {filtered.map((activity: Activity) => (
                 <tr key={activity.idactivities} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+
+                  {/* Illustration */}
                   <td className="px-6 py-4">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">{activity.title}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">{activity.description}</p>
+                    {activity.photourl ? (
+                      <img
+                        src={activity.photourl}
+                        className="w-12 h-12 rounded object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded" />
+                    )}
                   </td>
 
+                  {/* Titre + description */}
+                  <td className="px-6 py-4">
+                    <p className="text-sm font-medium">{activity.title}</p>
+                    <p className="text-xs text-gray-500 line-clamp-1">{activity.description}</p>
+                  </td>
+
+                  {/* Catégorie */}
+                  <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                    {activity.category || '-'}
+                  </td>
+
+                  {/* Difficulté */}
+                  <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                    {activity.difficulty || '-'}
+                  </td>
+
+                  {/* Âge */}
+                  <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                    {activity.agemin && activity.agemax
+                      ? `${activity.agemin} - ${activity.agemax} ans`
+                      : '-'}
+                  </td>
+
+                  {/* Durée */}
+                  <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                    {activity.duration ? `${activity.duration} min` : '-'}
+                  </td>
+
+                  {/* Prix crédits */}
                   <td className="px-6 py-4 text-gray-900 dark:text-gray-100">
                     {activity.credit_price} crédits
                   </td>
 
+                  {/* Achat unitaire */}
                   <td className="px-6 py-4">
                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                       activity.is_purchasable
@@ -112,6 +163,7 @@ export default function ActivitiesIndex() {
                     </span>
                   </td>
 
+                  {/* Statut */}
                   <td className="px-6 py-4">
                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                       activity.is_published
@@ -122,20 +174,21 @@ export default function ActivitiesIndex() {
                     </span>
                   </td>
 
+                  {/* Actions */}
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
 
                       {activity.is_published ? (
                         <button
                           onClick={() => unpublishMutation.mutate(activity.idactivities)}
-                          className="text-xs px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition"
+                          className="text-xs px-3 py-1 border border-gray-300 rounded-lg hover:bg-gray-50"
                         >
                           Dépublier
                         </button>
                       ) : (
                         <button
                           onClick={() => publishMutation.mutate(activity.idactivities)}
-                          className="text-xs px-3 py-1 border border-green-300 dark:border-green-700 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-green-600 dark:text-green-300 transition"
+                          className="text-xs px-3 py-1 border border-green-300 rounded-lg hover:bg-green-50"
                         >
                           Publier
                         </button>
@@ -143,7 +196,7 @@ export default function ActivitiesIndex() {
 
                       <Link
                         to={`/activities/${activity.idactivities}/edit`}
-                        className="text-xs px-3 py-1 border border-purple-300 dark:border-purple-700 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 text-purple-600 dark:text-purple-300 transition"
+                        className="text-xs px-3 py-1 border border-purple-300 rounded-lg hover:bg-purple-50"
                       >
                         Modifier
                       </Link>
@@ -154,7 +207,7 @@ export default function ActivitiesIndex() {
                             deleteMutation.mutate(activity.idactivities)
                           }
                         }}
-                        className="text-xs px-3 py-1 border border-red-300 dark:border-red-700 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-300 transition"
+                        className="text-xs px-3 py-1 border border-red-300 rounded-lg hover:bg-red-50"
                       >
                         Supprimer
                       </button>
@@ -166,7 +219,7 @@ export default function ActivitiesIndex() {
 
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-10 text-center text-sm text-gray-400 dark:text-gray-500">
+                  <td colSpan={10} className="px-6 py-10 text-center text-sm text-gray-400">
                     Aucune activité trouvée
                   </td>
                 </tr>

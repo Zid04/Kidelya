@@ -15,42 +15,50 @@ class HandleInertiaRequests extends Middleware
     }
 
     public function share(Request $request): array
-    {
-        return [
-            ...parent::share($request),
+{
+    $user = $request->user();
 
-            // Nom de l'application
-            'appName' => config('app.name'),
+    return [
+        ...parent::share($request),
 
-            // Utilisateur connecté + rôle
-            'auth' => [
-                'user' => $request->user(),
-                'role' => $request->user()?->role?->type,
-            ],
+        // Nom de l'application
+        'appName' => config('app.name'),
 
-            // Permissions globales (exemples)
-            'can' => [
-                'manageUsers'   => fn () => $request->user()?->can('viewAny', \App\Models\User::class),
-                'createPack'    => fn () => $request->user()?->can('create', \App\Models\Pack::class),
-                'createGroup'   => fn () => $request->user()?->can('create', \App\Models\Group::class),
-                'createActivity'=> fn () => $request->user()?->can('create', \App\Models\Activity::class),
-            ],
+        // Utilisateur connecté + rôle + plan actif
+        'auth' => [
+            'user' => $user,
+            'role' => $user?->role?->type,
 
-            // Messages flash
-            'flash' => [
-                'success' => fn () => $request->session()->get('success'),
-                'error'   => fn () => $request->session()->get('error'),
-            ],
+            // Le plan actif envoyé au frontend
+            'plan' => $user
+                ? $user->activeSubscription()?->plan  
+                : null,
+        ],
 
-            // Erreurs de validation
-            'errors' => fn () =>
-                $request->session()->get('errors')
-                    ? $request->session()->get('errors')->getBag('default')->getMessages()
-                    : (object) [],
+        // Permissions globales
+        'can' => [
+            'manageUsers'   => fn () => $user?->can('viewAny', \App\Models\User::class),
+            'createPack'    => fn () => $user?->can('create', \App\Models\Pack::class),
+            'createGroup'   => fn () => $user?->can('create', \App\Models\Group::class),
+            'createActivity'=> fn () => $user?->can('create', \App\Models\Activity::class),
+        ],
 
-            // État du sidebar
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state')
-                || $request->cookie('sidebar_state') === 'true',
-        ];
-    }
+        // Messages flash
+        'flash' => [
+            'success' => fn () => $request->session()->get('success'),
+            'error'   => fn () => $request->session()->get('error'),
+        ],
+
+        // Erreurs de validation
+        'errors' => fn () =>
+            $request->session()->get('errors')
+                ? $request->session()->get('errors')->getBag('default')->getMessages()
+                : (object) [],
+
+        // État du sidebar
+        'sidebarOpen' => ! $request->hasCookie('sidebar_state')
+            || $request->cookie('sidebar_state') === 'true',
+    ];
+}
+
 }

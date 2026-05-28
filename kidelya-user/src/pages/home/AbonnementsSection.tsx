@@ -1,0 +1,233 @@
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import api from "@/api/axios"
+import { formatPrice } from "@/utils/media"
+import { useAuth } from "@/hooks/useAuth"
+
+export type SubscriptionPlan = {
+  idplan: number
+  name: "Free" | "Monthly" | "Annual"
+  price: number | string
+  interval: "none" | "month" | "year"
+  interval_count: number
+  has_all_packs: boolean
+  has_planning: boolean
+  is_active: boolean
+}
+
+const order: Record<SubscriptionPlan["name"], number> = {
+  Free: 1,
+  Monthly: 2,
+  Annual: 3,
+}
+
+const labels: Record<SubscriptionPlan["name"], string> = {
+  Free: "Gratuit",
+  Monthly: "Abonnement mensuel",
+  Annual: "Abonnement annuel",
+}
+
+const features: Record<SubscriptionPlan["name"], string[]> = {
+  Free: [
+    "Accès limité à une sélection d'activités",
+    "1 enfant",
+    "Fonctionnalités de base",
+  ],
+  Monthly: [
+    "Accès illimité à tous les packs",
+    "Jusqu'à 5 enfants",
+    "Planification avec calendrier",
+    "Enregistrements favoris",
+    "Mises à jour régulières",
+  ],
+  Annual: [
+    "Tout ce qui est inclus en mensuel",
+    "Jusqu'à 5 enfants",
+    "Planification avec calendrier",
+    "Enregistrements favoris",
+    "Mises à jour régulières",
+    "2 mois offerts",
+  ],
+}
+
+function CheckIcon({ active }: { active: boolean }) {
+  return (
+    <span
+      className="mt-[2px] inline-flex h-[14px] w-[14px] items-center justify-center rounded-full"
+      style={{ backgroundColor: active ? "#E94E6F" : "#273068" }}
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 16 16" className="h-[10px] w-[10px]" fill="none">
+        <path
+          d="M3.5 8.5L6.5 11.5L12.5 5.5"
+          stroke="#FFFFFF"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  )
+}
+
+export default function AbonnementsSection() {
+  const [plans, setPlans] = useState<SubscriptionPlan[]>([])
+  const [loadingPlanId, setLoadingPlanId] = useState<number | null>(null)
+  const navigate = useNavigate()
+  const { user } = useAuth()
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const res = await api.get("/subscriptions/plans")
+        const activePlans: SubscriptionPlan[] = Array.isArray(res.data)
+          ? res.data.filter((p: SubscriptionPlan) => p.is_active)
+          : []
+        setPlans(activePlans.sort((a, b) => order[a.name] - order[b.name]))
+      } catch (err) {
+        console.error("Erreur récupération abonnements :", err)
+        setPlans([])
+      }
+    }
+
+    fetchPlans()
+  }, [])
+
+  const handleSelect = async (plan: SubscriptionPlan) => {
+    if (plan.name === "Free") {
+      navigate("/register")
+      return
+    }
+
+    if (!user) {
+      navigate("/login", { state: { redirectAfter: "/", planId: plan.idplan } })
+      return
+    }
+
+    try {
+      setLoadingPlanId(plan.idplan)
+      const res = await api.post("/stripe/subscription/checkout", {
+        plan_id: plan.idplan,
+      })
+      window.open(res.data.url, "_self")
+    } catch (err) {
+      console.error("Erreur création session Stripe :", err)
+    } finally {
+      setLoadingPlanId(null)
+    }
+  }
+
+  return (
+    <section className="bg-transparent py-16 md:py-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-10 grid items-center gap-8 lg:grid-cols-[1fr_1fr]">
+          <div className="text-center lg:text-left">
+            <h2 className="text-2xl font-bold text-[#273068] md:text-3xl">
+              Choisissez la formule qui vous convient
+            </h2>
+            <div className="mx-auto mb-3 mt-3 h-0.5 w-10 bg-[#E94E6F] lg:mx-0" />
+            <p className="text-sm text-black">
+              Accédez à encore plus d'activités grâce à nos abonnements
+            </p>
+          </div>
+        </div>
+
+        {plans.length === 0 ? (
+          <p className="mx-auto max-w-2xl text-center text-[#6F8D4C]">
+            Les formules sont momentanément indisponibles.
+          </p>
+        ) : (
+          <div className="mx-auto flex max-w-5xl flex-wrap items-stretch justify-center gap-6">
+            {plans.map((plan) => {
+              const isMonthly = plan.name === "Monthly"
+              const isFree = Number(plan.price) === 0
+              const isLoading = loadingPlanId === plan.idplan
+
+              return (
+                <article
+                  key={plan.idplan}
+                  className={`flex w-full max-w-[241px] flex-col overflow-hidden rounded-2xl bg-white shadow-md sm:w-[241px] ${
+                    isMonthly
+                      ? "border border-[#E94E6F] shadow-xl md:-translate-y-6"
+                      : "border border-[#FDC600]/30"
+                  }`}
+                >
+                  {isMonthly && (
+                    <div className="w-full bg-[#E94E6F] py-1.5 text-center text-xs font-bold text-white">
+                      Populaire
+                    </div>
+                  )}
+
+                  <div className="flex min-h-[420px] flex-1 flex-col p-6">
+                    <h3
+                      className="mb-4 text-xl font-semibold leading-tight"
+                      style={{ color: isMonthly ? "#E94E6F" : "#273068" }}
+                    >
+                      {labels[plan.name]}
+                    </h3>
+
+                    <div className="mb-1 flex items-baseline justify-center gap-1">
+                      {isFree ? (
+                        <>
+                          <span className="text-[41px] font-semibold leading-none text-[#273068]">0</span>
+                          <span className="text-[26px] font-semibold text-[#273068]">€</span>
+                        </>
+                      ) : (
+                        <span
+                          className="text-[26px] font-semibold leading-none"
+                          style={{ color: isMonthly ? "#E94E6F" : "#273068" }}
+                        >
+                          {formatPrice(plan.price)}
+                        </span>
+                      )}
+                      <span
+                        className="ml-1 text-[11px] font-light"
+                        style={{ color: isMonthly ? "#E94E6F" : "#273068" }}
+                      >
+                        {plan.interval === "year" ? "/an" : "/mois"}
+                      </span>
+                    </div>
+
+                    <ul className="mb-6 mt-5 space-y-2 text-left">
+                      {features[plan.name].map((feature) => (
+                        <li key={feature} className="flex items-start gap-[11px]">
+                          <CheckIcon active={isMonthly} />
+                          <span className="text-[11px] font-light leading-[19px] text-black">
+                            {feature}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-auto">
+                      <button
+                        type="button"
+                        onClick={() => handleSelect(plan)}
+                        disabled={isLoading}
+                        className={`w-full rounded-[9px] px-3 py-2 text-sm font-medium transition ${
+                          isMonthly
+                            ? "bg-[#E94E6F] text-white hover:bg-[#d63f5f]"
+                            : "border border-[#273068] bg-transparent text-[#273068] hover:bg-[#f5f5f5]"
+                        } disabled:cursor-not-allowed disabled:opacity-50`}
+                      >
+                        {isLoading
+                          ? "Chargement..."
+                          : isFree
+                          ? "Commencer"
+                          : "Choisir cette formule"}
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+        )}
+
+        <p className="mt-10 text-center text-xs text-black">
+          Annulez quand vous voulez. Sans engagement.
+        </p>
+      </div>
+    </section>
+  )
+}

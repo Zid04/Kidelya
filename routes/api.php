@@ -11,12 +11,22 @@ use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\PackController;
 use App\Http\Controllers\PackUserController;
 use App\Http\Controllers\PlanningController;
+use App\Http\Controllers\PublicPackController;
 use App\Http\Controllers\ReportActivityController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\StripeSubscriptionController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ActivityLibraryController;
+
+
+
 
 /*
 |----------------------------------------------------------------------
@@ -27,6 +37,13 @@ Route::post('admin/login', [App\Http\Controllers\Auth\AdminLoginController::clas
 
 // Webhook Stripe — DOIT être hors du middleware auth
 Route::post('stripe/webhook', [StripeController::class, 'webhook']);
+
+Route::get('/public/packs', [PublicPackController::class, 'index'])
+    ->name('public.packs.index');
+Route::get('/public/packs/{pack}', [PublicPackController::class, 'show'])
+    ->name('public.packs.show');
+Route::get('/subscriptions/plans', [SubscriptionController::class, 'index'])
+    ->name('subscriptions.plans');
 
 /*
 |----------------------------------------------------------------------
@@ -41,10 +58,22 @@ Route::middleware('auth:sanctum')->group(function () {
     |----------------------------------------------------------------------
     */
     Route::get('users/me', function () {
-        return response()->json([
-            'data' => auth()->user()->load('role')
-        ]);
-    })->name('users.me');
+    $user = auth()->user();
+
+    return response()->json([
+        'data' => [
+            'id' => $user->id,
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'email' => $user->email,
+            'idrole' => $user->idrole,
+            'credit_balance' => $user->credit_balance,
+            'role' => $user->role,
+            'plan' => $user->activeSubscription()?->plan,
+        ]
+    ]);
+})->name('users.me');
+
 
     Route::apiResource('users', UserController::class);
     Route::patch('users/{user}/deactivate', [UserController::class, 'deactivate'])
@@ -239,4 +268,30 @@ Route::get('settings', [SettingController::class, 'index'])
     ->name('settings.index');
 Route::patch('settings', [SettingController::class, 'update'])
     ->name('settings.update');
+
+    Route::post('/subscriptions/subscribe', [SubscriptionController::class, 'subscribe']);
+    Route::post('/subscriptions/cancel', [SubscriptionController::class, 'cancel']);
+    Route::get('/subscriptions/status', [SubscriptionController::class, 'status']);
+
+    Route::post('/stripe/subscription/checkout', [StripeSubscriptionController::class, 'checkout']);
+    Route::get('/stripe/subscription/success', [StripeSubscriptionController::class, 'success']);
+    Route::post('/stripe/subscription/cancel', [StripeSubscriptionController::class, 'cancel']);
+
+    // FAVORIS
+    Route::get('/favorites', [FavoriteController::class, 'index']);
+    Route::post('/favorites/add', [FavoriteController::class, 'add']);
+    Route::delete('/favorites/remove', [FavoriteController::class, 'remove']);
+
+    // PANIER
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::post('/cart/add', [CartController::class, 'add']);
+    Route::patch('/cart/{cartItem}', [CartController::class, 'update']);
+    Route::delete('/cart/{cartItem}', [CartController::class, 'remove']);
+    Route::delete('/cart', [CartController::class, 'clear']);
+
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::get('/activities/library', [ActivityLibraryController::class, 'index']);
+
+
+
 });

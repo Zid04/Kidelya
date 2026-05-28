@@ -1,21 +1,59 @@
+import type { InputHTMLAttributes } from "react"
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
-  return (
-    <input
-      type={type}
-      data-slot="input"
-      className={cn(
-        "border-input file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-        className
-      )}
-      {...props}
-    />
-  )
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string
+  error?: string
+  hint?: string
 }
 
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ label, error, hint, className, required, ...props }, ref) => {
+    return (
+      <div className="w-full flex flex-col gap-1">
+        
+        {/* Label */}
+        {label && (
+          <label className="text-sm font-medium text-[#93197D]">
+            {label}
+            {required && <span className="text-[#E94E6F] ml-1">*</span>}
+          </label>
+        )}
+
+        {/* Input */}
+        <input
+          ref={ref}
+          required={required}
+          {...props}
+          className={cn(
+            `
+            w-full px-4 py-3 rounded-xl border-2 bg-white
+            text-[#0094A8] placeholder-[#BFAED6]
+            transition-all duration-200 outline-none
+
+            focus:ring-2 focus:ring-[#E94E6F] focus:border-[#E94E6F]
+            disabled:opacity-50 disabled:cursor-not-allowed
+
+            ${error ? "border-[#E94E6F]" : "border-[#FDC600]/40"}
+            `,
+            className
+          )}
+        />
+
+        {/* Error */}
+        {error && (
+          <p className="text-sm text-[#E94E6F]">{error}</p>
+        )}
+
+        {/* Hint */}
+        {!error && hint && (
+          <p className="text-sm text-[#6F8D4C]">{hint}</p>
+        )}
+      </div>
+    )
+  }
+)
+
+Input.displayName = "Input"
 export { Input }

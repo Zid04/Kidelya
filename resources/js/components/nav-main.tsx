@@ -1,36 +1,32 @@
-import { Link } from '@inertiajs/react';
-import {
-    SidebarGroup,
-    SidebarGroupLabel,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from '@/components/ui/sidebar';
-import { useCurrentUrl } from '@/hooks/use-current-url';
-import type { NavItem } from '@/types';
+import { Link } from "@inertiajs/react"
+import { useCurrentUrl } from "@/hooks/use-current-url"
+import { cn } from "@/lib/utils"
+import type { NavItem } from "@/types"
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
-    const { isCurrentUrl } = useCurrentUrl();
+  const { isCurrentUrl } = useCurrentUrl()
 
-    return (
-        <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
-            <SidebarMenu>
-                {items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton
-                            asChild
-                            isActive={isCurrentUrl(item.href)}
-                            tooltip={{ children: item.title }}
-                        >
-                            <Link href={item.href} prefetch>
-                                {item.icon && <item.icon />}
-                                <span>{item.title}</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
-        </SidebarGroup>
-    );
+  return (
+    <nav className="flex flex-col gap-1 px-4 py-2">
+      {items.map((item) => {
+        const active = isCurrentUrl(item.href)
+
+        return (
+          <Link
+            key={item.title}
+            href={item.href}
+            className={cn(
+              "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+              active
+                ? "bg-[#FDC600]/30 text-[#93197D]"
+                : "text-[#6F8D4C] hover:bg-[#FDC600]/20 hover:text-[#93197D]"
+            )}
+          >
+            {item.icon && <item.icon className="h-5 w-5" />}
+            <span>{item.title}</span>
+          </Link>
+        )
+      })}
+    </nav>
+  )
 }
