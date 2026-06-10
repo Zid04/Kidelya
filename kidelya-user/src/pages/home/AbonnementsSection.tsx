@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "@/api/axios"
 import { formatPrice } from "@/utils/media"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/context/useAuth"
 import fleurs03 from "@/assets/FLEURS_03-1Abonnement.png"
 import fleurs04 from "@/assets/FLEURS_04-2Abonnement.png"
 

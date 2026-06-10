@@ -9,22 +9,17 @@ class GuardianService
 {
     public function getAll()
     {
-        return Guardian::latest()->get();
+        return Guardian::where('user_id', Auth::id())->latest()->get();
     }
 
-    /**
-     * Voir un parent (sans autorisation, la Policy s’en charge)
-     */
     public function getById(int $id): ?Guardian
     {
         return Guardian::find($id);
     }
 
-    /**
-     * Créer un parent
-     */
     public function create(array $data): Guardian
     {
+        $data['user_id'] = Auth::id();
         return Guardian::create($data);
     }
 

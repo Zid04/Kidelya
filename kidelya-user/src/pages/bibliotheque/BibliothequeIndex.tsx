@@ -4,6 +4,7 @@ import { getLibraryActivities } from "@/services/ActivityService"
 import { formatPrice, mediaUrl } from "@/utils/media"
 import api from "@/api/axios"
 import type { Activity } from "@/types/Activity"
+import { useFavorites } from "@/hooks/useFavorites"
 import illuHero from "@/assets/ILLU_PAGE_ACTIVITE.png"
 import ctaPack from "@/assets/ctapack.png"
 import iconSteam from "@/assets/steam.png"
@@ -29,6 +30,7 @@ const CARD_COLORS = [
 export default function BibliothequeIndex() {
   const navigate = useNavigate()
   const carouselRef = useRef<HTMLDivElement>(null)
+  const { favActivityIds, favPackIds, toggleActivity, togglePack } = useFavorites()
 
   const [activities, setActivities] = useState<Activity[]>([])
   const [packs, setPacks] = useState<Pack[]>([])
@@ -271,6 +273,15 @@ export default function BibliothequeIndex() {
                           🎨
                         </div>
                       )}
+                      <button
+                        onClick={(e) => toggleActivity(a.idactivities, e)}
+                        className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/80 shadow backdrop-blur-sm transition hover:bg-white"
+                        title={favActivityIds.has(a.idactivities) ? "Retirer des favoris" : "Ajouter aux favoris"}
+                      >
+                        <svg viewBox="0 0 24 24" className="h-4 w-4" fill={favActivityIds.has(a.idactivities) ? "#E94E6F" : "none"} stroke="#E94E6F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                      </button>
                     </div>
 
                     <div className="flex flex-1 flex-col p-4">
@@ -369,7 +380,7 @@ export default function BibliothequeIndex() {
                   <Link
                     key={pack.idpack}
                     to={`/packs/${pack.idpack}`}
-                    className="flex flex-col overflow-hidden rounded-2xl border border-[#F1D9B5] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                    className="relative flex flex-col overflow-hidden rounded-2xl border border-[#F1D9B5] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
                   >
                     {image ? (
                       <img src={image} alt={pack.title} className="h-40 w-full object-cover" />
@@ -379,6 +390,15 @@ export default function BibliothequeIndex() {
                         🎁
                       </div>
                     )}
+                    <button
+                      onClick={(e) => togglePack(pack.idpack, e)}
+                      className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/80 shadow backdrop-blur-sm transition hover:bg-white"
+                      title={favPackIds.has(pack.idpack) ? "Retirer des favoris" : "Ajouter aux favoris"}
+                    >
+                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill={favPackIds.has(pack.idpack) ? "#E94E6F" : "none"} stroke="#E94E6F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                      </svg>
+                    </button>
                     <div className="flex flex-1 flex-col p-4">
                       <h3 className="mb-1 font-black leading-snug" style={{ color: color.badge }}>{pack.title}</h3>
                       {pack.description && (

@@ -4,11 +4,13 @@ import { getMyActivities, deleteActivity, createActivity } from "@/services/Acti
 import { useAuth } from "@/context/useAuth"
 import type { Activity } from "@/types/Activity"
 import mesActivitesImg from "@/assets/mesactivites.png"
+import { useFavorites } from "@/hooks/useFavorites"
 
 const PAGE_SIZE = 6
 
 export default function MesActivites() {
   const { user } = useAuth()
+  const { favActivityIds, toggleActivity } = useFavorites()
   const [activities, setActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
@@ -269,6 +271,15 @@ export default function MesActivites() {
                       <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
                     </svg>
                     {duplicating === a.idactivities ? "…" : "Dupliquer"}
+                  </button>
+                  <button
+                    onClick={(e) => toggleActivity(a.idactivities, e)}
+                    className="flex items-center gap-1 text-xs font-semibold text-[#E94E6F] hover:opacity-70"
+                    title={favActivityIds.has(a.idactivities) ? "Retirer des favoris" : "Favoris"}
+                  >
+                    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill={favActivityIds.has(a.idactivities) ? "#E94E6F" : "none"} stroke="#E94E6F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
                   </button>
                   <button
                     onClick={() => handleDelete(a.idactivities)}

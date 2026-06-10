@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import api from "@/api/axios"
 
 interface Transaction {
   id: number
@@ -18,9 +19,8 @@ export default function HistoriqueAchats() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("/api/me/transactions")
-        const json = await res.json()
-        setTransactions(json.data || json)
+        const res = await api.get("/me/transactions")
+        setTransactions(res.data.data || res.data)
       } catch (e) {
         console.error("Erreur chargement historique :", e)
       } finally {

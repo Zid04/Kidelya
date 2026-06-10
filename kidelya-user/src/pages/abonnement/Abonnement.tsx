@@ -2,7 +2,7 @@
 import { Link, useNavigate } from "react-router-dom"
 import api from "@/api/axios"
 import { formatPrice } from "@/utils/media"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/context/useAuth"
 import heroAbonnement from "@/assets/photo-hero-abonnement.png"
 
 type SubscriptionPlan = {

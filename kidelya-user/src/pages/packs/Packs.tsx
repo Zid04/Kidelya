@@ -4,6 +4,7 @@ import api from "@/api/axios"
 import { useAuth } from "@/context/useAuth"
 import { PackArtwork } from "@/components/kidelya/PackArtwork"
 import { formatPrice, mediaUrl } from "@/utils/media"
+import { useFavorites } from "@/hooks/useFavorites"
 import illuHero from "@/assets/ILLU_PAGE_ACTIVITE.png"
 import ctaPack from "@/assets/ctapack.png"
 import iconSteam from "@/assets/steam.png"
@@ -95,6 +96,7 @@ export default function PacksPage() {
   const carouselRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { favPackIds, togglePack } = useFavorites()
 
   useEffect(() => {
     const fetchPacks = async () => {
@@ -358,6 +360,15 @@ export default function PacksPage() {
                         ) : (
                           <PackArtwork title={pack.title} compact className="h-36" />
                         )}
+                        <button
+                          onClick={(e) => togglePack(pack.idpack, e)}
+                          className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/80 shadow backdrop-blur-sm transition hover:bg-white"
+                          title={favPackIds.has(pack.idpack) ? "Retirer des favoris" : "Ajouter aux favoris"}
+                        >
+                          <svg viewBox="0 0 24 24" className="h-4 w-4" fill={favPackIds.has(pack.idpack) ? "#E94E6F" : "none"} stroke="#E94E6F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                          </svg>
+                        </button>
                       </div>
 
                       <div className="flex flex-1 flex-col p-4">

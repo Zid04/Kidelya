@@ -14,4 +14,9 @@ export interface User {
     name: string
     price: number
   }
+  subscription?: {
+    starts_at: string
+    ends_at: string
+    status: string
+  }
 }

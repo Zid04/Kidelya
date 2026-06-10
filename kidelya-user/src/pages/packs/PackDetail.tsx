@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom"
 import api from "@/api/axios"
 import { PackArtwork } from "@/components/kidelya/PackArtwork"
 import { formatPrice, mediaUrl } from "@/utils/media"
+import { useFavorites } from "@/hooks/useFavorites"
 
 type Activity = {
   idactivities: number
@@ -38,6 +39,7 @@ export default function PackDetail() {
   const [relatedPacks, setRelatedPacks] = useState<Pack[]>([])
   const [loading, setLoading] = useState(true)
   const [adding, setAdding] = useState(false)
+  const { favPackIds, togglePack } = useFavorites()
 
   const durations = pack?.activities?.map((a) => a.duration) ?? []
   const minDuration = durations.length ? Math.min(...durations) : null
@@ -180,6 +182,15 @@ export default function PackDetail() {
             >
               Voir les abonnements
             </Link>
+            <button
+              onClick={(e) => togglePack(pack.idpack, e)}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#E94E6F] px-4 py-3 text-sm font-semibold text-[#E94E6F] hover:bg-[#FFF5F7] transition-colors"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill={favPackIds.has(pack.idpack) ? "#E94E6F" : "none"} stroke="#E94E6F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+              {favPackIds.has(pack.idpack) ? "En favoris" : "Ajouter aux favoris"}
+            </button>
             <p className="mt-5 text-center text-xs font-semibold text-[#6F8D4C]">
               Paiement securise
             </p>

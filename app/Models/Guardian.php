@@ -6,6 +6,7 @@ use Database\Factories\GuardianFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\User;
 
 class Guardian extends Model
 {
@@ -15,6 +16,7 @@ class Guardian extends Model
     protected $primaryKey = 'idparent';
 
     protected $fillable = [
+        'user_id',
         'names',
         'email',
         'phone',
@@ -24,6 +26,11 @@ class Guardian extends Model
     public function getRouteKeyName(): string
     {
         return 'idparent';
+    }
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id', 'iduser');
     }
 
     public function children(): BelongsToMany

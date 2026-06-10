@@ -7,9 +7,6 @@ use App\Models\Guardian;
 
 class GuardianPolicy
 {
-    /**
-     * Voir la liste des tuteurs
-     */
     public function viewAny(User $user): bool
     {
         return true;
@@ -17,12 +14,9 @@ class GuardianPolicy
 
     public function view(User $user, Guardian $guardian): bool
     {
-        return true;
+        return $guardian->user_id === $user->iduser;
     }
 
-    /**
-     * Créer un tuteur
-     */
     public function create(User $user): bool
     {
         return true;
@@ -30,11 +24,11 @@ class GuardianPolicy
 
     public function update(User $user, Guardian $guardian): bool
     {
-        return true;
+        return $guardian->user_id === $user->iduser;
     }
 
     public function delete(User $user, Guardian $guardian): bool
     {
-        return true;
+        return $guardian->user_id === $user->iduser;
     }
 }

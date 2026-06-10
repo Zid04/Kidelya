@@ -20,7 +20,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let mounted = true
     usersApi
       .me()
-      .then((res) => { if (mounted) setUser(res.data) })
+      .then((res) => { if (mounted) setUser(res.data.data) })
       .catch(() => { if (mounted) setUser(null) })
       .finally(() => { if (mounted) setLoading(false) })
 
@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     save("token", token)
     try {
       const res = await usersApi.me()
-      setUser(res.data)
+      setUser(res.data.data)
     } catch {
       setUser(null)
     } finally {

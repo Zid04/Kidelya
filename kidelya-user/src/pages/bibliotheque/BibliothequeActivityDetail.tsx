@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom"
 import { getLibraryActivity, createActivityCheckout } from "@/services/ActivityService"
 import { mediaUrl } from "@/utils/media"
 import type { Activity } from "@/types/Activity"
+import { useFavorites } from "@/hooks/useFavorites"
 
 type Tab = "apercu" | "etapes" | "materiel" | "informations" | "competences"
 
@@ -13,6 +14,7 @@ export default function BibliothequeActivityDetail() {
   const [loading, setLoading] = useState(true)
   const [buying, setBuying] = useState(false)
   const [activeTab, setActiveTab] = useState<Tab>("apercu")
+  const { favActivityIds, toggleActivity } = useFavorites()
 
   useEffect(() => {
     async function load() {
@@ -145,7 +147,7 @@ export default function BibliothequeActivityDetail() {
               <p className="mt-4 max-w-lg text-sm leading-6 text-gray-500">{activity.description}</p>
             )}
 
-            <div className="mt-5 flex gap-3">
+            <div className="mt-5 flex flex-wrap gap-3">
               {canAccess ? (
                 <span className="flex items-center gap-2 rounded-xl bg-green-50 px-5 py-2.5 text-sm font-bold text-green-700">
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -165,6 +167,16 @@ export default function BibliothequeActivityDetail() {
                   {buying ? "Redirection…" : `Acheter — ${activity.credit_price ?? "?"} €`}
                 </button>
               )}
+              <button
+                onClick={(e) => toggleActivity(activity.idactivities, e)}
+                className="flex items-center gap-2 rounded-xl border border-[#E94E6F] px-5 py-2.5 text-sm font-semibold text-[#E94E6F] hover:bg-[#FFF5F7] transition-colors"
+                title={favActivityIds.has(activity.idactivities) ? "Retirer des favoris" : "Ajouter aux favoris"}
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill={favActivityIds.has(activity.idactivities) ? "#E94E6F" : "none"} stroke="#E94E6F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                {favActivityIds.has(activity.idactivities) ? "En favoris" : "Favoris"}
+              </button>
               <button
                 onClick={() => navigate(-1)}
                 className="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-500 hover:bg-gray-50"

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\ActivityPurchase;
 use App\Models\Pack;
+use App\Models\SubscriptionPlan;
 use App\Models\User;
 use App\Models\PackUser;
 use App\Services\StripeService;
+use App\Services\SubscriptionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -62,6 +64,22 @@ class StripeController extends Controller
             return;
         }
 
+        // ── Abonnement ────────────────────────────────────────────
+        if ($type === 'subscription' && isset($session->metadata->plan_id)) {
+            $plan = SubscriptionPlan::find($session->metadata->plan_id);
+            $user = User::find($userId);
+
+            if (!$user || !$plan) {
+                Log::warning('User or Plan not found for subscription', ['user_id' => $userId, 'plan_id' => $session->metadata->plan_id]);
+                return;
+            }
+
+            app(SubscriptionService::class)->subscribe($user, $plan);
+            Log::info('Abonnement activé via webhook', ['user_id' => $userId, 'plan_id' => $plan->idplan]);
+            return;
+        }
+
+        // ── Achat d'activité individuelle ─────────────────────────
         if ($type === 'activity_purchase' && $activityId) {
             $user     = User::find($userId);
             $activity = Activity::find($activityId);

@@ -11,7 +11,7 @@ export const usersApi = {
   create: (data: UserPayload) =>
     api.post<User>("/users", data),
 
-  me: () => api.get<User>("/users/me"),
+  me: () => api.get<{ data: User }>("/users/me"),
 
   one: (id: number) =>
     api.get<User>(`/users/${id}`),

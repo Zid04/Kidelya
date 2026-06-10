@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { getUserDashboard } from "@/services/UserService"
+import { useAuth } from "@/context/useAuth"
 import type {
   DashboardUser,
   DashboardStats,
@@ -48,6 +49,21 @@ export default function DashboardUser() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [activities, setActivities] = useState<DashboardActivity[]>([])
   const [recommendedPacks, setRecommendedPacks] = useState<DashboardPack[]>([])
+  const { user: authUser } = useAuth()
+
+  const plan         = authUser?.plan
+  const subscription = authUser?.subscription
+  const endsAt       = subscription?.ends_at
+  const startsAt     = subscription?.starts_at
+  const daysLeft     = endsAt
+    ? Math.max(0, Math.ceil((new Date(endsAt).getTime() - Date.now()) / 86400000))
+    : null
+  const totalDays    = startsAt && endsAt
+    ? Math.ceil((new Date(endsAt).getTime() - new Date(startsAt).getTime()) / 86400000)
+    : null
+  const progressPct  = totalDays && totalDays > 0 && daysLeft !== null
+    ? Math.round(((totalDays - daysLeft) / totalDays) * 100)
+    : 0
 
   useEffect(() => {
     getUserDashboard()
@@ -68,8 +84,6 @@ export default function DashboardUser() {
     )
   }
 
-  const initials = `${user.firstname[0] ?? ""}${user.lastname[0] ?? ""}`.toUpperCase()
-
   const statsCards = [
     { label: "Activités créées",     value: stats.activities_created,   icon: <IconActivitesCrees />,       bg: "bg-[#7B8CDE]", link: "/activities" },
     { label: "Activités faites",     value: stats.activities_favorites,  icon: <IconActivitesFaites />,      bg: "bg-[#E94E6F]", link: "/activities" },
@@ -78,7 +92,7 @@ export default function DashboardUser() {
   ]
 
   const sidebarItems = [
-    { title: "Bibliothèque d'activités", titleColor: "text-[#21164F]", desc: "Activités prêtes à l'emploi classées par âge et par thème.", link: "/library",     btn: "Explorer",          btnColor: "bg-[#8F6BC8] text-white", img: fleur1TB,       bg: "bg-white border border-gray-100" },
+    { title: "Boutique",                 titleColor: "text-[#21164F]", desc: "Activités prêtes à l'emploi classées par âge et par thème.", link: "/library",     btn: "Explorer",          btnColor: "bg-[#8F6BC8] text-white", img: fleur1TB,       bg: "bg-white border border-gray-100" },
     { title: "Packs d'activités",        titleColor: "text-[#E94E6F]", desc: "Des thèmes variés pour toutes les saisons et toutes les envies.", link: "/packs",   btn: "Voir les packs",    btnColor: "bg-[#6DBF67] text-white", img: fleur2TB,       bg: "bg-white border border-gray-100" },
     { title: "Planifiez vos activités",  titleColor: "text-[#21164F]", desc: "Organisez vos activités dans un calendrier dédié.", link: "/calendar",              btn: "Voir le calendrier", btnColor: "bg-[#E94E6F] text-white", img: calendariconTB, bg: "bg-white border border-gray-100" },
     { title: "Passez à un abonnement",   titleColor: "text-white",     desc: "Débloquez l'accès illimité aux packs et au planning.", link: "/abonnements",        btn: "Découvrir les offres", btnColor: "bg-white text-[#8F6BC8]", img: fleur3TB, bg: "bg-[#8F6BC8]" },
@@ -87,14 +101,6 @@ export default function DashboardUser() {
   return (
     // overflow-x-hidden sur le wrapper global pour éviter tout débordement
     <div className="min-h-screen overflow-x-hidden bg-white text-[#21164F]">
-
-      {/* ── Barre supérieure ── */}
-      <div className="mb-4 flex items-center justify-end gap-3">
-        <p className="text-sm font-semibold text-[#21164F] sm:text-base">Bonjour {user.firstname},</p>
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8F6BC8] text-xs font-black text-white sm:h-10 sm:w-10 sm:text-sm">
-          {initials}
-        </div>
-      </div>
 
       {/* ── Hero — image couvre tout le div ── */}
       <section className="relative mb-5 overflow-hidden rounded-2xl" style={{ minHeight: "140px" }}>
@@ -139,6 +145,32 @@ export default function DashboardUser() {
                 </div>
               </Link>
             ))}
+          </div>
+
+          {/* Mini-card abonnement */}
+          <div className={`flex items-center gap-4 rounded-2xl p-4 ${plan ? "bg-[#F5F0FF] border border-[#8F6BC8]/20" : "bg-gray-50 border border-gray-100"}`}>
+            <span className={`h-10 w-10 flex shrink-0 items-center justify-center rounded-full text-white text-sm font-black ${plan ? "bg-[#8F6BC8]" : "bg-gray-300"}`}>
+              {plan ? "★" : "○"}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-black text-[#2F236D]">{plan ? plan.name : "Plan gratuit"}</p>
+              {plan && daysLeft !== null ? (
+                <>
+                  <p className="text-xs text-[#6F8D4C]">{daysLeft} jour{daysLeft !== 1 ? "s" : ""} restant{daysLeft !== 1 ? "s" : ""}</p>
+                  <div className="mt-1.5 h-1.5 bg-[#8F6BC8]/20 rounded-full">
+                    <div className="h-1.5 bg-[#8F6BC8] rounded-full transition-all" style={{ width: `${progressPct}%` }} />
+                  </div>
+                </>
+              ) : (
+                <p className="text-xs text-gray-400">Accédez à toutes les fonctionnalités</p>
+              )}
+            </div>
+            <Link
+              to="/abonnements"
+              className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${plan ? "bg-[#8F6BC8] text-white hover:bg-[#7a5bb3]" : "bg-[#E94E6F] text-white hover:bg-[#d63f5f]"}`}
+            >
+              {plan ? "Gérer" : "Upgrade"}
+            </Link>
           </div>
 
           {/* Dernières activités */}

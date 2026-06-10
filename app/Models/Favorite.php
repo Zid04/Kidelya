@@ -15,7 +15,7 @@ class Favorite extends Model
 
     public function activity()
     {
-        return $this->belongsTo(Activity::class, 'idactivity', 'idactivity');
+        return $this->belongsTo(Activity::class, 'idactivity', 'idactivities');
     }
 
     public function pack()

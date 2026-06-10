@@ -20,11 +20,11 @@ class FavoriteController extends Controller
     public function add(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'idactivity' => 'nullable|exists:activities,idactivity',
+            'idactivity' => 'nullable|exists:activities,idactivities',
             'idpack' => 'nullable|exists:packs,idpack',
         ]);
 
-        if (!$validated['idactivity'] && !$validated['idpack']) {
+        if (!($validated['idactivity'] ?? null) && !($validated['idpack'] ?? null)) {
             return response()->json(['message' => 'Aucun élément fourni'], 422);
         }
 
@@ -43,7 +43,7 @@ class FavoriteController extends Controller
     public function remove(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'idactivity' => 'nullable|exists:activities,idactivity',
+            'idactivity' => 'nullable|exists:activities,idactivities',
             'idpack' => 'nullable|exists:packs,idpack',
         ]);
 
