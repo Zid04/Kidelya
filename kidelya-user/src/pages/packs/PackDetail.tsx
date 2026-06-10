@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+﻿import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import api from "@/api/axios"
 import { PackArtwork } from "@/components/kidelya/PackArtwork"
@@ -81,7 +81,7 @@ export default function PackDetail() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#FFF9F0] text-[#6F8D4C]">
+      <div className="flex min-h-screen items-center justify-center bg-white text-[#6F8D4C]">
         Chargement du pack...
       </div>
     )
@@ -89,7 +89,7 @@ export default function PackDetail() {
 
   if (!pack) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#FFF9F0] text-[#6F8D4C]">
+      <div className="flex min-h-screen items-center justify-center bg-white text-[#6F8D4C]">
         Pack introuvable.
       </div>
     )
@@ -99,7 +99,7 @@ export default function PackDetail() {
   const activitiesCount = pack.activities?.length ?? 0
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] text-[#21164F]">
+    <div className="min-h-screen bg-white text-[#21164F]">
       <main className="mx-auto max-w-7xl px-6 py-10">
         <div className="mb-8 text-sm text-[#6F8D4C]">
           <Link to="/" className="hover:text-[#E94E6F]">Accueil</Link>
@@ -201,9 +201,9 @@ export default function PackDetail() {
         </section>
 
         <section className="mt-10 grid gap-8 lg:grid-cols-[1.35fr,0.65fr]">
-          <div className="rounded-3xl border border-[#F1D9B5] bg-white p-6 shadow-md">
+          <div className="rounded-3xl border border-[var(--app-border)] bg-[var(--app-card)] p-6 shadow-md">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-black text-[#2F236D]">
+              <h2 className="text-xl font-black text-[var(--app-text)]">
                 Ce pack contient {activitiesCount} activites
               </h2>
               <span className="text-sm font-bold text-[#8F6BC8]">Apercu</span>
@@ -217,17 +217,17 @@ export default function PackDetail() {
                     <Link
                       key={activity.idactivities}
                       to={`/activities/pack/${activity.idactivities}`}
-                      className="flex items-center gap-4 rounded-2xl border border-[#F1D9B5] p-3 transition hover:bg-[#FFF9F0]"
+                      className="flex items-center gap-4 rounded-2xl border border-[var(--app-border)] bg-[var(--app-subtle)] p-3 transition hover:opacity-80"
                     >
                       {image ? (
                         <img src={image} alt={activity.title} className="h-16 w-16 rounded-xl object-cover" />
                       ) : (
-                        <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[#FFF3E0] text-sm font-black text-[#E94E6F]">
+                        <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[var(--app-card)] text-sm font-black text-[#E94E6F]">
                           {index + 1}
                         </div>
                       )}
                       <div className="min-w-0">
-                        <h3 className="truncate text-sm font-black text-[#2F236D]">
+                        <h3 className="truncate text-sm font-black text-[var(--app-text)]">
                           {activity.title}
                         </h3>
                         <p className="text-xs text-[#6F8D4C]">

@@ -45,6 +45,8 @@ class Activity extends Model
         'is_published'   => 'boolean',
         'included_in_subscription' => 'boolean',
 
+        'steps'          => 'array',
+        'materials'      => 'array',
     ];
 
     // ─── Relations ────────────────────────────────────────────

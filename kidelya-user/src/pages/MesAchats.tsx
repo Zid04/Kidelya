@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+﻿import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 interface PurchasedActivity {
@@ -59,7 +59,7 @@ export default function MesAchats() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] px-6 py-10 max-w-6xl mx-auto">
+    <div className="min-h-screen bg-white px-6 py-10 max-w-6xl mx-auto">
 
       {/* TITRE */}
       <h1 className="text-3xl font-bold text-[#93197D] mb-4">
@@ -86,7 +86,7 @@ export default function MesAchats() {
             Vous avez accès à toutes les activités.
           </p>
           <Link
-            to="/bibliotheque"
+            to="/library"
             className="px-4 py-2 bg-[#E94E6F] text-white rounded-lg font-semibold"
           >
             Explorer les activités

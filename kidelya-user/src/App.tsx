@@ -1,5 +1,11 @@
+
 import { BrowserRouter, Routes, Route, useParams, useSearchParams } from "react-router-dom"
+import ScrollToTop from "@/components/ScrollToTop"
+
+// LAYOUT
 import MainLayout from "@/components/layout/MainLayout"
+
+// ERROR
 import ErrorPage from "./pages/ErrorPage"
 
 // HOME
@@ -13,6 +19,7 @@ import ResetPassword from "./pages/auth/reset-password"
 import ConfirmPassword from "./pages/auth/ConfirmPassword"
 import VerifyEmail from "./pages/auth/verify-email"
 import TwoFactorChallenge from "./pages/auth/two-factor-challenge"
+import AuthCallback from "./pages/auth/AuthCallback"
 
 // ABONNEMENT
 import Abonnement from "./pages/abonnement/Abonnement"
@@ -71,10 +78,15 @@ import PackDetail from "./pages/packs/PackDetail"
 import MesActivites from "./pages/activities/MesActivites"
 import ActivityDetailPack from "./pages/activities/ActivityDetailPack"
 import ActivityShow from "./pages/activities/ActivityShow"
+import ActivityCreate from "./pages/activities/ActivityCreate"
+import ActivityEdit from "./pages/activities/ActivityEdit"
 import BibliothequeIndex from "./pages/bibliotheque/BibliothequeIndex"
+import BibliothequeActivityDetail from "./pages/bibliotheque/BibliothequeActivityDetail"
 import ConfidentialitePage from "./pages/Confidentialite"
 import CGUPage from "./pages/CGU"
+import CartPage from "./pages/panier/CartPage"
 
+// RESET PASSWORD ROUTE
 function ResetPasswordRoute() {
   const { token = "" } = useParams()
   const [searchParams] = useSearchParams()
@@ -90,11 +102,11 @@ function ResetPasswordRoute() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
-        <Route
-          path="/login"
-          element={<Login canResetPassword={true} canRegister={true} />}
-        />
+
+        {/* AUTH (pas de MainLayout ici) */}
+        <Route path="/login" element={<Login canResetPassword={true} canRegister={true} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPasswordRoute />} />
@@ -102,12 +114,16 @@ export default function App() {
         <Route path="/confirm-password" element={<ConfirmPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/two-factor-challenge" element={<TwoFactorChallenge />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
 
-        {/* Layout global */}
+        {/* LAYOUT GLOBAL (public + privé) */}
         <Route element={<MainLayout />}>
 
           {/* HOME */}
           <Route path="/" element={<Home />} />
+
+          {/* DASHBOARD */}
+          <Route path="/dashboard" element={<Dashboard />} />
 
           {/* ABONNEMENT */}
           <Route path="/abonnements" element={<Abonnement />} />
@@ -143,31 +159,28 @@ export default function App() {
           <Route path="/plannings/:id/edit" element={<PlanningEdit />} />
           <Route path="/plannings/:id/delete" element={<PlanningDelete />} />
 
-          {/* PAYMENTS */}
-          <Route path="/payment/success" element={<PaymentSuccess />} />
-          <Route path="/payment/failed" element={<PaymentFailed />} />
-
-          {/* USER AREAS */}
+          {/* ACTIVITÉS */}
           <Route path="/activities" element={<MesActivites />} />
+          <Route path="/activities/create" element={<ActivityCreate />} />
           <Route path="/activities/:id" element={<ActivityShow />} />
+          <Route path="/activities/:id/edit" element={<ActivityEdit />} />
           <Route path="/activities/pack/:idactivities" element={<ActivityDetailPack />} />
           <Route path="/library" element={<BibliothequeIndex />} />
+          <Route path="/library/:id" element={<BibliothequeActivityDetail />} />
           <Route path="/calendar" element={<PlanningIndex />} />
-          <Route path="/profile" element={<Profil />} />
+
+          {/* PACKS */}
+          <Route path="/packs" element={<PacksPage />} />
+          <Route path="/packs/:idpack" element={<PackDetail />} />
+
+          {/* PANIER */}
+          <Route path="/panier" element={<CartPage />} />
 
           {/* SETTINGS */}
           <Route path="/settings" element={<Profil />} />
           <Route path="/settings/profil" element={<Profil />} />
           <Route path="/settings/security" element={<Security />} />
           <Route path="/settings/apparence" element={<Apparence />} />
-
-          {/* PACKS */}
-          <Route path="/packs" element={<PacksPage />} />
-          <Route path="/packs/:idpack" element={<PackDetail />} />
-
-          {/* PAYMENTS / HELP */}
-          <Route path="/pricing" element={<Abonnement />} />
-          <Route path="/help" element={<Faq />} />
 
           {/* AUTRES */}
           <Route path="/about" element={<About />} />
@@ -177,12 +190,14 @@ export default function App() {
           <Route path="/legal" element={<MentionsLegalesPage />} />
           <Route path="/historique" element={<Historique />} />
           <Route path="/mes-achats" element={<MesAchats />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/Confidentialite" element={<ConfidentialitePage />} />
           <Route path="/CGU" element={<CGUPage />} />
 
           {/* 404 */}
           <Route path="*" element={<ErrorPage />} />
+
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+          <Route path="/payment/failed" element={<PaymentFailed />} />
 
         </Route>
       </Routes>

@@ -6,37 +6,46 @@ import { load, save, remove } from "@/utils/storage"
 import { AuthContext } from "./AuthContext"
 
 export function AuthProvider({ children }: { children: ReactNode }) {
- const initialToken = load("token", null) 
-
-  const [loading, setLoading] = useState<boolean>(!!initialToken)
   const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
+  // Chargement initial — exécuté une seule fois au montage
   useEffect(() => {
-    if (!initialToken) return
+    const token = load("token", null)
+    if (!token) {
+      setLoading(false)
+      return
+    }
 
     let mounted = true
-
     usersApi
       .me()
-      .then((res) => {
-        if (mounted) setUser(res.data)
-      })
-      .finally(() => {
-        if (mounted) setLoading(false)
-      })
+      .then((res) => { if (mounted) setUser(res.data) })
+      .catch(() => { if (mounted) setUser(null) })
+      .finally(() => { if (mounted) setLoading(false) })
 
-    return () => {
-      mounted = false
-    }
-  }, [initialToken])
+    return () => { mounted = false }
+  }, [])
 
   const login = async (token: string) => {
+    // On vide l'ancien utilisateur et on signale le chargement
+    setUser(null)
+    setLoading(true)
     save("token", token)
-    const res = await usersApi.me()
-    setUser(res.data)
+    try {
+      const res = await usersApi.me()
+      setUser(res.data)
+    } catch {
+      setUser(null)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await usersApi.logout()
+    } catch { /* on continue même si l'appel échoue */ }
     remove("token")
     setUser(null)
     window.location.href = "/login"

@@ -1,13 +1,47 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { getUserDashboard } from "@/services/UserService"
-import { PackArtwork } from "@/components/kidelya/PackArtwork"
 import type {
   DashboardUser,
   DashboardStats,
   DashboardActivity,
   DashboardPack,
 } from "@/types/Dashboard"
+
+import tableauDeBord from "@/assets/tableaudebord.png"
+import fleur1TB from "@/assets/fleur1TB.png"
+import fleur2TB from "@/assets/fleur2TB.png"
+import fleur3TB from "@/assets/fleur3TB.png"
+import calendariconTB from "@/assets/calendariconTB.png"
+
+function IconActivitesCrees() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5" y="2" width="14" height="20" rx="2" /><path d="M9 7h6M9 11h6M9 15h4" />
+    </svg>
+  )
+}
+function IconActivitesFaites() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+    </svg>
+  )
+}
+function IconActivitesPlanifiees() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" />
+    </svg>
+  )
+}
+function IconAchatPack() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" />
+    </svg>
+  )
+}
 
 export default function DashboardUser() {
   const [user, setUser] = useState<DashboardUser | null>(null)
@@ -16,173 +50,230 @@ export default function DashboardUser() {
   const [recommendedPacks, setRecommendedPacks] = useState<DashboardPack[]>([])
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getUserDashboard()
+    getUserDashboard()
+      .then((data) => {
         setUser(data.user)
         setStats(data.stats)
         setActivities(data.activities)
         setRecommendedPacks(data.recommended_packs)
-      } catch (error) {
-        console.error("Erreur de chargement du tableau de bord :", error)
-      }
-    }
-    fetchData()
+      })
+      .catch((err) => console.error("Erreur dashboard :", err))
   }, [])
 
   if (!user || !stats) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-[#6F8D4C]">
-        Chargement du tableau de bord...
+      <div className="flex min-h-screen items-center justify-center text-[#8F6BC8]">
+        Chargement…
       </div>
     )
   }
 
+  const initials = `${user.firstname[0] ?? ""}${user.lastname[0] ?? ""}`.toUpperCase()
+
   const statsCards = [
-    ["Activites creees", stats.activities_created, "/activities"],
-    ["Activites favorites", stats.activities_favorites, "/library"],
-    ["Activites planifiees", stats.activities_planned, "/calendar"],
-    ["Achat de pack", stats.packs_purchased, "/packs"],
-  ] as const
+    { label: "Activités créées",     value: stats.activities_created,   icon: <IconActivitesCrees />,       bg: "bg-[#7B8CDE]", link: "/activities" },
+    { label: "Activités faites",     value: stats.activities_favorites,  icon: <IconActivitesFaites />,      bg: "bg-[#E94E6F]", link: "/activities" },
+    { label: "Activités planifiées", value: stats.activities_planned,    icon: <IconActivitesPlanifiees />,  bg: "bg-[#6DBF67]", link: "/calendar" },
+    { label: "Achat de pack",        value: stats.packs_purchased,       icon: <IconAchatPack />,            bg: "bg-[#F5A623]", link: "/packs" },
+  ]
+
+  const sidebarItems = [
+    { title: "Bibliothèque d'activités", titleColor: "text-[#21164F]", desc: "Activités prêtes à l'emploi classées par âge et par thème.", link: "/library",     btn: "Explorer",          btnColor: "bg-[#8F6BC8] text-white", img: fleur1TB,       bg: "bg-white border border-gray-100" },
+    { title: "Packs d'activités",        titleColor: "text-[#E94E6F]", desc: "Des thèmes variés pour toutes les saisons et toutes les envies.", link: "/packs",   btn: "Voir les packs",    btnColor: "bg-[#6DBF67] text-white", img: fleur2TB,       bg: "bg-white border border-gray-100" },
+    { title: "Planifiez vos activités",  titleColor: "text-[#21164F]", desc: "Organisez vos activités dans un calendrier dédié.", link: "/calendar",              btn: "Voir le calendrier", btnColor: "bg-[#E94E6F] text-white", img: calendariconTB, bg: "bg-white border border-gray-100" },
+    { title: "Passez à un abonnement",   titleColor: "text-white",     desc: "Débloquez l'accès illimité aux packs et au planning.", link: "/abonnements",        btn: "Découvrir les offres", btnColor: "bg-white text-[#8F6BC8]", img: fleur3TB, bg: "bg-[#8F6BC8]" },
+  ]
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] text-[#21164F]">
-      <section className="mb-7 overflow-hidden rounded-[32px] bg-[#CDB9EA] px-8 py-8 shadow-md">
-        <div className="grid gap-6 lg:grid-cols-[1fr,1fr]">
-          <div>
-            <h1 className="text-4xl font-black text-[#2F236D]">
-              Bonjour {user.firstname} !
-            </h1>
-            <p className="mt-4 max-w-xl leading-7 text-[#21164F]">
-              Bienvenue dans votre espace Kidelya. Organisez vos activites et
-              gardez de beaux souvenirs avec vos enfants.
-            </p>
-            <div className="mt-5 inline-flex rounded-xl bg-white/75 px-4 py-2 text-sm font-bold text-[#2F236D]">
-              Astuce : debloquez le calendrier avec l'abonnement
-            </div>
-          </div>
-          <div className="relative hidden min-h-[170px] lg:block">
-            <div className="absolute bottom-0 left-0 right-0 h-16 rounded-full bg-[#8DBE55]/50" />
-            <div className="absolute right-12 top-0 h-20 w-20 rounded-full bg-[#F8B7C4]" />
-            <div className="absolute right-36 top-8 h-16 w-16 rounded-full bg-[#FDC600]" />
-            <div className="absolute left-24 top-8 h-16 w-28 rounded-full bg-white/85" />
-          </div>
+    // overflow-x-hidden sur le wrapper global pour éviter tout débordement
+    <div className="min-h-screen overflow-x-hidden bg-white text-[#21164F]">
+
+      {/* ── Barre supérieure ── */}
+      <div className="mb-4 flex items-center justify-end gap-3">
+        <p className="text-sm font-semibold text-[#21164F] sm:text-base">Bonjour {user.firstname},</p>
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8F6BC8] text-xs font-black text-white sm:h-10 sm:w-10 sm:text-sm">
+          {initials}
+        </div>
+      </div>
+
+      {/* ── Hero — image couvre tout le div ── */}
+      <section className="relative mb-5 overflow-hidden rounded-2xl" style={{ minHeight: "140px" }}>
+        <img
+          src={tableauDeBord}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#C5B5E8] via-[#C5B5E8]/70 to-transparent" />
+        <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,var(--app-dark-overlay,0))" }} />
+        <div className="relative z-10 px-5 py-7 sm:px-8 sm:py-10">
+          <h1 className="text-xl font-black text-[#2F236D] sm:text-3xl">
+            Bonjour {user.firstname},
+          </h1>
+          <p className="mt-1 text-xs leading-5 text-[#3D2D7A] sm:mt-2 sm:text-sm sm:leading-6">
+            Bienvenue dans votre espace Kidelya.
+          </p>
         </div>
       </section>
 
-      <section className="mb-7 grid gap-5 md:grid-cols-4">
-        {statsCards.map(([title, value, to], index) => (
-          <Link
-            key={title}
-            to={to}
-            className="rounded-3xl border border-[#F1D9B5] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-          >
-            <div className={`mb-4 h-14 w-14 rounded-2xl ${index % 2 === 0 ? "bg-[#8F6BC8]/20" : "bg-[#E94E6F]/15"}`} />
-            <p className="text-3xl font-black text-[#2F236D]">{value}</p>
-            <p className="mt-1 text-sm font-bold text-[#4F5F45]">{title}</p>
-          </Link>
-        ))}
-      </section>
+      {/* ── Layout principal ── */}
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
 
-      <section className="grid gap-7 xl:grid-cols-[1fr,280px]">
-        <div className="space-y-7">
-          <div className="rounded-3xl border border-[#F1D9B5] bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-xl font-black text-[#2F236D]">
-                Mes dernieres activites
-              </h2>
-              <Link to="/activities" className="text-sm font-bold text-[#8F6BC8]">
-                Voir toutes mes activites
+        {/* ── Contenu principal ── */}
+        <div className="w-full min-w-0 flex-1 space-y-6">
+
+          {/* Stats — 2×2 mobile, 4×1 desktop */}
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+            {statsCards.map((s) => (
+              <Link
+                key={s.label}
+                to={s.link}
+                className="flex flex-col items-center gap-2 rounded-2xl border border-gray-100 bg-white p-3 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:flex-row sm:p-4 sm:text-left"
+              >
+                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${s.bg}`}>
+                  {s.icon}
+                </span>
+                <div>
+                  <p className="text-lg font-black text-[#2F236D]">{s.value}</p>
+                  <p className="text-[10px] font-medium leading-tight text-[#6F7894]">{s.label}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Dernières activités */}
+          <section>
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-base font-black text-[#21164F] sm:text-lg">Dernières activités</h2>
+              <Link to="/activities" className="text-xs font-semibold text-[#21164F] hover:text-[#8F6BC8]">
+                Voir toutes →
               </Link>
             </div>
-
             {activities.length === 0 ? (
-              <p className="text-sm text-[#6F8D4C]">
-                Vous n'avez pas encore cree d'activites.
-              </p>
+              <p className="text-sm text-gray-400">Aucune activité créée pour l'instant.</p>
             ) : (
-              <div className="grid gap-5 md:grid-cols-3">
-                {activities.slice(0, 3).map((activity) => (
-                  <article key={activity.id} className="overflow-hidden rounded-2xl border border-[#F1D9B5]">
-                    <PackArtwork title={activity.title} compact className="h-32" />
-                    <div className="p-4">
-                      <h3 className="font-black text-[#2F236D]">{activity.title}</h3>
-                      <p className="mt-2 text-xs text-[#6F8D4C]">
-                        {activity.category} · {activity.age_range}
-                      </p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {activities.slice(0, 3).map((a) => (
+                  <article key={a.idactivities} className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+                    <div className="h-28 bg-gray-100" />
+                    <div className="p-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="text-sm font-black text-[#21164F]">{a.title}</h3>
+                        <span className="shrink-0 text-xs text-gray-400">{a.age_range}</span>
+                      </div>
+                      <p className="mt-1 text-xs text-gray-400 line-clamp-2">{a.category}</p>
                     </div>
                   </article>
                 ))}
               </div>
             )}
-          </div>
+          </section>
 
-          <div className="rounded-3xl border border-[#F1D9B5] bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-xl font-black text-[#2F236D]">
-                Recommande pour vous
-              </h2>
-              <Link to="/packs" className="text-sm font-bold text-[#8F6BC8]">
-                Voir plus d'idees
-              </Link>
-            </div>
-
+          {/* Recommandé pour vous */}
+          <section>
+            <h2 className="mb-3 text-base font-black text-[#21164F] sm:text-lg">Recommandé pour vous</h2>
             {recommendedPacks.length === 0 ? (
-              <p className="text-sm text-[#6F8D4C]">
-                Vous avez deja souscrit a tous les packs disponibles.
-              </p>
+              <p className="text-sm text-gray-400">Aucun pack disponible.</p>
             ) : (
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {recommendedPacks.slice(0, 4).map((pack) => (
-                  <Link
-                    key={pack.id}
-                    to={`/packs/${pack.id}`}
-                    className="overflow-hidden rounded-2xl border border-[#F1D9B5]"
-                  >
-                    <PackArtwork title={pack.name} compact className="h-28" />
-                    <div className="p-3">
-                      <h3 className="text-sm font-black text-[#2F236D]">{pack.name}</h3>
-                      <p className="mt-1 text-xs text-[#6F8D4C]">
-                        {pack.theme} · {pack.age_range}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
+              <div className="flex items-center gap-3">
+                <div className="grid flex-1 grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {recommendedPacks.slice(0, 3).map((p) => (
+                    <Link
+                      key={p.idpack}
+                      to={`/packs/${p.idpack}`}
+                      className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-0.5"
+                    >
+                      <div className="h-24 bg-gray-100" />
+                      <div className="p-3">
+                        <div className="flex items-start justify-between gap-2">
+                          <h3 className="text-sm font-black text-[#21164F]">{p.title}</h3>
+                          <span className="shrink-0 text-xs text-gray-400">{p.age_range}</span>
+                        </div>
+                        <p className="mt-1 text-xs text-gray-400">{p.theme}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <Link to="/packs" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm hover:bg-gray-50">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4 text-[#21164F]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </Link>
               </div>
             )}
-          </div>
+          </section>
+
+          {/* Accès rapide */}
+          <section>
+            <h2 className="mb-3 text-base font-black text-[var(--app-text)] sm:text-lg">Accès rapide</h2>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <Link to="/activities/create" className="flex items-start gap-3 rounded-2xl bg-[var(--app-card)] border border-[var(--app-border)] p-4 transition hover:opacity-90">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#7B8CDE] text-lg font-black text-white">+</span>
+                <div>
+                  <p className="text-sm font-black text-[var(--app-text)]">Créer une activité</p>
+                  <p className="text-xs text-[var(--app-muted)]">Créez votre propre activité</p>
+                </div>
+              </Link>
+              <Link to="/library" className="flex items-start gap-3 rounded-2xl bg-[var(--app-card)] border border-[var(--app-border)] p-4 transition hover:opacity-90">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#6DBF67] text-white">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 016.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" />
+                  </svg>
+                </span>
+                <div>
+                  <p className="text-sm font-black text-[#6DBF67]">Explorer la bibliothèque</p>
+                  <p className="text-xs text-[var(--app-muted)]">Découvrez de nouvelles activités</p>
+                </div>
+              </Link>
+              <Link to="/packs" className="flex items-start gap-3 rounded-2xl bg-[var(--app-card)] border border-[var(--app-border)] p-4 transition hover:opacity-90">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#E94E6F] text-white">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
+                  </svg>
+                </span>
+                <div>
+                  <p className="text-sm font-black text-[#E94E6F]">Voir les packs</p>
+                  <p className="text-xs text-[var(--app-muted)]">Découvrez nos packs d'activités</p>
+                </div>
+              </Link>
+            </div>
+          </section>
+
+          {/* Sidebar cards — mobile uniquement, en grille 2×2 (pas de scroll horizontal) */}
+          <section className="lg:hidden">
+            <h2 className="mb-3 text-base font-black text-[#21164F]">Nos services</h2>
+            <div className="grid grid-cols-2 gap-3">
+              {sidebarItems.map((c) => (
+                <div key={c.title} className={`relative overflow-hidden rounded-xl p-3 shadow-sm ${c.bg}`}>
+                  <h3 className={`text-xs font-black ${c.titleColor}`}>{c.title}</h3>
+                  <p className={`mt-1 text-[10px] leading-4 ${c.titleColor === "text-white" ? "text-white/70" : "text-gray-400"}`}>{c.desc}</p>
+                  <Link to={c.link} className={`mt-2 inline-flex rounded-lg px-2 py-1 text-[10px] font-bold ${c.btnColor}`}>
+                    {c.btn}
+                  </Link>
+                  <img src={c.img} alt="" aria-hidden className="absolute bottom-0 right-0 h-10 w-auto object-contain" />
+                </div>
+              ))}
+            </div>
+          </section>
+
         </div>
 
-        <aside className="space-y-5">
-          <div className="rounded-3xl border border-[#F1D9B5] bg-white p-6 shadow-sm">
-            <h3 className="font-black text-[#2F236D]">Bibliotheque d'activites</h3>
-            <p className="mt-2 text-sm leading-6 text-[#6F8D4C]">
-              Decouvrez des activites pretes a l'emploi classees par age et theme.
-            </p>
-            <Link to="/library" className="mt-5 inline-flex rounded-xl bg-[#8F6BC8] px-5 py-3 text-sm font-bold text-white">
-              Explorer
-            </Link>
-          </div>
-          <div className="rounded-3xl border border-[#F1D9B5] bg-white p-6 shadow-sm">
-            <h3 className="font-black text-[#2F236D]">Packs d'activites</h3>
-            <p className="mt-2 text-sm leading-6 text-[#6F8D4C]">
-              Des themes varies pour toutes les saisons et toutes les envies.
-            </p>
-            <Link to="/packs" className="mt-5 inline-flex rounded-xl bg-[#E94E6F] px-5 py-3 text-sm font-bold text-white">
-              Voir les packs
-            </Link>
-          </div>
-          <div className="rounded-3xl bg-[#8F6BC8] p-6 text-white shadow-md">
-            <h3 className="font-black">Passez a un abonnement</h3>
-            <p className="mt-2 text-sm leading-6 text-white/85">
-              Debloquez l'acces illimite aux packs et au planning.
-            </p>
-            <Link to="/abonnements" className="mt-5 inline-flex rounded-xl bg-white px-5 py-3 text-sm font-black text-[#2F236D]">
-              Decouvrir
-            </Link>
-          </div>
+        {/* ── Sidebar droite — desktop uniquement ── */}
+        <aside className="hidden lg:sticky lg:top-6 lg:block lg:w-[220px] lg:shrink-0 lg:space-y-3">
+          {sidebarItems.map((c) => (
+            <div key={c.title} className={`relative overflow-hidden rounded-xl p-3 shadow-sm ${c.bg}`}>
+              <h3 className={`text-xs font-black ${c.titleColor}`}>{c.title}</h3>
+              <p className={`mt-1 text-[10px] leading-4 ${c.titleColor === "text-white" ? "text-white/70" : "text-gray-400"}`}>{c.desc}</p>
+              <Link to={c.link} className={`mt-2 inline-flex rounded-lg px-3 py-1.5 text-[10px] font-bold ${c.btnColor}`}>
+                {c.btn}
+              </Link>
+              <img src={c.img} alt="" aria-hidden className="absolute bottom-0 right-0 h-14 w-auto object-contain" />
+            </div>
+          ))}
         </aside>
-      </section>
+
+      </div>
+
     </div>
   )
 }

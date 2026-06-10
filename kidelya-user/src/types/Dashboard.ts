@@ -1,5 +1,5 @@
 export interface DashboardUser {
-  id: number
+  iduser: number
   firstname: string
   lastname: string
   email: string
@@ -13,7 +13,7 @@ export interface DashboardStats {
 }
 
 export interface DashboardActivity {
-  id: number
+  idactivities: number
   title: string
   category: string
   age_range: string
@@ -21,8 +21,8 @@ export interface DashboardActivity {
 }
 
 export interface DashboardPack {
-  id: number
-  name: string
+  idpack: number
+  title: string
   theme: string
   age_range: string
 }

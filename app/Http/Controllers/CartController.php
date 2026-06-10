@@ -20,30 +20,31 @@ class CartController extends Controller
     public function add(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'idactivity' => 'nullable|exists:activities,idactivity',
-            'idpack' => 'nullable|exists:packs,idpack',
-            'quantity' => 'nullable|integer|min:1',
+            'idactivity' => 'nullable|exists:activities,idactivities',
+            'idpack'     => 'nullable|exists:packs,idpack',
+            'quantity'   => 'nullable|integer|min:1',
         ]);
 
-        if (!$validated['idactivity'] && !$validated['idpack']) {
+        $idactivity = $validated['idactivity'] ?? null;
+        $idpack     = $validated['idpack'] ?? null;
+
+        if (!$idactivity && !$idpack) {
             return response()->json(['message' => 'Aucun élément fourni'], 422);
         }
 
         $item = CartItem::firstOrCreate(
             [
-                'iduser' => auth()->id(),
-                'idactivity' => $validated['idactivity'] ?? null,
-                'idpack' => $validated['idpack'] ?? null,
+                'iduser'     => auth()->id(),
+                'idactivity' => $idactivity,
+                'idpack'     => $idpack,
             ],
             [
                 'quantity' => $validated['quantity'] ?? 1,
             ]
         );
 
-        // si déjà existant, on peut incrémenter
-        if (!$item->wasRecentlyCreated && isset($validated['quantity'])) {
-            $item->quantity += $validated['quantity'];
-            $item->save();
+        if (!$item->wasRecentlyCreated) {
+            $item->increment('quantity', $validated['quantity'] ?? 1);
         }
 
         return response()->json([

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import api from "@/api/axios"
 
 interface Child {
-  idchild: number
+  idchildren: number
   firstname: string
+  lastname: string
+  birthday?: string
   avatar?: string | null
 }
 
@@ -11,133 +14,130 @@ export default function GuardianAddChild() {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const [children, setChildren] = useState<Child[]>([])
-  const [selectedId, setSelectedId] = useState<number | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [children,    setChildren]    = useState<Child[]>([])
+  const [selectedId,  setSelectedId]  = useState<number | null>(null)
+  const [loading,     setLoading]     = useState(true)
+  const [saving,      setSaving]      = useState(false)
+  const [error,       setError]       = useState<string | null>(null)
 
   useEffect(() => {
-    async function load() {
-      try {
-        const res = await fetch("/api/me/children")
-        const json = await res.json()
-        setChildren(json.children || [])
-      } catch (e) {
-        console.error(e)
-        setError("Impossible de charger les enfants.")
-      } finally {
-        setLoading(false)
-      }
-    }
-    load()
+    api.get("/children")
+      .then(res => setChildren(res.data.data ?? res.data ?? []))
+      .catch(() => setError("Impossible de charger les enfants."))
+      .finally(() => setLoading(false))
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!selectedId) {
-      setError("Veuillez sélectionner un enfant.")
-      return
-    }
-
+    if (!selectedId) { setError("Veuillez sélectionner un enfant."); return }
     setSaving(true)
     setError(null)
-
     try {
-      const res = await fetch(`/api/guardians/${id}/add-child`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idchild: selectedId }),
-      })
-      if (!res.ok) {
-        throw new Error("Erreur ajout enfant")
-      }
+      await api.post(`/guardians/${id}/children`, { child_id: selectedId })
       navigate(`/guardians/${id}`)
-    } catch (e) {
-      console.error(e)
-      setError("Impossible d’ajouter l’enfant à ce parent.")
+    } catch {
+      setError("Impossible d'associer cet enfant.")
       setSaving(false)
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-[#6F8D4C]">
-        Chargement…
-      </div>
-    )
-  }
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center text-[#6F8D4C]">
+      Chargement…
+    </div>
+  )
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] px-6 py-10 max-w-xl mx-auto">
-      <h1 className="text-3xl font-bold text-[#93197D] mb-8">
-        Associer un enfant à ce parent 🌸
-      </h1>
+    <div className="min-h-screen bg-[#FAFAFA] px-4 py-10">
+      <div className="max-w-xl mx-auto">
 
-      {error && (
-        <div className="mb-4 text-[#E94E6F] font-semibold">
-          {error}
+        {/* En-tête */}
+        <div className="flex items-center gap-4 mb-8">
+          <button onClick={() => navigate(-1)}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-[#FDC600]/40 shadow-sm hover:bg-[#FFF3E0] text-[#93197D]">
+            ←
+          </button>
+          <div>
+            <h1 className="text-2xl font-bold text-[#93197D]">Associer un enfant</h1>
+            <p className="text-sm text-[#6F8D4C] mt-0.5">Choisissez l'enfant à lier à ce parent</p>
+          </div>
         </div>
-      )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white rounded-xl shadow-sm border border-[#FDC600]/40 p-6 space-y-4"
-      >
-        {children.length === 0 ? (
-          <p className="text-[#6F8D4C]">Aucun enfant disponible.</p>
-        ) : (
-          <div className="space-y-3">
-            {children.map((child) => (
-              <label
-                key={child.idchild}
-                className="flex items-center gap-3 bg-[#FFF3E0] p-3 rounded-lg cursor-pointer hover:bg-[#FFE8C2]"
-              >
-                <input
-                  type="radio"
-                  name="child"
-                  checked={selectedId === child.idchild}
-                  onChange={() => setSelectedId(child.idchild)}
-                />
-
-                {child.avatar ? (
-                  <img
-                    src={child.avatar}
-                    alt={child.firstname}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#93197D] font-bold">
-                    {child.firstname[0]}
-                  </div>
-                )}
-
-                <span className="text-[#93197D] font-semibold">
-                  {child.firstname}
-                </span>
-              </label>
-            ))}
+        {error && (
+          <div className="mb-5 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm font-semibold text-red-600">
+            {error}
           </div>
         )}
 
-        <div className="flex gap-4 mt-4">
-          <button
-            type="submit"
-            disabled={saving}
-            className="flex-1 px-4 py-3 bg-[#E94E6F] text-white rounded-lg font-semibold hover:bg-[#d63f5f] disabled:opacity-50"
-          >
-            {saving ? "Association…" : "Associer"}
-          </button>
+        <form onSubmit={handleSubmit}>
+          <div className="bg-white rounded-2xl shadow-sm border border-[#FDC600]/40 p-6 mb-5">
+            <h2 className="text-sm font-bold text-[#93197D] mb-4 flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-[#FDC600]/20 flex items-center justify-center text-xs">🌸</span>
+              Sélectionnez un enfant
+            </h2>
 
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="flex-1 px-4 py-3 bg-white border border-[#93197D] text-[#93197D] rounded-lg font-semibold hover:bg-[#FFF3E0]"
-          >
-            Annuler
-          </button>
-        </div>
-      </form>
+            {children.length === 0 ? (
+              <div className="text-center py-8 text-[#6F8D4C]">
+                <p className="text-3xl mb-2">🌱</p>
+                <p className="text-sm">Aucun enfant enregistré.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {children.map(child => {
+                  const selected = selectedId === child.idchildren
+                  return (
+                    <button key={child.idchildren} type="button"
+                      onClick={() => setSelectedId(child.idchildren)}
+                      className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all ${
+                        selected
+                          ? "border-[#E94E6F] bg-[#FFF5F7]"
+                          : "border-gray-100 bg-[#FAFAFA] hover:border-[#FDC600]/60 hover:bg-[#FFF3E0]"
+                      }`}>
+
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0 transition-colors ${
+                        selected ? "bg-[#E94E6F] text-white" : "bg-[#FFF3E0] text-[#93197D]"
+                      }`}>
+                        {child.avatar
+                          ? <img src={child.avatar} alt={child.firstname} className="w-12 h-12 rounded-full object-cover" />
+                          : child.firstname[0].toUpperCase()
+                        }
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <p className={`font-semibold truncate ${selected ? "text-[#E94E6F]" : "text-[#93197D]"}`}>
+                          {child.firstname} {child.lastname}
+                        </p>
+                        {child.birthday && (
+                          <p className="text-xs text-[#6F8D4C] mt-0.5">
+                            Né(e) le {new Date(child.birthday).toLocaleDateString("fr-FR")}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                        selected ? "border-[#E94E6F] bg-[#E94E6F]" : "border-gray-300"
+                      }`}>
+                        {selected && <span className="text-white text-xs font-bold">✓</span>}
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-3">
+            <button type="button" onClick={() => navigate(-1)}
+              className="flex-1 px-4 py-3 bg-white border border-gray-200 text-[#374151] rounded-xl font-semibold hover:bg-gray-50 transition-colors">
+              Annuler
+            </button>
+            <button type="submit" disabled={saving || !selectedId}
+              className="flex-1 px-4 py-3 bg-[#E94E6F] text-white rounded-xl font-semibold hover:bg-[#d63f5f] disabled:opacity-40 transition-colors shadow-sm">
+              {saving ? "Association…" : "Associer"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

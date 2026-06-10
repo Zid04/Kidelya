@@ -31,7 +31,7 @@ class HandleInertiaRequests extends Middleware
 
             // Le plan actif envoyé au frontend
             'plan' => $user
-                ? $user->activeSubscription()?->plan  
+                ? $user->activeSubscription?->plan
                 : null,
         ],
 

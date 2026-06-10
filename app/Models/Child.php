@@ -19,7 +19,7 @@ class Child extends Model
         'lastname',
         'firstname',
         'birthday',
-        'specificationnote',
+        'specification_note',
         'sexe',
         'photourl',
         'iduser',

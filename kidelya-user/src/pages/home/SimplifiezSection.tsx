@@ -1,4 +1,7 @@
-const featureColors = ["#F5A9B9", "#E94E6F", "#CDB9EA", "#8DBE55"]
+import fleursLeft from "@/assets/FLEURS_01-simplifez.png"
+import fleursRight from "@/assets/FLEURS_02-simplifiez.png"
+
+const featureColors = ["#EEAD54", "#E94E6F", "#273068", "#8A9B4F"]
 
 const featureIcons = [
   // 1. Bibliothèque d'activités — dossier
@@ -11,7 +14,7 @@ const featureIcons = [
   // 2. Planifiez — calendrier
   <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-12 w-12">
     <rect x="7" y="12" width="34" height="30" rx="4" fill="white" fillOpacity="0.9" />
-    <rect x="7" y="12" width="34" height="11" rx="4" fill="white" fillOpacity="0.5" />
+    <rect x="7" y="12" width="34" height="11" rx="4" fill="white" fillOpacity="0.9" />
     <line x1="16" y1="8" x2="16" y2="16" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
     <line x1="32" y1="8" x2="32" y2="16" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
     <rect x="13" y="28" width="5" height="5" rx="1" fill="white" fillOpacity="0.6" />
@@ -60,8 +63,21 @@ export default function SimplifiezSection() {
   ]
 
   return (
-    <section className="bg-transparent py-16">
-      <div className="mx-auto max-w-6xl px-6 text-center">
+    <section className="relative overflow-hidden bg-transparent py-16">
+      <img
+        src={fleursLeft}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-6 z-0 w-[120px] object-contain opacity-95 sm:w-[150px] lg:top-8 lg:w-[180px]"
+      />
+      <img
+        src={fleursRight}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 top-40 z-0 w-[115px] object-contain opacity-95 sm:top-48 sm:w-[145px] lg:top-56 lg:w-[175px]"
+      />
+
+      <div className="relative z-10 mx-auto max-w-6xl px-6 text-center">
         <div className="mb-10">
           <h2 className="text-2xl font-extrabold text-[#273068] md:text-[26px]">
             Simplifiez votre quotidien
@@ -75,7 +91,7 @@ export default function SimplifiezSection() {
               key={item.title}
               className="flex w-full max-w-[210px] flex-col items-center text-center sm:w-[210px]"
             >
-              <div className="relative mb-5 flex h-[148px] w-[148px] items-center justify-center rounded-md bg-[#F3EBDD]">
+              <div className="relative mb-5 flex h-[148px] w-[148px] items-center justify-center rounded-md bg-transparent">
                 <div
                   className="flex h-24 w-24 items-center justify-center rounded-full shadow-[0_10px_18px_rgba(39,48,104,0.12)]"
                   style={{ backgroundColor: featureColors[index] }}

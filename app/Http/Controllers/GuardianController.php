@@ -31,9 +31,15 @@ class GuardianController extends Controller
     {
         $this->authorize('create', Guardian::class);
 
+        $guardian = $this->guardianService->create($request->validated());
+
+        if ($request->filled('children')) {
+            $guardian->children()->sync($request->children);
+        }
+
         return response()->json([
             'message' => 'Guardian created successfully',
-            'data' => $this->guardianService->create($request->validated())
+            'data' => $guardian->load('children')
         ], 201);
     }
 
@@ -50,9 +56,15 @@ class GuardianController extends Controller
     {
         $this->authorize('update', $guardian);
 
+        $updated = $this->guardianService->update($guardian, $request->validated());
+
+        if ($request->has('children')) {
+            $updated->children()->sync($request->children);
+        }
+
         return response()->json([
             'message' => 'Guardian updated successfully',
-            'data' => $this->guardianService->update($guardian, $request->validated())
+            'data' => $updated->load('children')
         ]);
     }
 

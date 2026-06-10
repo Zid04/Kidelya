@@ -24,6 +24,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\StripeSubscriptionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ActivityLibraryController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ContactController;
 
 
 
@@ -33,6 +35,11 @@ use App\Http\Controllers\ActivityLibraryController;
 | Routes publiques (sans authentification)
 |----------------------------------------------------------------------
 */
+Route::post('register', [AuthController::class, 'register']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('login', [AuthController::class, 'login']);
+Route::post('contact', [ContactController::class, 'send']);
+Route::post('newsletter', [ContactController::class, 'newsletter']);
 Route::post('admin/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login']);
 
 // Webhook Stripe — DOIT être hors du middleware auth
@@ -57,8 +64,11 @@ Route::middleware('auth:sanctum')->group(function () {
     | Users
     |----------------------------------------------------------------------
     */
-    Route::get('users/me', function () {
+   Route::get('users/me', function () {
     $user = auth()->user();
+
+    // On récupère le modèle Subscription
+    $subscription = $user->activeSubscription()->first();
 
     return response()->json([
         'data' => [
@@ -69,10 +79,13 @@ Route::middleware('auth:sanctum')->group(function () {
             'idrole' => $user->idrole,
             'credit_balance' => $user->credit_balance,
             'role' => $user->role,
-            'plan' => $user->activeSubscription()?->plan,
+
+            // Correction ici
+            'plan' => $subscription?->plan,
         ]
     ]);
 })->name('users.me');
+
 
 
     Route::apiResource('users', UserController::class);
@@ -94,6 +107,9 @@ Route::middleware('auth:sanctum')->group(function () {
     | Activities
     |----------------------------------------------------------------------
     */
+    Route::get('activities/mine', [ActivityController::class, 'mine'])->name('activities.mine');
+    Route::get('activities/library', [ActivityLibraryController::class, 'index'])->name('activities.library');
+    Route::get('activities/library/{activity}', [ActivityLibraryController::class, 'show'])->name('activities.library.show');
     Route::apiResource('activities', ActivityController::class);
     Route::patch('activities/{activity}/publish', [ActivityController::class, 'publish'])
         ->name('activities.publish');
@@ -221,6 +237,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('stripe')->name('stripe.')->group(function () {
         Route::post('checkout', [StripeController::class, 'createCheckout'])
             ->name('checkout');
+        Route::post('activity-checkout', [StripeController::class, 'createActivityCheckout'])
+            ->name('activity-checkout');
         Route::get('payments', [StripeController::class, 'payments'])
             ->name('payments');
         Route::post('refund', [StripeController::class, 'refund'])
@@ -251,6 +269,8 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('plannings.children.add');
     Route::delete('plannings/{planning}/children', [PlanningController::class, 'removeChild'])
         ->name('plannings.children.remove');
+    Route::post('plannings/{planning}/report', [PlanningController::class, 'saveReport'])
+        ->name('plannings.report.save');
 
     /*
     |----------------------------------------------------------------------
@@ -290,7 +310,7 @@ Route::patch('settings', [SettingController::class, 'update'])
     Route::delete('/cart', [CartController::class, 'clear']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
-Route::get('/activities/library', [ActivityLibraryController::class, 'index']);
+
 
 
 

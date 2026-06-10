@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+﻿import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { getMyActivity, updateActivity } from "../../services/ActivityService"
 import { getThemes } from "../../services/ThemeService"
@@ -122,7 +122,7 @@ export default function ActivityEdit() {
 
       await updateActivity(Number(id), data)
 
-      navigate("/mes-activites")
+      navigate("/activities")
     } catch (err) {
       console.error("Erreur modification activité :", err)
     } finally {
@@ -139,7 +139,7 @@ export default function ActivityEdit() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] px-6 py-10 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-white px-6 py-10 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold text-[#93197D] mb-6 flex items-center gap-2">
         Modifier l’activité <span className="text-[#FDC600]">🌸</span>
       </h1>

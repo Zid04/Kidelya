@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react"
+﻿import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import api from "@/api/axios"
 import { formatPrice } from "@/utils/media"
 import { useAuth } from "@/hooks/useAuth"
-import NavFooter from "@/components/NavFooter"
 import heroAbonnement from "@/assets/photo-hero-abonnement.png"
 
 type SubscriptionPlan = {
@@ -32,7 +31,7 @@ const order: Record<SubscriptionPlan["name"], number> = {
 const features: Record<SubscriptionPlan["name"], string[]> = {
   Free: [
     "Accès limité à une sélection d'activités",
-    "1 enfant",
+    "2 enfants",
     "Fonctionnalités de base",
   ],
   Monthly: [
@@ -71,14 +70,80 @@ function CheckIcon({ active }: { active: boolean }) {
   )
 }
 
+/** Icône bouclier style outline épuré (comme l'image fournie) */
+function ShieldIcon({ className = "h-6 w-6" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none">
+      <path
+        d="M12 3L4 6.5V11C4 15.4 7.4 19.5 12 21C16.6 19.5 20 15.4 20 11V6.5L12 3Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+/** Icône demi-cercle qui tourne (refresh/sync) */
+function RefreshIcon({ className = "h-6 w-6" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none">
+      <path
+        d="M4 12a8 8 0 018-8 8 8 0 016.93 4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M20 4v4h-4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M20 12a8 8 0 01-8 8 8 8 0 01-6.93-4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M4 20v-4h4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+/** Icône cadenas rose */
+function LockIcon({ className = "h-6 w-6" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none">
+      <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M8 10V7a4 4 0 118 0v3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="12" cy="15" r="1.2" fill="currentColor" />
+    </svg>
+  )
+}
+
+/** Emoji souriant jaune */
+function SmileIcon({ className = "h-6 w-6" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M8.5 14.5s1 2 3.5 2 3.5-2 3.5-2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="9" cy="10" r="1" fill="currentColor" />
+      <circle cx="15" cy="10" r="1" fill="currentColor" />
+    </svg>
+  )
+}
+
 function HeroInfoIcon({ type }: { type: "lock" | "spark" | "heart" }) {
   if (type === "lock") {
-    return (
-      <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#273068]" fill="none">
-        <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M8 10V7a4 4 0 118 0v3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      </svg>
-    )
+    return <ShieldIcon className="h-5 w-5 text-[#273068]" />
   }
   if (type === "spark") {
     return (
@@ -201,7 +266,7 @@ export default function AbonnementPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-[#FFF9F0] text-[#273068]">
+      <div className="min-h-screen bg-white text-[#273068]">
         <section className="mx-auto max-w-6xl px-6 pb-6 pt-14">
           <div className="grid items-center gap-8 lg:grid-cols-[1fr_1fr]">
             <div className="text-center lg:text-left">
@@ -229,7 +294,7 @@ export default function AbonnementPage() {
               </div>
             </div>
 
-            <div className="overflow-hidden rounded-[18px] bg-transparent p-0">
+            <div className="overflow-hidden rounded-[18px] p-0">
               <img
                 src={heroAbonnement}
                 alt="Illustration abonnement"
@@ -256,8 +321,10 @@ export default function AbonnementPage() {
                 return (
                   <article
                     key={plan.idplan}
-                    className={`flex w-full max-w-[250px] flex-col overflow-hidden rounded-2xl bg-white shadow-md sm:w-[250px] ${
-                      isPopular ? "border border-[#E94E6F] shadow-xl md:-translate-y-5" : "border border-[#F1D9B5]"
+                    className={`flex w-full max-w-[250px] flex-col overflow-hidden rounded-2xl sm:w-[250px] ${
+                      isPopular
+                        ? " shadow-xl md:-translate-y-5 backdrop-blur-sm"
+                        : " shadow-md backdrop-blur-sm"
                     }`}
                   >
                     {isPopular && (
@@ -322,15 +389,16 @@ export default function AbonnementPage() {
             Paiement 100% sécurisé. Annulez quand vous voulez. Sans engagement.
           </p>
 
+          {/* TABLEAU COMPARATIF */}
           <section className="mt-14">
             <h3 className="mb-5 text-center text-xl font-semibold text-[#273068]">
               Comparez nos formules
             </h3>
 
-            <div className="overflow-x-auto rounded-xl border border-[#F1D9B5] bg-white">
+            <div className="overflow-x-auto rounded-xl backdrop-blur-sm">
               <table className="w-full min-w-[860px] border-collapse text-sm">
                 <thead>
-                  <tr className="bg-[#FFF3E0] text-[#273068]">
+                  <tr className="bg-[#FFF3E0]/70 text-[#273068]">
                     <th className="p-3 text-left font-semibold">
                       Fonctionnalités
                       <p className="mt-1 text-[11px] font-normal text-[#6F8D4C]">Ce qui est inclus dans chaque formule</p>
@@ -351,7 +419,7 @@ export default function AbonnementPage() {
                 </thead>
 
                 <tbody className="text-[#4F5F45]">
-                  <tr className="border-t border-[#F1D9B5]/60">
+                  <tr>
                     <td className="p-3">
                       <div className="flex items-center gap-2 text-[#273068]">
                         <FeatureRowIcon kind="packs" />
@@ -378,19 +446,19 @@ export default function AbonnementPage() {
                     </td>
                   </tr>
 
-                  <tr className="border-t border-[#F1D9B5]/60">
+                  <tr>
                     <td className="p-3">
                       <div className="flex items-center gap-2 text-[#273068]">
                         <FeatureRowIcon kind="kids" />
                         <span>Nombre d'enfants</span>
                       </div>
                     </td>
-                    <td className="p-3 text-center">1 enfant</td>
+                    <td className="p-3 text-center">2 enfants</td>
                     <td className="p-3 text-center">10 enfants</td>
                     <td className="p-3 text-center">Illimité</td>
                   </tr>
 
-                  <tr className="border-t border-[#F1D9B5]/60">
+                  <tr>
                     <td className="p-3">
                       <div className="flex items-center gap-2 text-[#273068]">
                         <FeatureRowIcon kind="calendar" />
@@ -402,7 +470,7 @@ export default function AbonnementPage() {
                     <td className="p-3 text-center"><CellIcon ok={true} /></td>
                   </tr>
 
-                  <tr className="border-t border-[#F1D9B5]/60">
+                  <tr>
                     <td className="p-3">
                       <div className="flex items-center gap-2 text-[#273068]">
                         <FeatureRowIcon kind="star" />
@@ -414,7 +482,7 @@ export default function AbonnementPage() {
                     <td className="p-3 text-center"><CellIcon ok={true} /></td>
                   </tr>
 
-                  <tr className="border-t border-[#F1D9B5]/60">
+                  <tr>
                     <td className="p-3">
                       <div className="flex items-center gap-2 text-[#273068]">
                         <FeatureRowIcon kind="update" />
@@ -430,44 +498,61 @@ export default function AbonnementPage() {
             </div>
           </section>
 
+          {/* FAQ */}
           <section className="mt-14">
             <h3 className="mb-5 text-center text-xl font-semibold text-[#273068]">
               Questions fréquentes
             </h3>
 
             <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-              <div className="space-y-4">
+              {/* Questions — sans bordure, sans espace entre lignes, transparent */}
+              <div>
                 {[
                   ["Puis-je annuler mon abonnement à tout moment ?", "Oui. L'accès reste actif jusqu'à la fin de la période en cours."],
                   ["Puis-je changer de formule plus tard ?", "Oui, vous pouvez changer de formule à tout moment."],
                   ["Les formules payantes couvrent-elles plusieurs enfants ?", "Oui, les offres payantes permettent la gestion de plusieurs profils."],
                 ].map(([question, answer]) => (
-                  <details key={question} className="rounded-xl border border-[#F1D9B5] bg-white p-4 text-sm text-[#4F5F45]">
-                    <summary className="cursor-pointer font-semibold text-[#273068]">{question}</summary>
-                    <p className="mt-2">{answer}</p>
+                  <details
+                    key={question}
+                    className="border-b border-[#F1D9B5]/60 bg-transparent px-2 py-3 text-sm text-[#4F5F45] last:border-b-0"
+                  >
+                    <summary className="cursor-pointer font-semibold text-[#273068] list-none flex items-center justify-between">
+                      {question}
+                      <span className="ml-2 text-[#E94E6F] text-lg leading-none">+</span>
+                    </summary>
+                    <p className="mt-2 text-sm leading-6">{answer}</p>
                   </details>
                 ))}
               </div>
 
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-3">
-                {[
-                  ["lock", "Annulation facile", "Gérez votre formule en un clic."],
-                  ["spark", "Paiement sécurisé", "Transactions protégées en permanence."],
-                  ["heart", "Support réactif", "Notre équipe vous répond rapidement."],
-                ].map(([icon, title, text]) => (
-                  <div
-                    key={String(title)}
-                    className="rounded-xl border border-[#F1D9B5] bg-transparent px-4 py-3"
-                  >
-                    <div className="flex flex-col items-center text-center">
-                      <div className="mb-2 text-[#273068]">
-                        <HeroInfoIcon type={icon as "lock" | "spark" | "heart"} />
-                      </div>
-                      <p className="text-sm font-semibold text-[#273068]">{title}</p>
-                      <p className="mt-1 text-xs text-[#4F5F45]">{text}</p>
-                    </div>
+              {/* 3 icônes : refresh, cadenas rose, emoji jaune */}
+              <div className="grid grid-cols-1 gap-0 sm:grid-cols-3 lg:grid-cols-3">
+                {/* 1 — demi-cercle qui tourne */}
+                <div className="flex flex-col items-center text-center px-4 py-3">
+                  <div className="mb-2 text-[#273068]">
+                    <RefreshIcon className="h-6 w-6 text-[#273068]" />
                   </div>
-                ))}
+                  <p className="text-sm font-semibold text-[#273068]">Annulation facile</p>
+                  <p className="mt-1 text-xs text-[#4F5F45]">Gérez votre formule en un clic.</p>
+                </div>
+
+                {/* 2 — cadenas rose */}
+                <div className="flex flex-col items-center text-center px-4 py-3">
+                  <div className="mb-2 text-[#E94E6F]">
+                    <LockIcon className="h-6 w-6 text-[#E94E6F]" />
+                  </div>
+                  <p className="text-sm font-semibold text-[#273068]">Paiement sécurisé</p>
+                  <p className="mt-1 text-xs text-[#4F5F45]">Transactions protégées en permanence.</p>
+                </div>
+
+                {/* 3 — emoji souriant jaune */}
+                <div className="flex flex-col items-center text-center px-4 py-3">
+                  <div className="mb-2 text-[#F5A623]">
+                    <SmileIcon className="h-6 w-6 text-[#F5A623]" />
+                  </div>
+                  <p className="text-sm font-semibold text-[#273068]">Support réactif</p>
+                  <p className="mt-1 text-xs text-[#4F5F45]">Notre équipe vous répond rapidement.</p>
+                </div>
               </div>
             </div>
 
@@ -480,8 +565,6 @@ export default function AbonnementPage() {
           </section>
         </main>
       </div>
-
-      <NavFooter />
     </>
   )
 }

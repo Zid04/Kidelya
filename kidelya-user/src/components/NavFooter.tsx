@@ -1,7 +1,24 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
 import logoKidelya from "@/assets/logo-kidelya.png"
+import api from "@/api/axios"
 
 export default function NavFooter() {
+  const [email, setEmail] = useState("")
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+
+  async function handleNewsletter(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!email) return
+    setStatus("loading")
+    try {
+      await api.post("/newsletter", { email })
+      setStatus("success")
+      setEmail("")
+    } catch {
+      setStatus("error")
+    }
+  }
   const navigationLinks = [
     { label: "Accueil", to: "/" },
     { label: "Packs d’activités", to: "/packs" },
@@ -81,16 +98,31 @@ export default function NavFooter() {
               Recevez nos idées d’activités et nos nouveautés.
             </p>
 
-            <div className="flex max-w-[280px] gap-2">
+            <form onSubmit={handleNewsletter} className="flex max-w-[280px] gap-2">
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Votre email"
-                className="min-w-0 flex-1 rounded-[8px] border border-[#F1D9B5] bg-white/80 px-2.5 py-1.5 text-[11px] text-[#273068] outline-none focus:ring-2 focus:ring-[#E94E6F]/25"
+                required
+                disabled={status === "loading" || status === "success"}
+                className="min-w-0 flex-1 rounded-[8px] border border-[#F1D9B5] bg-white/80 px-2.5 py-1.5 text-[11px] text-[#273068] outline-none focus:ring-2 focus:ring-[#E94E6F]/25 disabled:opacity-60"
               />
-              <button className="rounded-[8px] bg-[#E94E6F] px-3 py-1.5 text-[11px] font-semibold text-white transition-colors hover:bg-[#d63f5f]">
-                S’abonner
+              <button
+                type="submit"
+                disabled={status === "loading" || status === "success"}
+                className="rounded-[8px] bg-[#E94E6F] px-3 py-1.5 text-[11px] font-semibold text-white transition-colors hover:bg-[#d63f5f] disabled:opacity-60"
+              >
+                {status === "loading" ? "..." : status === "success" ? "✓" : "S’abonner"}
               </button>
-            </div>
+            </form>
+
+            {status === "success" && (
+              <p className="mt-1.5 text-[10px] font-semibold text-[#6F8D4C]">Inscription confirmée !</p>
+            )}
+            {status === "error" && (
+              <p className="mt-1.5 text-[10px] font-semibold text-[#E94E6F]">Une erreur est survenue.</p>
+            )}
           </div>
         </div>
 

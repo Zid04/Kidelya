@@ -17,7 +17,6 @@ class PlanningService
                 'groups',
                 'children',
                 'user',
-                'reportActivity'
             ])
             ->where('iduser', $user->iduser)
             ->latest()
@@ -53,7 +52,6 @@ class PlanningService
             'groups',
             'children',
             'user',
-            'reportActivity'
         ]);
     }
 

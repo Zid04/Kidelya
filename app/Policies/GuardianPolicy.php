@@ -15,12 +15,9 @@ class GuardianPolicy
         return true;
     }
 
-    /**
-     * Voir un tuteur — uniquement propriétaire
-     */
     public function view(User $user, Guardian $guardian): bool
     {
-        return $user->iduser === $guardian->iduser;
+        return true;
     }
 
     /**
@@ -31,19 +28,13 @@ class GuardianPolicy
         return true;
     }
 
-    /**
-     * Modifier un tuteur — uniquement propriétaire
-     */
     public function update(User $user, Guardian $guardian): bool
     {
-        return $user->iduser === $guardian->iduser;
+        return true;
     }
 
-    /**
-     * Supprimer un tuteur — uniquement propriétaire
-     */
     public function delete(User $user, Guardian $guardian): bool
     {
-        return $user->iduser === $guardian->iduser;
+        return true;
     }
 }

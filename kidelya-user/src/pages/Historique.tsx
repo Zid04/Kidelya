@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+﻿import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 interface Transaction {
@@ -39,7 +39,7 @@ export default function HistoriqueAchats() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] px-6 py-10 max-w-5xl mx-auto">
+    <div className="min-h-screen bg-white px-6 py-10 max-w-5xl mx-auto">
 
       {/* TITRE */}
       <div className="flex justify-between items-center mb-10">

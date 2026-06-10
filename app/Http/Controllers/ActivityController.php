@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use App\Models\Activity;
+use App\Models\ActivityPurchase;
 use App\Services\ActivityService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -16,6 +17,23 @@ class ActivityController extends Controller
     public function __construct(
         private readonly ActivityService $activityService
     ) {}
+
+    /**
+     * Activités de l'utilisateur connecté
+     */
+    public function mine(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $activities = Activity::where('iduser', $user->iduser)
+            ->with(['themes', 'competences'])
+            ->orderByDesc('created_at')
+            ->get();
+
+        return response()->json([
+            'data' => $activities,
+        ]);
+    }
 
     /**
      * Liste paginée des activités (admin + filtres)
@@ -43,19 +61,38 @@ class ActivityController extends Controller
     /**
      * Afficher une activité
      */
-    public function show(Activity $activity): JsonResponse
+    public function show(Request $request, Activity $activity): JsonResponse
     {
         $this->authorize('view', $activity);
 
-        return response()->json([
-            'data' => $activity->load([
-                'user',
-                'themes',
-                'competences',
-                'plannings',
-                'packs'
-            ])
-        ]);
+        $user = $request->user();
+        $activity->load(['user', 'themes', 'competences', 'plannings', 'packs']);
+
+        $isCreator = $activity->iduser === $user->iduser;
+
+        $userPackIds = $user->packSubscriptions()
+            ->where('status', 'active')
+            ->where(function ($q) {
+                $q->whereNull('expirationdate')->orWhere('expirationdate', '>=', now());
+            })
+            ->pluck('idpack')
+            ->toArray();
+
+        $hasPack = $activity->packs->whereIn('idpack', $userPackIds)->isNotEmpty();
+
+        $hasPurchased = ActivityPurchase::where('user_id', $user->iduser)
+            ->where('activity_id', $activity->idactivities)
+            ->exists();
+
+        $hasActiveSubscription = $user->activeSubscription()
+            ->where('ends_at', '>=', now())
+            ->exists();
+
+        $data = $activity->toArray();
+        $data['is_owned']        = $isCreator || $hasPack || $hasPurchased;
+        $data['has_subscription'] = $hasActiveSubscription && (bool) $activity->included_in_subscription;
+
+        return response()->json(['data' => $data]);
     }
 
     /**

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+﻿import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { createActivity } from "../../services/ActivityService"
 import { getThemes } from "../../services/ThemeService"
@@ -108,7 +108,7 @@ export default function ActivityCreate() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] px-6 py-10 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-white px-6 py-10 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold text-[#93197D] mb-6 flex items-center gap-2">
         Créer une activité <span className="text-[#FDC600]">🌸</span>
       </h1>

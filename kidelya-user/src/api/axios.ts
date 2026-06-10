@@ -9,7 +9,7 @@ const baseURL = normalizedBase.endsWith("/api")
 
 const api = axios.create({
   baseURL,
-  withCredentials: true,
+  withCredentials: false,
 })
 
 api.interceptors.request.use((config) => {

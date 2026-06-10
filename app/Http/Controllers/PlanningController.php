@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Planning;
+use App\Models\ReportActivity;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use App\Services\PlanningService;
 
 use App\Http\Requests\Planning\StorePlanningRequest;
@@ -38,10 +40,28 @@ class PlanningController extends Controller
     {
         $this->authorize('create', Planning::class);
 
-        $planning = $this->planningService->create(
-            $request->validated(),
-            auth()->user()
-        );
+        $user             = auth()->user();
+        $activeSubscription = $user->activeSubscription()->with('plan')->first();
+        $isFree           = !$activeSubscription || ($activeSubscription->plan->price ?? 0) == 0;
+
+        if ($isFree) {
+            $count = Planning::where('iduser', $user->iduser)->count();
+            if ($count >= 1) {
+                return response()->json([
+                    'message' => 'Le plan gratuit est limité à 1 planning. Passez à un abonnement payant pour en créer davantage.',
+                ], 403);
+            }
+        }
+
+        $validated = $request->validated();
+        $idchild   = $validated['idchild'] ?? null;
+        unset($validated['idchild']);
+
+        $planning = $this->planningService->create($validated, $user);
+
+        if ($idchild) {
+            $this->planningService->attachChild($planning, (int) $idchild);
+        }
 
         return response()->json([
             'message' => 'Planning created successfully',
@@ -54,13 +74,31 @@ class PlanningController extends Controller
         $this->authorize('view', $planning);
 
         return response()->json([
-            'data' => $planning->load([
-                'activities',
-                'groups',
-                'children',
-                'user',
-                'reportActivity'
-            ])
+            'data' => $planning->load(['children', 'activities', 'groups', 'report'])
+        ]);
+    }
+
+    public function saveReport(Request $request, Planning $planning): JsonResponse
+    {
+        $this->authorize('update', $planning);
+
+        $data = $request->validate([
+            'comments'     => 'nullable|string',
+            'positive'     => 'nullable|string',
+            'difficulties' => 'nullable|string',
+            'improvements' => 'nullable|string',
+        ]);
+
+        if ($planning->idreport) {
+            $planning->report->update($data);
+        } else {
+            $report = ReportActivity::create($data);
+            $planning->update(['idreport' => $report->idreport]);
+        }
+
+        return response()->json([
+            'message' => 'Rapport enregistré.',
+            'data'    => $planning->fresh()->load('report'),
         ]);
     }
 

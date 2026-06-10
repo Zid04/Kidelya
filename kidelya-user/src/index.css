@@ -1,2 +1,122 @@
 @import "tailwindcss";
 
+/* ── Valeurs par défaut des variables (mode clair) ── */
+:root {
+  --app-bg:       #ffffff;
+  --app-card:     #ffffff;
+  --app-subtle:   #f9fafb;
+  --app-text:     #21164F;
+  --app-muted:    #6b7280;
+  --app-border:   #f3f4f6;
+  --app-input-bg: #ffffff;
+  --app-warm-bg:  rgba(255, 243, 224, 0.55);
+  --app-muted-bg: rgba(39, 48, 104, 0.08);
+}
+
+html, body, #root {
+  background-color: var(--app-bg);
+  color: var(--app-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ════════════════════════════════════════
+   DARK MODE — classe .dark sur <html>
+   Les variables sont injectées via JS (useApparence.ts)
+   ════════════════════════════════════════ */
+
+/* Fond de page */
+html.dark body,
+html.dark #root {
+  background-color: var(--app-bg);
+  color: var(--app-text);
+}
+
+/* Navbar */
+html.dark nav {
+  background-color: var(--app-card) !important;
+  border-color: var(--app-border) !important;
+}
+html.dark nav a:not([class*="bg-"]),
+html.dark nav button:not([class*="bg-"]) {
+  color: var(--app-text) !important;
+}
+
+/* Sidebar */
+html.dark aside {
+  background-color: var(--app-card) !important;
+  border-color: var(--app-border) !important;
+}
+
+/* Fonds blancs Tailwind */
+html.dark .bg-white    { background-color: var(--app-card)   !important; }
+html.dark .bg-gray-50  { background-color: var(--app-subtle) !important; }
+html.dark .bg-gray-100 { background-color: var(--app-subtle) !important; }
+
+/* Fonds arbitraires courants */
+html.dark .bg-\[\#FAF9F6\],
+html.dark .bg-\[\#F7F3EE\],
+html.dark .bg-\[\#FFF8F0\],
+html.dark .bg-\[\#FFF0F2\],
+html.dark .bg-\[\#FFF3D9\],
+html.dark .bg-\[\#EEF0F8\],
+html.dark .bg-\[\#F6FAF2\],
+html.dark .bg-\[\#F2F8FA\],
+html.dark .bg-\[\#FDF8F0\],
+html.dark .bg-\[\#FFF4CC\],
+html.dark .bg-\[\#F7F0E8\],
+html.dark .bg-\[\#FFF5F7\],
+html.dark .bg-\[\#F5F0FF\],
+html.dark .bg-\[\#FFE7ED\] { background-color: var(--app-subtle) !important; }
+
+/* Bordures */
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-\[\#F1D9B5\],
+html.dark .border-\[\#E8DDD0\] { border-color: var(--app-border) !important; }
+
+/* Textes */
+html.dark .text-\[\#21164F\],
+html.dark .text-\[\#2F236D\],
+html.dark .text-\[\#273068\] { color: var(--app-text)  !important; }
+html.dark .text-\[\#4F5F45\],
+html.dark .text-\[\#6F8D4C\],
+html.dark .text-gray-400,
+html.dark .text-gray-500,
+html.dark .text-gray-600    { color: var(--app-muted) !important; }
+
+/* Inputs */
+html.dark input:not([type="checkbox"]):not([type="radio"]),
+html.dark textarea,
+html.dark select {
+  background-color: var(--app-input-bg) !important;
+  color: var(--app-text) !important;
+  border-color: var(--app-border) !important;
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder { color: var(--app-muted) !important; }
+
+/* Images — filtre via CSS var injectée par JS (s'applique à toutes les images) */
+:root img {
+  filter: var(--app-img-filter, brightness(1) saturate(1));
+  transition: filter 0.25s ease;
+}
+/* Logo Kidelya toujours à pleine luminosité */
+:root img[alt="Kidelya"] {
+  filter: brightness(1) saturate(1) !important;
+}
+
+/* Ombres */
+html.dark .shadow-sm { box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.5) !important; }
+html.dark .shadow-md { box-shadow: 0 4px 8px 0 rgb(0 0 0 / 0.4) !important; }
+
+/* Hover gris */
+html.dark .hover\:bg-gray-50:hover { background-color: var(--app-subtle) !important; }
+
+/* ── Scrollbar masquée ── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

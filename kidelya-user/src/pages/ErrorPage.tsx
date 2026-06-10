@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom"
+﻿import { useLocation } from "react-router-dom"
 
 export default function ErrorPage() {
   const location = useLocation()
@@ -9,7 +9,7 @@ export default function ErrorPage() {
     "Une erreur inattendue est survenue. Veuillez réessayer plus tard."
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] flex flex-col items-center justify-center px-6 text-center">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 text-center">
       <h1 className="text-3xl font-bold text-[#E94E6F] mb-4">
         Oups… 😔
       </h1>

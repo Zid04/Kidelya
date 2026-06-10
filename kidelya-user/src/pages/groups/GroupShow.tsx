@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+﻿import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 
 interface Child {
@@ -79,7 +79,7 @@ export default function GroupShow() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] px-6 py-10 max-w-5xl mx-auto">
+    <div className="min-h-screen bg-white px-6 py-10 max-w-5xl mx-auto">
 
       {/* HEADER */}
       <div className="flex justify-between items-center mb-10">

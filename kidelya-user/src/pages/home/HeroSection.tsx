@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/Button"
+import heroImage from "@/assets/Img-hero.png"
 
 const trustItems = [
   {
@@ -57,8 +58,29 @@ const trustItems = [
 
 export default function HeroSection() {
   return (
-    <section className="relative bg-transparent">
-      <div className="mx-auto max-w-7xl px-6 pb-20 pt-28 md:pb-24 md:pt-36">
+    <section className="relative min-h-[520px] overflow-hidden bg-transparent md:min-h-[600px]">
+
+      {/* Image desktop — collée au bord droit, hors du conteneur max-w */}
+      <div className="absolute right-0 top-0 hidden h-full w-[48%] lg:block">
+        <img
+          src={heroImage}
+          alt="Activites creatives Kidelya"
+          className="h-full w-full object-cover object-left"
+        />
+      </div>
+
+      {/* Image mobile — fond plein écran */}
+      <div className="absolute inset-0 z-0 lg:hidden">
+        <img
+          src={heroImage}
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover"
+        />
+      </div>
+
+      {/* Texte */}
+      <div className="relative z-10 mx-auto max-w-7xl pl-6 pb-20 pt-28 md:pb-24 md:pt-36">
         <div className="max-w-[540px]">
           <h1 className="text-[32px] font-black leading-[1.12] text-[#273068] md:text-[44px]">
             Des activités manuelles créatives pour éveiller les enfants au
@@ -67,8 +89,8 @@ export default function HeroSection() {
 
           <p className="mt-5 max-w-[410px] text-[14px] leading-6 text-[#222222]">
             Kidelya accompagne les assistantes maternelles, crèches et parents
-            avec des activités créatives, pédagogiques et prêtes à l’emploi pour
-            les enfants de 2 à 10 ans.
+            avec des activités créatives, pédagogiques et prêtes à l'emploi
+            pour les enfants de 2 à 10 ans.
           </p>
 
           <div className="mt-7 flex flex-wrap gap-4">
@@ -80,7 +102,6 @@ export default function HeroSection() {
                 Commencer gratuitement
               </Button>
             </Link>
-
             <Link to="/packs">
               <Button
                 variant="outline"
@@ -97,7 +118,6 @@ export default function HeroSection() {
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center">
                   {item.icon}
                 </div>
-
                 <div>
                   <p className="max-w-[130px] text-[11px] font-bold leading-4 text-[#273068]">
                     {item.title}
@@ -111,6 +131,7 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
+
     </section>
   )
 }

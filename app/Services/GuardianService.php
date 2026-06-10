@@ -7,14 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 class GuardianService
 {
-    /**
-     * Liste tous les parents du user connecté
-     */
-    public function getAllForUser()
+    public function getAll()
     {
-        return Guardian::where('iduser', Auth::id())
-            ->latest()
-            ->get();
+        return Guardian::latest()->get();
     }
 
     /**
@@ -30,9 +25,6 @@ class GuardianService
      */
     public function create(array $data): Guardian
     {
-        // Associer automatiquement le user connecté
-        $data['iduser'] = Auth::id();
-
         return Guardian::create($data);
     }
 
@@ -51,5 +43,15 @@ class GuardianService
     public function delete(Guardian $guardian): void
     {
         $guardian->delete();
+    }
+
+    public function attachChild(Guardian $guardian, int $childId): void
+    {
+        $guardian->children()->syncWithoutDetaching([$childId]);
+    }
+
+    public function detachChild(Guardian $guardian, int $childId): void
+    {
+        $guardian->children()->detach($childId);
     }
 }

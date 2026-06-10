@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+﻿import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 interface Child {
@@ -79,7 +79,7 @@ export default function GroupCreate() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] px-6 py-10 max-w-3xl mx-auto">
+    <div className="min-h-screen bg-white px-6 py-10 max-w-3xl mx-auto">
 
       <h1 className="text-3xl font-bold text-[#93197D] mb-8">
         Créer un groupe 🌸

@@ -94,5 +94,14 @@ public function cartItems()
 {
     return $this->hasMany(CartItem::class, 'iduser', 'iduser');
 }
+public function plannings()
+{
+    return $this->children()
+        ->with('plannings')
+        ->get()
+        ->pluck('plannings')
+        ->flatten()
+        ->unique('idplanning');
+}
 
 }

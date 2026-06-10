@@ -19,7 +19,6 @@ class Guardian extends Model
         'email',
         'phone',
         'address',
-        'iduser',
     ];
 
     public function getRouteKeyName(): string

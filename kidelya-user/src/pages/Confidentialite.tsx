@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom"
-import NavFooter from "@/components/NavFooter"
+﻿import { Link } from "react-router-dom"
 
 const sections = [
   {
@@ -115,7 +114,7 @@ const sections = [
 
 export default function ConfidentialitePage() {
   return (
-    <div className="min-h-screen bg-[#FFF9F0] text-[#273068]">
+    <div className="min-h-screen bg-white text-[#273068]">
       <section className="mx-auto max-w-5xl px-6 pb-8 pt-14 text-center">
         <h1 className="text-4xl font-extrabold md:text-5xl">Politique de confidentialité</h1>
         <div className="mx-auto mt-3 h-[3px] w-12 rounded-full bg-[#E94E6F]" />
@@ -154,8 +153,6 @@ export default function ConfidentialitePage() {
           </Link>
         </div>
       </section>
-
-      <NavFooter />
     </div>
   )
 }

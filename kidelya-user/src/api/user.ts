@@ -4,6 +4,8 @@ import type { User } from "@/types/User"
 export type UserPayload = Record<string, unknown>
 
 export const usersApi = {
+  logout: () => api.post("/logout"),
+
   all: () => api.get<User[]>("/users"),
 
   create: (data: UserPayload) =>
@@ -26,10 +28,10 @@ export const usersApi = {
   deactivate: (id: number) =>
     api.patch<User>(`/users/${id}/deactivate`),
 }
-export async function updateProfile(data: {
+export async function updateProfile(id: number, data: {
   firstname: string
   lastname: string
   email: string
 }) {
-  return api.put<User>("/users/me", data)
+  return api.put<User>(`/users/${id}`, data)
 }

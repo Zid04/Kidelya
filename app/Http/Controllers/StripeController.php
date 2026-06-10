@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
+use App\Models\ActivityPurchase;
 use App\Models\Pack;
 use App\Models\User;
 use App\Models\PackUser;
@@ -46,14 +48,39 @@ class StripeController extends Controller
     }
 
     /**
-     * Checkout complété — activer l'abonnement
+     * Checkout complété — activer l'abonnement ou enregistrer un achat individuel
      */
     private function handleCheckoutCompleted(object $session): void
     {
-        $userId = $session->metadata->user_id ?? null;
-        $packId = $session->metadata->pack_id ?? null;
+        $userId     = $session->metadata->user_id ?? null;
+        $type       = $session->metadata->type ?? null;
+        $activityId = $session->metadata->activity_id ?? null;
+        $packId     = $session->metadata->pack_id ?? null;
 
-        if (!$userId || !$packId) {
+        if (!$userId) {
+            Log::warning('Checkout session missing user_id', ['session' => $session->id]);
+            return;
+        }
+
+        if ($type === 'activity_purchase' && $activityId) {
+            $user     = User::find($userId);
+            $activity = Activity::find($activityId);
+
+            if (!$user || !$activity) {
+                Log::warning('User or Activity not found', compact('userId', 'activityId'));
+                return;
+            }
+
+            ActivityPurchase::firstOrCreate(
+                ['user_id' => $userId, 'activity_id' => $activityId],
+                ['credits_spent' => 0, 'purchased_at' => now()]
+            );
+
+            Log::info('Achat activité enregistré', ['user_id' => $userId, 'activity_id' => $activityId]);
+            return;
+        }
+
+        if (!$packId) {
             Log::warning('Checkout session missing metadata', ['session' => $session->id]);
             return;
         }
@@ -105,7 +132,7 @@ class StripeController extends Controller
     }
 
     /**
-     * Créer une session Checkout
+     * Créer une session Checkout pour un pack
      */
     public function createCheckout(Request $request): JsonResponse
     {
@@ -116,6 +143,22 @@ class StripeController extends Controller
         $pack    = Pack::findOrFail($request->pack_id);
         $user    = $request->user();
         $session = $this->stripeService->createCheckoutSession($user, $pack);
+
+        return response()->json(['url' => $session->url]);
+    }
+
+    /**
+     * Créer une session Checkout pour l'achat individuel d'une activité
+     */
+    public function createActivityCheckout(Request $request): JsonResponse
+    {
+        $request->validate([
+            'activity_id' => 'required|exists:activities,idactivities',
+        ]);
+
+        $activity = Activity::findOrFail($request->activity_id);
+        $user     = $request->user();
+        $session  = $this->stripeService->createActivityCheckoutSession($user, $activity);
 
         return response()->json(['url' => $session->url]);
     }

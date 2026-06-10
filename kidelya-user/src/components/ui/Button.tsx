@@ -4,7 +4,7 @@ import React from "react"
 const variants = {
   primary: "bg-[#E94E6F] text-white hover:bg-[#d63f5f]",
   secondary: "bg-white border border-[#FDC600] text-[#93197D] hover:bg-[#FFF4CC]",
-  outline: "border border-[#93197D] text-[#93197D] hover:bg-[#FAF7F0]",
+  outline: "border border-[#273068] text-[#273068] hover:bg-[#FAF7F0]",
   ghost: "text-[#93197D] hover:bg-[#FAF7F0]",
   warning: "bg-red-600 text-white hover:bg-red-700",
 }

@@ -11,21 +11,36 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        // Récupération des plannings via les enfants du user
+        $plannings = $user->children
+            ->flatMap(fn ($child) => $child->plannings)
+            ->unique('idplanning');
+
         return response()->json([
             'user' => $user,
+
             'stats' => [
-                'activities_created' => $user->activities()->count(),
+                'activities_created'   => $user->activities()->count(),
                 'activities_favorites' => $user->favorites()->count(),
-                'activities_planned' => $user->plannings()->count(),
-                'packs_purchased' => $user->packs()->count(),
+                'activities_planned'   => $plannings->count(),
+                'packs_purchased'      => $user->packSubscriptions()->count(),
             ],
+
             'activities' => $user->activities()
                 ->latest()
                 ->take(3)
                 ->get(),
-            'recommended_packs' => Pack::whereNotIn('id', $user->packs->pluck('id'))
-                ->take(4)
-                ->get(),
+
+            'recommended_packs' => Pack::whereNotIn(
+                'idpack',
+                $user->packSubscriptions->pluck('idpack')
+            )
+            ->take(4)
+            ->get(),
         ]);
     }
 }

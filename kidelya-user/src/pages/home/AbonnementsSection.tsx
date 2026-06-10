@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"
 import api from "@/api/axios"
 import { formatPrice } from "@/utils/media"
 import { useAuth } from "@/hooks/useAuth"
+import fleurs03 from "@/assets/FLEURS_03-1Abonnement.png"
+import fleurs04 from "@/assets/FLEURS_04-2Abonnement.png"
 
 export type SubscriptionPlan = {
   idplan: number
@@ -53,7 +55,7 @@ const features: Record<SubscriptionPlan["name"], string[]> = {
 function CheckIcon({ active }: { active: boolean }) {
   return (
     <span
-      className="mt-[2px] inline-flex h-[14px] w-[14px] items-center justify-center rounded-full"
+      className="mt-[2px] inline-flex h-[14px] w-[14px] shrink-0 items-center justify-center rounded-full"
       style={{ backgroundColor: active ? "#E94E6F" : "#273068" }}
       aria-hidden="true"
     >
@@ -89,7 +91,6 @@ export default function AbonnementsSection() {
         setPlans([])
       }
     }
-
     fetchPlans()
   }, [])
 
@@ -98,12 +99,10 @@ export default function AbonnementsSection() {
       navigate("/register")
       return
     }
-
     if (!user) {
       navigate("/login", { state: { redirectAfter: "/", planId: plan.idplan } })
       return
     }
-
     try {
       setLoadingPlanId(plan.idplan)
       const res = await api.post("/stripe/subscription/checkout", {
@@ -118,18 +117,35 @@ export default function AbonnementsSection() {
   }
 
   return (
-    <section className="bg-transparent py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-10 grid items-center gap-8 lg:grid-cols-[1fr_1fr]">
-          <div className="text-center lg:text-left">
-            <h2 className="text-2xl font-bold text-[#273068] md:text-3xl">
-              Choisissez la formule qui vous convient
-            </h2>
-            <div className="mx-auto mb-3 mt-3 h-0.5 w-10 bg-[#E94E6F] lg:mx-0" />
-            <p className="text-sm text-black">
-              Accédez à encore plus d'activités grâce à nos abonnements
-            </p>
-          </div>
+    <section className="relative overflow-hidden bg-transparent py-16 md:py-20">
+
+      {/* Fleur gauche */}
+      <img
+        src={fleurs03}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 w-[180px] object-contain lg:w-[240px]"
+      />
+
+      {/* Fleur droite */}
+      <img
+        src={fleurs04}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 right-0 w-[180px] object-contain lg:w-[240px]"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-6">
+
+        {/* Titre centré */}
+        <div className="mb-10 text-center">
+          <h2 className="text-2xl font-bold text-[#273068] md:text-3xl">
+            Choisissez la formule qui vous convient
+          </h2>
+          <div className="mx-auto mb-3 mt-3 h-0.5 w-10 bg-[#E94E6F]" />
+          <p className="text-sm text-black">
+            Accédez à encore plus d'activités grâce à nos abonnements
+          </p>
         </div>
 
         {plans.length === 0 ? (
@@ -137,7 +153,7 @@ export default function AbonnementsSection() {
             Les formules sont momentanément indisponibles.
           </p>
         ) : (
-          <div className="mx-auto flex max-w-5xl flex-wrap items-stretch justify-center gap-6">
+          <div className="mx-auto flex max-w-5xl flex-wrap items-end justify-center gap-6">
             {plans.map((plan) => {
               const isMonthly = plan.name === "Monthly"
               const isFree = Number(plan.price) === 0
@@ -148,7 +164,7 @@ export default function AbonnementsSection() {
                   key={plan.idplan}
                   className={`flex w-full max-w-[241px] flex-col overflow-hidden rounded-2xl bg-white shadow-md sm:w-[241px] ${
                     isMonthly
-                      ? "border border-[#E94E6F] shadow-xl md:-translate-y-6"
+                      ? "-translate-y-6 border border-[#E94E6F] shadow-xl"
                       : "border border-[#FDC600]/30"
                   }`}
                 >
@@ -158,7 +174,7 @@ export default function AbonnementsSection() {
                     </div>
                   )}
 
-                  <div className="flex min-h-[420px] flex-1 flex-col p-6">
+                  <div className="flex flex-1 flex-col p-6">
                     <h3
                       className="mb-4 text-xl font-semibold leading-tight"
                       style={{ color: isMonthly ? "#E94E6F" : "#273068" }}
@@ -169,8 +185,12 @@ export default function AbonnementsSection() {
                     <div className="mb-1 flex items-baseline justify-center gap-1">
                       {isFree ? (
                         <>
-                          <span className="text-[41px] font-semibold leading-none text-[#273068]">0</span>
-                          <span className="text-[26px] font-semibold text-[#273068]">€</span>
+                          <span className="text-[41px] font-semibold leading-none text-[#273068]">
+                            0
+                          </span>
+                          <span className="text-[26px] font-semibold text-[#273068]">
+                            €
+                          </span>
                         </>
                       ) : (
                         <span
@@ -204,11 +224,11 @@ export default function AbonnementsSection() {
                         type="button"
                         onClick={() => handleSelect(plan)}
                         disabled={isLoading}
-                        className={`w-full rounded-[9px] px-3 py-2 text-sm font-medium transition ${
+                        className={`w-full rounded-[9px] px-3 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50 ${
                           isMonthly
                             ? "bg-[#E94E6F] text-white hover:bg-[#d63f5f]"
                             : "border border-[#273068] bg-transparent text-[#273068] hover:bg-[#f5f5f5]"
-                        } disabled:cursor-not-allowed disabled:opacity-50`}
+                        }`}
                       >
                         {isLoading
                           ? "Chargement..."

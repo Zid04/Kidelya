@@ -1,6 +1,11 @@
-import { Link } from "react-router-dom"
-import NavFooter from "@/components/NavFooter"
+﻿import { Link } from "react-router-dom"
 import heroFonctionnalites from "@/assets/photo-hero-abonnement.png"
+import imgBibliotheque from "@/assets/bibliothequeActivite.jpg"
+import imgCreer from "@/assets/creerActivite.PNG"
+import imgPlannifier from "@/assets/plannifier.PNG"
+import imgPanier from "@/assets/panier1.PNG"
+import imgSolution from "@/assets/solution.PNG"
+import imgCtaPack from "@/assets/ctapack.png"
 
 const featureCards = [
   {
@@ -158,8 +163,8 @@ function ReliableIcon({ kind }: { kind: "shield" | "check" | "bolt" | "heart" })
   if (kind === "check") {
     return (
       <svg viewBox="0 0 24 24" className={base} fill="none">
-        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M8 12.5l2.5 2.5L16 9.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M8 10V7a4 4 0 118 0v3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
       </svg>
     )
   }
@@ -167,7 +172,8 @@ function ReliableIcon({ kind }: { kind: "shield" | "check" | "bolt" | "heart" })
   if (kind === "bolt") {
     return (
       <svg viewBox="0 0 24 24" className={base} fill="none">
-        <path d="M13 2L5 13h6l-1 9 8-11h-6l1-9z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <line x1="22" y1="2" x2="11" y2="13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <polygon points="22 2 15 22 11 13 2 9 22 2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   }
@@ -181,10 +187,26 @@ function ReliableIcon({ kind }: { kind: "shield" | "check" | "bolt" | "heart" })
 
 export default function FonctionnalitesPage() {
   return (
-    <div className="min-h-screen bg-[#FFF9F5] text-[#273068]">
+    <div className="min-h-screen bg-white text-[#273068]">
       {/* HERO */}
-      <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-2">
-        <div>
+      <section className="relative min-h-[520px] overflow-hidden md:min-h-[580px]">
+
+        {/* Image desktop — collée au bord droit */}
+        <div className="absolute right-0 top-0 hidden h-full w-[48%] lg:block">
+          <img
+            src={heroFonctionnalites}
+            alt="Illustration fonctionnalités"
+            className="h-full w-full object-cover object-left"
+          />
+        </div>
+
+        {/* Image mobile — fond */}
+        <div className="absolute inset-0 z-0 opacity-100 lg:hidden">
+          <img src={heroFonctionnalites} alt="" aria-hidden="true" className="h-full w-full object-cover" />
+        </div>
+
+        {/* Texte */}
+        <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:py-20">
           <p className="mb-3 text-sm font-bold uppercase tracking-[3px] text-[#E94E6F]">
             Fonctionnalités
           </p>
@@ -206,7 +228,6 @@ export default function FonctionnalitesPage() {
             >
               Commencer gratuitement
             </Link>
-
             <Link
               to="/abonnements"
               className="rounded-[12px] border border-[#273068] bg-white px-7 py-4 text-sm font-semibold text-[#273068] hover:bg-[#f6f6f6]"
@@ -216,17 +237,6 @@ export default function FonctionnalitesPage() {
           </div>
         </div>
 
-       
-         <div className="relative">
-  <div className="overflow-hidden rounded-[28px] border border-[#F1D9B5] bg-transparent p-0 shadow-none">
-    <img
-      src={heroFonctionnalites}
-      alt="Illustration fonctionnalités"
-      className="h-full w-full rounded-[20px] object-cover"
-    />
-  </div>
-</div>
-   
       </section>
 
       {/* TOP FEATURES */}
@@ -235,7 +245,7 @@ export default function FonctionnalitesPage() {
           {featureCards.map((item) => (
             <article
               key={item.title}
-              className="flex items-start gap-4 rounded-[18px] border border-[#F3E8D5] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+              className="flex items-start gap-4 rounded-[18px] p-5 transition hover:-translate-y-1"
             >
               <div
                 className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${item.color}`}
@@ -261,218 +271,169 @@ export default function FonctionnalitesPage() {
         </div>
       </section>
 
-      {/* SECTION 01 + 02 */}
+      {/* SECTION 01 + 02 côte à côte */}
       <section className="mx-auto max-w-7xl px-6 pb-8">
-        <div className="rounded-[20px] border border-[#F3E8D5] bg-white p-8 shadow-sm">
-          {/* SECTION 01 */}
-          <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div className="overflow-hidden rounded-[24px] bg-[#FFF4F7] p-4">
-              <img src={heroFonctionnalites} alt="" className="rounded-[18px]" />
+        <div className="grid gap-6 md:grid-cols-2">
+
+          {/* SECTION 01 — image gauche, texte droite */}
+          <div className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+            <div className="w-1/2 shrink-0 overflow-hidden rounded-[18px]">
+              <img src={imgBibliotheque} alt="Bibliothèque d'activités" className="h-full w-full object-cover" />
             </div>
-
-            <div>
-              <span className="rounded-full bg-[#FFE1EA] px-3 py-1 text-xs font-bold text-[#E94E6F]">
-                01
-              </span>
-
-              <h2 className="mt-5 text-3xl font-extrabold leading-tight">
-                Une bibliothèque riche et inspirante
-              </h2>
-
-              <p className="mt-5 text-[15px] leading-7 text-[#4F5F45]">
-                Trouvez rapidement des activités adaptées à chaque âge et chaque envie.
-              </p>
-
-              <ul className="mt-6 space-y-3 text-[14px] text-[#4F5F45]">
+            <div className="flex-1">
+              <span className="rounded-full bg-[#FFE1EA] px-3 py-1 text-xs font-bold text-[#E94E6F]">01</span>
+              <h2 className="mt-4 text-xl font-extrabold leading-tight">Une bibliothèque riche et inspirante</h2>
+              <p className="mt-3 text-[14px] leading-7 text-[#4F5F45]">Trouvez rapidement des activités adaptées à chaque âge et chaque envie.</p>
+              <ul className="mt-4 space-y-2 text-[13px] text-[#4F5F45]">
                 <li>✓ Recherche par âge</li>
                 <li>✓ Recherche par thème</li>
                 <li>✓ Catégories variées</li>
-                <li>✓ Activités prêtes à l’emploi</li>
+                <li>✓ Activités prêtes à l'emploi</li>
               </ul>
             </div>
           </div>
 
-          <div className="my-12 h-[1px] bg-[#F3E8D5]" />
-
-          {/* SECTION 02 */}
-          <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div>
-              <span className="rounded-full bg-[#FFE1EA] px-3 py-1 text-xs font-bold text-[#E94E6F]">
-                02
-              </span>
-
-              <h2 className="mt-5 text-3xl font-extrabold leading-tight">
-                Créez vos propres activités
-              </h2>
-
-              <p className="mt-5 text-[15px] leading-7 text-[#4F5F45]">
-                Ajoutez facilement vos idées et personnalisez vos activités.
-              </p>
-
-              <ul className="mt-6 space-y-3 text-[14px] text-[#4F5F45]">
+          {/* SECTION 02 — texte gauche, image droite */}
+          <div className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+            <div className="flex-1">
+              <span className="rounded-full bg-[#FFE1EA] px-3 py-1 text-xs font-bold text-[#E94E6F]">02</span>
+              <h2 className="mt-4 text-xl font-extrabold leading-tight">Créez vos propres activités</h2>
+              <p className="mt-3 text-[14px] leading-7 text-[#4F5F45]">Ajoutez facilement vos idées et personnalisez vos activités.</p>
+              <ul className="mt-4 space-y-2 text-[13px] text-[#4F5F45]">
                 <li>✓ Ajouter un titre et une description</li>
                 <li>✓ Ajouter des photos</li>
                 <li>✓ Choisir une catégorie</li>
                 <li>✓ Modifier à tout moment</li>
               </ul>
             </div>
-
-            <div className="rounded-[24px] bg-[#FFF5F8] p-8">
-              <div className="rounded-[24px] bg-white p-6 shadow-lg">
-                <div className="h-44 rounded-2xl bg-[#FFE1EA]" />
-
-                <div className="mt-5 space-y-3">
-                  <div className="h-3 rounded-full bg-[#EFEFEF]" />
-                  <div className="h-3 w-2/3 rounded-full bg-[#EFEFEF]" />
-                </div>
-
-                <button className="mt-6 rounded-xl bg-[#E94E6F] px-5 py-3 text-sm font-semibold text-white">
-                  Enregistrer
-                </button>
-              </div>
+            <div className="w-1/2 shrink-0 overflow-hidden rounded-[18px]">
+              <img src={imgCreer} alt="Créer une activité" className="h-full w-full object-cover" />
             </div>
           </div>
+
         </div>
       </section>
 
-      {/* SECTION 03 + 04 */}
+      {/* SECTION 03 + 04 côte à côte */}
       <section className="mx-auto max-w-7xl px-6 pb-16">
-        <div className="rounded-[20px] border border-[#F3E8D5] bg-white p-8 shadow-sm">
-          {/* SECTION 03 */}
-          <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div>
-              <span className="rounded-full bg-[#E8F7D9] px-3 py-1 text-xs font-bold text-[#67A63B]">
-                03
-              </span>
+        <div className="grid gap-6 md:grid-cols-2">
 
-              <h2 className="mt-5 text-3xl font-extrabold">
-                Planifiez en toute simplicité
-              </h2>
-
-              <p className="mt-5 text-[15px] leading-7 text-[#4F5F45]">
-                Organisez votre semaine grâce au calendrier intégré.
-              </p>
-
-              <ul className="mt-6 space-y-3 text-[14px] text-[#4F5F45]">
+          {/* SECTION 03 — texte gauche, image droite */}
+          <div className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+            <div className="flex-1">
+              <span className="rounded-full bg-[#E8F7D9] px-3 py-1 text-xs font-bold text-[#67A63B]">03</span>
+              <h2 className="mt-4 text-xl font-extrabold">Planifiez en toute simplicité</h2>
+              <p className="mt-3 text-[14px] leading-7 text-[#4F5F45]">Organisez votre semaine grâce au calendrier intégré.</p>
+              <ul className="mt-4 space-y-2 text-[13px] text-[#4F5F45]">
                 <li>✓ Vue jour, semaine ou mois</li>
                 <li>✓ Organisez vos activités</li>
                 <li>✓ Rappels et notifications</li>
                 <li>✓ Visualisation claire et pratique</li>
               </ul>
             </div>
-
-            <div className="rounded-[24px] bg-[#FFF8EC] p-8">
-              <div className="rounded-[24px] bg-white p-8 shadow-lg">
-                <div className="grid grid-cols-7 gap-2">
-                  {Array.from({ length: 35 }).map((_, i) => (
-                    <div key={i} className="h-8 rounded-lg bg-[#FFE9B8]" />
-                  ))}
-                </div>
-              </div>
+            <div className="w-1/2 shrink-0 overflow-hidden rounded-[18px]">
+              <img src={imgPlannifier} alt="Planification" className="h-full w-full object-cover" />
             </div>
           </div>
 
-          <div className="my-12 h-[1px] bg-[#F3E8D5]" />
-
-          {/* SECTION 04 */}
-          <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div className="rounded-[24px] bg-[#F8F4FF] p-8">
-              <div className="space-y-4 rounded-[24px] bg-white p-6 shadow-lg">
-                <div className="h-10 rounded-xl bg-[#F4F4F4]" />
-                <div className="h-10 rounded-xl bg-[#F4F4F4]" />
-                <div className="h-10 rounded-xl bg-[#F4F4F4]" />
-
-                <button className="w-full rounded-xl bg-[#273068] py-3 font-semibold text-white">
-                  Rechercher
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <span className="rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">
-                04
-              </span>
-
-              <h2 className="mt-5 text-3xl font-extrabold">
-                Trouvez rapidement ce dont vous avez besoin
-              </h2>
-
-              <p className="mt-5 text-[15px] leading-7 text-[#4F5F45]">
-                Des outils de recherche performants pour gagner du temps.
-              </p>
-
-              <ul className="mt-6 space-y-3 text-[14px] text-[#4F5F45]">
+          {/* SECTION 04 — texte gauche, image droite */}
+          <div className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+            <div className="flex-1">
+              <span className="rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">04</span>
+              <h2 className="mt-4 text-xl font-extrabold">Trouvez rapidement ce dont vous avez besoin</h2>
+              <p className="mt-3 text-[14px] leading-7 text-[#4F5F45]">Des outils de recherche performants pour gagner du temps.</p>
+              <ul className="mt-4 space-y-2 text-[13px] text-[#4F5F45]">
                 <li>✓ Recherche par mot-clé</li>
                 <li>✓ Filtre par âge</li>
                 <li>✓ Filtre par catégorie</li>
                 <li>✓ Filtre par date</li>
               </ul>
             </div>
+            <div className="w-1/2 shrink-0 overflow-hidden rounded-[18px] bg-[#F8F4FF] p-6">
+              <div className="space-y-4 rounded-[18px] bg-white p-4 shadow">
+                <div className="h-8 rounded-lg bg-[#F4F4F4]" />
+                <div className="h-8 rounded-lg bg-[#F4F4F4]" />
+                <div className="h-8 rounded-lg bg-[#F4F4F4]" />
+                <button className="w-full rounded-lg bg-[#273068] py-2 text-sm font-semibold text-white">Rechercher</button>
+              </div>
+            </div>
           </div>
+
         </div>
       </section>
 
       {/* SECTION 05 06 07 */}
       <section className="mx-auto max-w-7xl px-6 pb-16">
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+
           {/* 05 */}
-          <article className="rounded-[20px] border border-[#F3E8D5] bg-white p-8 shadow-sm">
-            <span className="rounded-full bg-[#FFE1EA] px-3 py-1 text-xs font-bold text-[#E94E6F]">
-              05
-            </span>
+          <article className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+            <div className="flex-1">
+              <span className="rounded-full bg-[#FFE1EA] px-3 py-1 text-xs font-bold text-[#E94E6F]">
+                05
+              </span>
 
-            <h3 className="mt-5 text-[22px] font-extrabold text-[#273068]">
-              Des packs adaptés à toutes les envies
-            </h3>
+              <h3 className="mt-5 text-[22px] font-extrabold text-[#273068]">
+                Des packs adaptés à toutes les envies
+              </h3>
 
-            <p className="mt-4 text-[14px] leading-7 text-[#4F5F45]">
-              Des activités variées pour toutes les saisons et tous les thèmes.
-            </p>
+              <p className="mt-4 text-[14px] leading-7 text-[#4F5F45]">
+                Des activités variées pour toutes les saisons et tous les thèmes.
+              </p>
 
-            <ul className="mt-5 space-y-3 text-[13px] text-[#4F5F45]">
-              <li>✓ Activités thématiques</li>
-              <li>✓ Packs variés</li>
-              <li>✓ Contenus adaptés</li>
-            </ul>
+              <ul className="mt-5 space-y-3 text-[13px] text-[#4F5F45]">
+                <li>✓ Activités thématiques</li>
+                <li>✓ Packs variés</li>
+                <li>✓ Contenus adaptés</li>
+              </ul>
 
-            <Link
-              to="/packs"
-              className="mt-7 inline-flex rounded-[12px] bg-[#E94E6F] px-5 py-3 text-sm font-semibold text-white"
-            >
-              Voir les packs
-            </Link>
+              <Link
+                to="/packs"
+                className="mt-7 inline-flex rounded-[12px] bg-[#E94E6F] px-5 py-3 text-sm font-semibold text-white"
+              >
+                Voir les packs
+              </Link>
+            </div>
+            <div className="w-2/5 shrink-0 overflow-hidden rounded-[18px]">
+              <img src={imgPanier} alt="Packs d'activités" className="h-full w-full object-cover" />
+            </div>
           </article>
 
           {/* 06 */}
-          <article className="rounded-[20px] border border-[#F3E8D5] bg-white p-8 shadow-sm">
-            <span className="rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">
-              06
-            </span>
+          <article className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+            <div className="flex-1">
+              <span className="rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">
+                06
+              </span>
 
-            <h3 className="mt-5 text-[22px] font-extrabold text-[#273068]">
-              Une solution adaptée à vos besoins
-            </h3>
+              <h3 className="mt-5 text-[22px] font-extrabold text-[#273068]">
+                Une solution adaptée à vos besoins
+              </h3>
 
-            <p className="mt-4 text-[14px] leading-7 text-[#4F5F45]">
-              Choisissez entre achat à l'unité et accès illimité.
-            </p>
+              <p className="mt-4 text-[14px] leading-7 text-[#4F5F45]">
+                Choisissez entre achat à l'unité et accès illimité.
+              </p>
 
-            <ul className="mt-5 space-y-3 text-[13px] text-[#4F5F45]">
-              <li>✓ Flexible</li>
-              <li>✓ Simple à utiliser</li>
-              <li>✓ Accessible partout</li>
-            </ul>
+              <ul className="mt-5 space-y-3 text-[13px] text-[#4F5F45]">
+                <li>✓ Flexible</li>
+                <li>✓ Simple à utiliser</li>
+                <li>✓ Accessible partout</li>
+              </ul>
 
-            <Link
-              to="/abonnements"
-              className="mt-7 inline-flex rounded-[12px] bg-[#273068] px-5 py-3 text-sm font-semibold text-white"
-            >
-              Découvrir les formules
-            </Link>
+              <Link
+                to="/abonnements"
+                className="mt-7 inline-flex rounded-[12px] bg-[#273068] px-5 py-3 text-sm font-semibold text-white"
+              >
+                Découvrir les formules
+              </Link>
+            </div>
+            <div className="w-2/5 shrink-0 overflow-hidden rounded-[18px]">
+              <img src={imgSolution} alt="Solution adaptée" className="h-full w-full object-cover" />
+            </div>
           </article>
 
           {/* 07 */}
-          <article className="rounded-[20px] border border-[#F3E8D5] bg-white p-8 shadow-sm">
+          <article className="rounded-[20px] p-8">
             <span className="rounded-full bg-[#E8F7D9] px-3 py-1 text-xs font-bold text-[#67A63B]">
               07
             </span>
@@ -491,9 +452,39 @@ export default function FonctionnalitesPage() {
               <li>✓ Utilisation fluide</li>
             </ul>
 
+            <div className="mt-6 flex gap-4">
+              {/* Parent */}
+              <div className="flex flex-1 flex-col items-center gap-1 text-center">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EAF3FF]">
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="#273068" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <p className="text-[11px] font-semibold text-[#273068]">Parent</p>
+              </div>
+              {/* Professionnel */}
+              <div className="flex flex-1 flex-col items-center gap-1 text-center">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FFE7ED]">
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="#E94E6F" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" /><line x1="12" y1="12" x2="12" y2="16" /><line x1="10" y1="14" x2="14" y2="14" />
+                  </svg>
+                </div>
+                <p className="text-[11px] font-semibold text-[#273068]">Professionnel</p>
+              </div>
+              {/* Structure */}
+              <div className="flex flex-1 flex-col items-center gap-1 text-center">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EAF7DF]">
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="#67A63B" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3" />
+                  </svg>
+                </div>
+                <p className="text-[11px] font-semibold text-[#273068]">Structure</p>
+              </div>
+            </div>
+
             <Link
               to="/register"
-              className="mt-7 inline-flex rounded-[12px] bg-[#67A63B] px-5 py-3 text-sm font-semibold text-white"
+              className="mt-6 inline-flex rounded-[12px] bg-[#67A63B] px-5 py-3 text-sm font-semibold text-white"
             >
               Créer un compte
             </Link>
@@ -503,66 +494,66 @@ export default function FonctionnalitesPage() {
 
       {/* SECTION 08 */}
       <section className="mx-auto max-w-7xl px-6 pb-16">
-        <div className="rounded-[20px] border border-[#F3E8D5] bg-white p-8">
-          <div className="mb-10">
-            <span className="rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">
-              08
-            </span>
+        <div className="rounded-[20px] p-8">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
 
-            <h2 className="mt-5 text-3xl font-extrabold text-[#273068]">
-              Un service fiable et sécurisé
-            </h2>
+            {/* Message — en premier */}
+            <div className="lg:w-56 shrink-0">
+              <span className="rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">08</span>
+              <h2 className="mt-4 text-2xl font-extrabold text-[#273068]">
+                Un service fiable et sécurisé
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-[#4F5F45]">
+                Vos données sont protégées et votre expérience reste notre priorité.
+              </p>
+            </div>
 
-            <p className="mt-4 text-[#4F5F45]">
-              Vos données sont protégées et votre expérience reste notre priorité.
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {reliableFeatures.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-[16px] border border-[#F1D9B5] bg-[#FFFDF9] p-6 text-center"
-              >
-                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#EFE7FF]">
-                  <ReliableIcon kind={item.icon as "shield" | "check" | "bolt" | "heart"} />
+            {/* 4 items horizontaux */}
+            <div className="flex flex-1 flex-wrap gap-6 lg:flex-nowrap">
+              {reliableFeatures.map((item) => (
+                <div key={item.title} className="flex flex-1 flex-col items-center text-center min-w-[120px]">
+                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full">
+                    <ReliableIcon kind={item.icon as "shield" | "check" | "bolt" | "heart"} />
+                  </div>
+                  <h3 className="font-bold text-[#273068]">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#4F5F45]">{item.desc}</p>
                 </div>
+              ))}
+            </div>
 
-                <h3 className="font-bold text-[#273068]">{item.title}</h3>
-
-                <p className="mt-3 text-sm leading-6 text-[#4F5F45]">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
 
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-6 pb-16">
-        <div className="rounded-[20px] border border-[#F1D9B5] bg-white px-8 py-10 shadow-sm md:flex md:items-center md:justify-between">
-          <div>
-            <h3 className="text-3xl font-extrabold text-[#273068]">
+        <div className="relative overflow-hidden rounded-[20px] md:flex md:items-center md:justify-between px-8 py-10">
+          <img
+            src={imgCtaPack}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0" />
+          <div className="relative z-10">
+            <h3 className="text-3xl font-extrabold text-white">
               Prêt à découvrir Kidelya ?
             </h3>
 
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-[#4F5F45]">
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/80">
               Explorez les packs, testez les activités et choisissez la formule
               qui correspond à votre organisation.
             </p>
           </div>
 
           <Link
-            to="/packs"
-            className="mt-6 inline-flex rounded-[12px] bg-[#E94E6F] px-6 py-4 text-sm font-bold text-white md:mt-0"
+            to="/register"
+            className="relative z-10 mt-6 inline-flex rounded-[12px] bg-[#E94E6F] px-6 py-4 text-sm font-bold text-white shadow-md transition hover:bg-[#d63f5f] md:mt-0 shrink-0"
           >
-            Explorer les activités
+            Commencer gratuitement
           </Link>
         </div>
       </section>
-
-      <NavFooter />
     </div>
   )
 }

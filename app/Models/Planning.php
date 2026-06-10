@@ -19,8 +19,15 @@ class Planning extends Model
         'title',
         'description',
         'location',
+        'date',
+        'start_time',
+        'end_time',
         'iduser',
         'idreport',
+    ];
+
+    protected $casts = [
+        'date' => 'date',
     ];
 
     public function getRouteKeyName(): string
@@ -33,12 +40,12 @@ class Planning extends Model
         return $this->belongsTo(User::class, 'iduser', 'iduser');
     }
 
-    public function reportActivity(): BelongsTo
+    public function report(): BelongsTo
     {
         return $this->belongsTo(ReportActivity::class, 'idreport', 'idreport');
     }
 
-    public function activities(): BelongsToMany
+public function activities(): BelongsToMany
     {
         return $this->belongsToMany(
             Activity::class,
