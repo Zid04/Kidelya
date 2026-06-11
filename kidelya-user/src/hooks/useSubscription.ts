@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
+import api from "@/api/axios"
 
 export interface Subscription {
   idsubscription: number
@@ -19,11 +20,9 @@ export function useSubscription() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("/api/me/subscription")
-        const json: SubscriptionResponse = await res.json()
-        setSubscription(json.subscription)
-      } catch (e) {
-        console.error("Erreur abonnement :", e)
+        const res = await api.get<SubscriptionResponse>("/me/subscription")
+        setSubscription(res.data.subscription)
+      } catch {
       } finally {
         setLoading(false)
       }
@@ -37,7 +36,7 @@ export function useSubscription() {
     if (subscription.status !== "active") return false
 
     const end = new Date(subscription.end_date).getTime()
-    const now = new Date().getTime() 
+    const now = new Date().getTime()
 
     return end > now
   }, [subscription])

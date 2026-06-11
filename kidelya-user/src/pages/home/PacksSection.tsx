@@ -36,7 +36,6 @@ export default function PacksSection() {
           : []
         setPacks(published.sort(() => Math.random() - 0.5).slice(0, 5))
       } catch (err) {
-        console.error("Erreur recuperation packs :", err)
         setPacks([])
       }
     }

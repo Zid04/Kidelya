@@ -71,9 +71,11 @@ class PlanningService
     /**
      * Ajouter une activité au planning
      */
-    public function attachActivity(Planning $planning, int $activityId): void
+    public function attachActivity(Planning $planning, int $activityId, string $datestart, string $dateend): void
     {
-        $planning->activities()->syncWithoutDetaching([$activityId]);
+        $planning->activities()->syncWithoutDetaching([
+            $activityId => ['datestart' => $datestart, 'dateend' => $dateend],
+        ]);
     }
 
     /**

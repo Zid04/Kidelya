@@ -28,7 +28,7 @@ export default function GuardianCreate() {
   useEffect(() => {
     api.get("/children")
       .then(res => setAllChildren(res.data.data ?? res.data ?? []))
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
 

@@ -43,6 +43,7 @@ export default function ActivityEdit() {
   const [selectedCompetences, setSelectedCompetences] = useState<number[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function load() {
@@ -74,7 +75,7 @@ export default function ActivityEdit() {
           activity.competences?.map((c) => c.idcompetence) ?? []
         )
       } catch (err) {
-        console.error("Erreur chargement activité :", err)
+        setError("Impossible de charger l'activité. Veuillez réessayer.")
       } finally {
         setLoading(false)
       }
@@ -105,6 +106,7 @@ export default function ActivityEdit() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setSaving(true)
+    setError(null)
 
     try {
       const data = new FormData()
@@ -124,7 +126,7 @@ export default function ActivityEdit() {
 
       navigate("/activities")
     } catch (err) {
-      console.error("Erreur modification activité :", err)
+      setError("Impossible de modifier l'activité. Veuillez réessayer.")
     } finally {
       setSaving(false)
     }
@@ -143,6 +145,10 @@ export default function ActivityEdit() {
       <h1 className="text-3xl font-bold text-[#93197D] mb-6 flex items-center gap-2">
         Modifier l’activité <span className="text-[#FDC600]">🌸</span>
       </h1>
+
+      {error && (
+        <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
+      )}
 
       <form
         onSubmit={handleSubmit}

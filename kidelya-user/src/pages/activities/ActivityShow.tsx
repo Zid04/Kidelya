@@ -12,6 +12,7 @@ export default function ActivityShow() {
   const [activity, setActivity] = useState<Activity | null>(null)
   const [loading, setLoading] = useState(true)
   const [accessDenied, setAccessDenied] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<Tab>("apercu")
   const { favActivityIds, toggleActivity } = useFavorites()
 
@@ -22,8 +23,8 @@ export default function ActivityShow() {
         const canAccess = data.is_owned === true || data.has_subscription === true || data.iduser != null
         if (!canAccess) { setAccessDenied(true); return }
         setActivity(data)
-      } catch (err) {
-        console.error("Erreur chargement activité :", err)
+      } catch {
+        setError("Impossible de charger cette activité.")
       } finally {
         setLoading(false)
       }
@@ -44,7 +45,11 @@ export default function ActivityShow() {
   )
 
   if (!activity) return (
-    <div className="flex min-h-[60vh] items-center justify-center text-gray-400">Activité introuvable.</div>
+    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
+      <h2 className="text-2xl font-black text-[#E94E6F]">{error ? "Erreur" : "Introuvable"}</h2>
+      <p className="text-gray-400">{error || "Activité introuvable."}</p>
+      <Link to="/activities" className="rounded-xl bg-[#E94E6F] px-6 py-3 text-sm font-bold text-white">Retour</Link>
+    </div>
   )
 
   const steps  = Array.isArray(activity.steps)    ? activity.steps    : []

@@ -42,8 +42,10 @@ class PlanningController extends Controller
 
         $user             = auth()->user();
         $activeSubscription = $user->activeSubscription()->with('plan')->first();
+        // Plan gratuit : aucun abonnement actif, ou un abonnement dont le prix est 0.
         $isFree           = !$activeSubscription || ($activeSubscription->plan->price ?? 0) == 0;
 
+        // Règle métier : les utilisateurs gratuits sont limités à 1 planning pour les inciter à passer à un abonnement payant.
         if ($isFree) {
             $count = Planning::where('iduser', $user->iduser)->count();
             if ($count >= 1) {
@@ -54,6 +56,7 @@ class PlanningController extends Controller
         }
 
         $validated = $request->validated();
+        // idchild n'est pas une colonne directe de la table plannings — l'enfant doit être rattaché via la table pivot après la création.
         $idchild   = $validated['idchild'] ?? null;
         unset($validated['idchild']);
 
@@ -74,7 +77,7 @@ class PlanningController extends Controller
         $this->authorize('view', $planning);
 
         return response()->json([
-            'data' => $planning->load(['children', 'activities', 'groups', 'report'])
+            'data' => $planning->load(['children', 'activities', 'groups', 'report.photos'])
         ]);
     }
 
@@ -87,18 +90,30 @@ class PlanningController extends Controller
             'positive'     => 'nullable|string',
             'difficulties' => 'nullable|string',
             'improvements' => 'nullable|string',
+            'photos'       => 'nullable|array',
+            'photos.*'     => 'image|max:5120',
         ]);
+
+        unset($data['photos']);
 
         if ($planning->idreport) {
             $planning->report->update($data);
+            $report = $planning->report;
         } else {
             $report = ReportActivity::create($data);
             $planning->update(['idreport' => $report->idreport]);
         }
 
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $file) {
+                $path = $file->store('reports', 'public');
+                \App\Models\ReportPhoto::create(['idreport' => $report->idreport, 'photourl' => $path]);
+            }
+        }
+
         return response()->json([
             'message' => 'Rapport enregistré.',
-            'data'    => $planning->fresh()->load('report'),
+            'data'    => $planning->fresh()->load('report.photos'),
         ]);
     }
 
@@ -127,7 +142,7 @@ class PlanningController extends Controller
     {
         $this->authorize('update', $planning);
 
-        $this->planningService->attachActivity($planning, $request->activity_id);
+        $this->planningService->attachActivity($planning, $request->activity_id, $request->datestart, $request->dateend);
 
         return response()->json([
             'message' => 'Activity added to planning'

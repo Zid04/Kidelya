@@ -13,6 +13,7 @@ export default function MesActivites() {
   const { favActivityIds, toggleActivity } = useFavorites()
   const [activities, setActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [duplicating, setDuplicating] = useState<number | null>(null)
   const [dupError, setDupError] = useState<string | null>(null)
@@ -31,7 +32,7 @@ export default function MesActivites() {
         )
         setActivities(valid)
       })
-      .catch((err) => console.error("Erreur chargement activités :", err))
+      .catch(() => setError("Impossible de charger les activités."))
       .finally(() => setLoading(false))
   }, [])
 
@@ -112,7 +113,6 @@ export default function MesActivites() {
         ?? Object.values(axiosErr.response?.data?.errors ?? {}).flat()[0]
         ?? "Erreur lors de la duplication."
       setDupError(msg)
-      console.error("Erreur duplication :", err)
     } finally {
       setDuplicating(null)
     }
@@ -190,6 +190,10 @@ export default function MesActivites() {
       </div>
 
       {/* ── Grille ── */}
+      {error && (
+        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">{error}</div>
+      )}
+
       {dupError && (
         <div className="mb-4 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
           <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -12,6 +12,7 @@ export default function BibliothequeActivityDetail() {
   const navigate = useNavigate()
   const [activity, setActivity] = useState<Activity | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [buying, setBuying] = useState(false)
   const [activeTab, setActiveTab] = useState<Tab>("apercu")
   const { favActivityIds, toggleActivity } = useFavorites()
@@ -21,8 +22,8 @@ export default function BibliothequeActivityDetail() {
       try {
         const data = await getLibraryActivity(Number(id))
         setActivity(data)
-      } catch (err) {
-        console.error("Erreur chargement activité :", err)
+      } catch {
+        setError("Impossible de charger cette activité.")
       } finally {
         setLoading(false)
       }
@@ -36,8 +37,8 @@ export default function BibliothequeActivityDetail() {
     try {
       const url = await createActivityCheckout(activity.idactivities)
       window.location.href = url
-    } catch (err) {
-      console.error("Erreur paiement :", err)
+    } catch {
+      setError("Erreur lors du paiement. Veuillez réessayer.")
       setBuying(false)
     }
   }
@@ -47,7 +48,11 @@ export default function BibliothequeActivityDetail() {
   )
 
   if (!activity) return (
-    <div className="flex min-h-[60vh] items-center justify-center text-gray-400">Activité introuvable.</div>
+    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
+      <h2 className="text-2xl font-black text-[#E94E6F]">{error ? "Erreur" : "Introuvable"}</h2>
+      <p className="text-gray-400">{error || "Activité introuvable."}</p>
+      <Link to="/library" className="rounded-xl bg-[#E94E6F] px-6 py-3 text-sm font-bold text-white">Retour</Link>
+    </div>
   )
 
   const canAccess = activity.is_owned === true || activity.has_subscription === true
@@ -95,6 +100,10 @@ export default function BibliothequeActivityDetail() {
 
   return (
     <div className="min-h-screen bg-white">
+
+      {error && (
+        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
+      )}
 
       {/* Breadcrumb */}
       <nav className="mb-5 flex items-center gap-2 text-xs text-gray-400">

@@ -106,11 +106,29 @@ class PackService
     }
 
     /**
+     * Publier un pack
+     */
+    public function publish(Pack $pack): Pack
+    {
+        $pack->update(['is_published' => true]);
+        return $pack->fresh();
+    }
+
+    /**
+     * Dépublier un pack
+     */
+    public function unpublish(Pack $pack): Pack
+    {
+        $pack->update(['is_published' => false]);
+        return $pack->fresh();
+    }
+
+    /**
      * Ajouter activité au pack
      */
     public function attachActivity(Pack $pack, int $activityId): void
     {
-        if (!$pack->activities()->where('idactivities', $activityId)->exists()) {
+        if (!$pack->activities()->where('activities.idactivities', $activityId)->exists()) {
             $pack->activities()->attach($activityId);
         }
     }

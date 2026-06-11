@@ -1,5 +1,6 @@
-﻿import { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import api from "@/api/axios"
 
 interface Child {
   idchild: number
@@ -21,11 +22,9 @@ export default function GroupCreate() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("/api/me/children")
-        const json = await res.json()
-        setAllChildren(json.children || [])
+        const res = await api.get("/me/children")
+        setAllChildren(res.data.children || [])
       } catch (e) {
-        console.error("Erreur chargement enfants :", e)
         setError("Impossible de charger les enfants.")
       } finally {
         setLoading(false)
@@ -48,22 +47,12 @@ export default function GroupCreate() {
     setError(null)
 
     try {
-      const res = await fetch("/api/groups", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          children: selectedChildren,
-        }),
+      await api.post("/groups", {
+        name,
+        children: selectedChildren,
       })
-
-      if (!res.ok) {
-        throw new Error("Erreur lors de la création du groupe.")
-      }
-
       navigate("/groups")
     } catch (e) {
-      console.error(e)
       setError("Impossible de créer le groupe.")
     } finally {
       setSaving(false)

@@ -14,12 +14,16 @@ class ActivityPolicy
 
     public function view(User $user, Activity $activity): bool
     {
-        return true;
+        // Activités publiées : accessibles à tous les utilisateurs connectés
+        // Activités non publiées : créateur et admins uniquement
+        return $activity->is_published
+            || $user->iduser === $activity->iduser
+            || ($user->role && $user->role->type === 'Admin');
     }
 
     public function create(User $user): bool
     {
-        return true; // tu peux restreindre aux rôles si besoin
+        return true;
     }
 
     public function update(User $user, Activity $activity): bool

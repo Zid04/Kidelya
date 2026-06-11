@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Activity;
 use App\Models\Idea;
 
 class IdeaService
@@ -43,5 +44,24 @@ class IdeaService
     public function delete(Idea $idea): void
     {
         $idea->delete();
+    }
+
+    /**
+     * Convertit une idée en brouillon d'activité puis supprime l'idée.
+     */
+    public function convertToActivity(Idea $idea, $user): Activity
+    {
+        $activity = Activity::create([
+            'title'          => $idea->title,
+            'description'    => $idea->notes,
+            'iduser'         => $user->iduser,
+            'is_published'   => false,
+            'is_purchasable' => false,
+            'credit_price'   => 0,
+        ]);
+
+        $idea->delete();
+
+        return $activity;
     }
 }

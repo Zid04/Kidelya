@@ -15,6 +15,8 @@ class AddActivityToPlanningRequest extends FormRequest
     {
         return [
             'activity_id' => 'required|exists:activities,idactivities',
+            'datestart'   => 'required|date',
+            'dateend'     => 'required|date|after_or_equal:datestart',
         ];
     }
 }

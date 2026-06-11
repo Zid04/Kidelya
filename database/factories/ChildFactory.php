@@ -13,8 +13,8 @@ class ChildFactory extends Factory
             'lastname'          => $this->faker->lastName(),
             'firstname'         => $this->faker->firstName(),
             'birthday'          => $this->faker->dateTimeBetween('-15 years', '-3 years')->format('Y-m-d'),
-            'specificationnote' => $this->faker->optional()->sentence(),
-            'sexe'              => $this->faker->randomElement(['Male', 'Female', 'Other']),
+            'specification_note' => $this->faker->optional()->sentence(),
+            'sexe'              => $this->faker->randomElement(['male', 'female']),
             'photourl'          => $this->faker->optional()->imageUrl(200, 200, 'people'),
             'iduser'            => User::factory(),
         ];

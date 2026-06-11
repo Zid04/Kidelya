@@ -96,12 +96,13 @@ export default function MaBibliotheque() {
   const [tab, setTab] = useState<Tab>("activites")
   const [data, setData] = useState<PurchasesData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const { user } = useAuth()
 
   useEffect(() => {
     api.get("/me/purchases")
       .then(res => setData(res.data.data || res.data))
-      .catch(err => console.error("Erreur chargement achats :", err))
+      .catch(() => setError("Impossible de charger vos achats."))
       .finally(() => setLoading(false))
   }, [])
 
@@ -131,6 +132,10 @@ export default function MaBibliotheque() {
 
   return (
     <div className="min-h-screen bg-white px-4 py-8 max-w-6xl mx-auto">
+
+      {error && (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
+      )}
 
       {/* En-tête */}
       <div className="flex items-center justify-between mb-6">

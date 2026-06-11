@@ -17,12 +17,13 @@ export default function ChildrenIndex() {
 
   const [children, setChildren] = useState<Child[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<number | null>(null)
 
   useEffect(() => {
     api.get("/children")
       .then(res => setChildren(res.data.data ?? res.data ?? []))
-      .catch(console.error)
+      .catch(() => setError("Impossible de charger les enfants."))
       .finally(() => setLoading(false))
   }, [])
 
@@ -49,6 +50,10 @@ export default function ChildrenIndex() {
 
   return (
     <div className="min-h-screen bg-white px-6 py-10 max-w-5xl mx-auto">
+
+      {error && (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
+      )}
 
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-[#93197D]">Mes enfants 🌸</h1>

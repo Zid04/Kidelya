@@ -49,6 +49,7 @@ export default function DashboardUser() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [activities, setActivities] = useState<DashboardActivity[]>([])
   const [recommendedPacks, setRecommendedPacks] = useState<DashboardPack[]>([])
+  const [error, setError] = useState<string | null>(null)
   const { user: authUser } = useAuth()
 
   const plan         = authUser?.plan
@@ -73,13 +74,20 @@ export default function DashboardUser() {
         setActivities(data.activities)
         setRecommendedPacks(data.recommended_packs)
       })
-      .catch((err) => console.error("Erreur dashboard :", err))
+      .catch(() => setError("Impossible de charger le tableau de bord."))
   }, [])
 
   if (!user || !stats) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-[#8F6BC8]">
-        Chargement…
+      <div className="flex min-h-screen items-center justify-center text-center px-6">
+        {error ? (
+          <div>
+            <p className="text-lg font-bold text-[#E94E6F]">Erreur</p>
+            <p className="mt-1 text-sm text-gray-400">{error}</p>
+          </div>
+        ) : (
+          <p className="text-[#8F6BC8]">Chargement…</p>
+        )}
       </div>
     )
   }

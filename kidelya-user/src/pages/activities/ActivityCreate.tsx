@@ -50,6 +50,7 @@ export default function ActivityCreate() {
   const [selectedThemes, setSelectedThemes] = useState<number[]>([])
   const [selectedCompetences, setSelectedCompetences] = useState<number[]>([])
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function load() {
@@ -83,6 +84,7 @@ export default function ActivityCreate() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
+    setError(null)
 
     try {
       const data = new FormData()
@@ -101,7 +103,7 @@ export default function ActivityCreate() {
       await createActivity(data)
       navigate("/mes-activites")
     } catch (err) {
-      console.error("Erreur création activité :", err)
+      setError("Impossible de créer l'activité. Veuillez réessayer.")
     } finally {
       setLoading(false)
     }
@@ -112,6 +114,10 @@ export default function ActivityCreate() {
       <h1 className="text-3xl font-bold text-[#93197D] mb-6 flex items-center gap-2">
         Créer une activité <span className="text-[#FDC600]">🌸</span>
       </h1>
+
+      {error && (
+        <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
+      )}
 
       <form
         onSubmit={handleSubmit}

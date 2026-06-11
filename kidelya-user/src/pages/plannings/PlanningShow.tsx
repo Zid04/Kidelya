@@ -1,11 +1,17 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import api from "@/api/axios"
+import { mediaUrl } from "@/utils/media"
 
 interface Child {
   idchildren: number
   firstname: string
   lastname: string
+}
+
+interface ReportPhoto {
+  id: number
+  photourl: string
 }
 
 interface Report {
@@ -14,6 +20,8 @@ interface Report {
   positive: string | null
   difficulties: string | null
   improvements: string | null
+  photourl: string | null
+  photos: ReportPhoto[]
 }
 
 interface PlanningData {
@@ -41,8 +49,11 @@ export default function PlanningShow() {
   const [positive,     setPositive]     = useState("")
   const [difficulties, setDifficulties] = useState("")
   const [improvements, setImprovements] = useState("")
+  const [photoFiles,   setPhotoFiles]   = useState<File[]>([])
+  const [photoPreviews,setPhotoPreviews]= useState<string[]>([])
   const [savingReport, setSavingReport] = useState(false)
   const [reportSuccess,setReportSuccess]= useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     api.get(`/plannings/${id}`)
@@ -70,14 +81,40 @@ export default function PlanningShow() {
     }
   }
 
+  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? [])
+    if (!files.length) return
+    setPhotoFiles(prev => [...prev, ...files])
+    files.forEach(file => {
+      const reader = new FileReader()
+      reader.onload = ev => setPhotoPreviews(prev => [...prev, ev.target?.result as string])
+      reader.readAsDataURL(file)
+    })
+    if (fileInputRef.current) fileInputRef.current.value = ""
+  }
+
+  function removeNewPhoto(index: number) {
+    setPhotoFiles(prev => prev.filter((_, i) => i !== index))
+    setPhotoPreviews(prev => prev.filter((_, i) => i !== index))
+  }
+
   async function handleSaveReport(e: React.FormEvent) {
     e.preventDefault()
     setSavingReport(true)
     try {
-      const res = await api.post(`/plannings/${id}/report`, {
-        comments, positive, difficulties, improvements
+      const form = new FormData()
+      form.append("comments",     comments)
+      form.append("positive",     positive)
+      form.append("difficulties", difficulties)
+      form.append("improvements", improvements)
+      photoFiles.forEach(f => form.append("photos[]", f))
+
+      const res = await api.post(`/plannings/${id}/report`, form, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       setPlanning(prev => prev ? { ...prev, report: res.data.data.report } : prev)
+      setPhotoFiles([])
+      setPhotoPreviews([])
       setReportSuccess(true)
       setTimeout(() => setReportSuccess(false), 3000)
     } catch {
@@ -260,6 +297,74 @@ export default function PlanningShow() {
                 placeholder="Ce qu'on pourrait améliorer…"
                 className="w-full border border-[#6F8D4C]/30 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#6F8D4C]/40"
               />
+            </div>
+
+            {/* ── Photos ── */}
+            <div>
+              <label className="block text-sm font-semibold text-[#6F8D4C] mb-2">
+                Photos du compte-rendu
+              </label>
+
+              {/* Photos déjà enregistrées */}
+              {(planning.report?.photos?.length ?? 0) > 0 && (
+                <div className="mb-3">
+                  <p className="text-xs text-[#6F8D4C] mb-2">Photos enregistrées :</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {planning.report!.photos.map(photo => (
+                      <img
+                        key={photo.id}
+                        src={mediaUrl(photo.photourl) ?? ""}
+                        alt="Photo rapport"
+                        className="h-24 w-full object-cover rounded-xl border border-[#6F8D4C]/20"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Nouvelles photos sélectionnées (prévisualisation) */}
+              {photoPreviews.length > 0 && (
+                <div className="mb-3">
+                  <p className="text-xs text-[#6F8D4C] mb-2">Nouvelles photos à ajouter :</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {photoPreviews.map((src, i) => (
+                      <div key={i} className="relative">
+                        <img
+                          src={src}
+                          alt={`Aperçu ${i + 1}`}
+                          className="h-24 w-full object-cover rounded-xl border-2 border-[#6F8D4C]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeNewPhoto(i)}
+                          className="absolute -top-1.5 -right-1.5 h-6 w-6 flex items-center justify-center rounded-full bg-[#E94E6F] text-white text-xs shadow hover:bg-[#d63f5f]"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Bouton ajout */}
+              <label className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed border-[#6F8D4C]/40 px-4 py-3 hover:border-[#6F8D4C] hover:bg-[#F0F7EB] transition-colors">
+                <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-[#6F8D4C]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span className="text-sm text-[#6F8D4C]">
+                  Ajouter des photos (jpg, png — max 5 Mo chacune)
+                </span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handlePhotoChange}
+                  className="hidden"
+                />
+              </label>
             </div>
 
             <button

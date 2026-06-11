@@ -22,9 +22,6 @@ class UpdateActivityRequest extends FormRequest
             'season'         => 'nullable|string|max:50',
             'location'       => 'nullable|string|max:100',
             'photourl'       => 'nullable|url|max:255',
-            'iduser'         => 'required|exists:users,iduser',
-
-           
             'credit_price'   => 'sometimes|integer|min:0',
             'is_purchasable' => 'sometimes|boolean',
             'is_published'   => 'sometimes|boolean',

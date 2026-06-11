@@ -1,5 +1,6 @@
-﻿import { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
+import api from "@/api/axios"
 
 interface Child {
   idchild: number
@@ -31,17 +32,15 @@ export default function GroupShow() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch(`/api/groups/${id}`)
-        const json = await res.json()
+        const res = await api.get(`/groups/${id}`)
 
-        if (!json.group) {
+        if (!res.data.group) {
           setError("Groupe introuvable.")
           return
         }
 
-        setGroup(json.group)
+        setGroup(res.data.group)
       } catch (e) {
-        console.error("Erreur chargement groupe :", e)
         setError("Impossible de charger ce groupe.")
       } finally {
         setLoading(false)
@@ -54,10 +53,9 @@ export default function GroupShow() {
     if (!confirm("Supprimer ce groupe ?")) return
 
     try {
-      await fetch(`/api/groups/${id}`, { method: "DELETE" })
+      await api.delete(`/groups/${id}`)
       navigate("/groups")
     } catch (e) {
-      console.error(e)
       alert("Erreur lors de la suppression.")
     }
   }

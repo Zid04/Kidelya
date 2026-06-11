@@ -43,7 +43,12 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Crée un utilisateur avec un rôle spécifique ('Admin', 'User', 'Partner').
+ * Utilisé dans tous les tests pour éviter la répétition de Role::create + factory.
+ */
+function userWithRole(string $type): \App\Models\User
 {
-    // ..
+    $role = \App\Models\Role::create(['type' => $type]);
+    return \App\Models\User::factory()->create(['idrole' => $role->idrole]);
 }

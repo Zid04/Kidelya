@@ -68,4 +68,22 @@ class ActivityService
     {
         $activity->delete();
     }
+
+    /**
+     * Publie une activité.
+     */
+    public function publish(Activity $activity): Activity
+    {
+        $activity->update(['is_published' => true]);
+        return $activity->fresh();
+    }
+
+    /**
+     * Dépublie une activité.
+     */
+    public function unpublish(Activity $activity): Activity
+    {
+        $activity->update(['is_published' => false]);
+        return $activity->fresh();
+    }
 }

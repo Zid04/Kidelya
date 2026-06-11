@@ -55,7 +55,6 @@ export default function PackDetail() {
         const relatedRes = await api.get("/public/packs?per_page=50")
         setRelatedPacks(relatedRes.data.data || [])
       } catch (e) {
-        console.error(e)
         setPack(null)
         setRelatedPacks([])
       } finally {
@@ -74,7 +73,6 @@ export default function PackDetail() {
       await api.post("/cart/add", { idpack: pack.idpack, quantity: 1 })
       alert("Pack ajoute au panier !")
     } catch (e) {
-      console.error(e)
       alert("Erreur lors de l'ajout au panier.")
     } finally {
       setAdding(false)

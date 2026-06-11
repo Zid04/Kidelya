@@ -39,6 +39,7 @@ export default function CartPage() {
   const [removing, setRemoving]     = useState<number | null>(null)
   const [updating, setUpdating]     = useState<number | null>(null)
   const [suggestions, setSuggestions] = useState<Pack[]>([])
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
   const subtotal = items.reduce(
     (sum, item) => sum + Number(item.pack.tarification) * item.quantity,
@@ -90,14 +91,13 @@ export default function CartPage() {
   }
 
   const handleCheckout = async () => {
-    // Pour chaque article, lancer le checkout Stripe du premier pack
-    // Simple cas : checkout du premier pack
     if (items.length === 0) return
+    setCheckoutError(null)
     try {
       const res = await api.post("/stripe/checkout", { pack_id: items[0].pack.idpack })
       window.location.href = res.data.url
-    } catch (e) {
-      console.error(e)
+    } catch {
+      setCheckoutError("Erreur lors du paiement. Veuillez réessayer.")
     }
   }
 
@@ -286,6 +286,10 @@ export default function CartPage() {
                     <p className="text-[10px] leading-4 text-gray-400">Vos données sont protégées et vos paiements 100% sécurisés</p>
                   </div>
                 </div>
+
+                {checkoutError && (
+                  <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">{checkoutError}</div>
+                )}
 
                 <button
                   onClick={handleCheckout}

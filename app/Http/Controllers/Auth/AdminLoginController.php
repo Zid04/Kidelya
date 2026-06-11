@@ -17,20 +17,11 @@ class AdminLoginController extends Controller
         'password' => 'required|string',
     ]);
 
-    \Log::info('Login attempt', ['email' => $request->email]);
-
     $user = User::where('email', $request->email)
                 ->with('role')
                 ->first();
 
-    \Log::info('User found', ['exists' => (bool)$user]);
-
     if (!$user || !Hash::check($request->password, $user->password)) {
-        \Log::info('Check failed', [
-            'user_exists'    => (bool)$user,
-            'password_check' => $user ? Hash::check($request->password, $user->password) : false,
-            'role'           => $user?->role?->type
-        ]);
         return response()->json(['message' => 'Email ou mot de passe incorrect'], 401);
     }
 

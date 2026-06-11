@@ -70,6 +70,7 @@ class ActivityController extends Controller
 
         $isCreator = $activity->iduser === $user->iduser;
 
+        // Les abonnements aux packs peuvent être sans date d'expiration (accès à vie) ou expirer dans le futur.
         $userPackIds = $user->packSubscriptions()
             ->where('status', 'active')
             ->where(function ($q) {
@@ -89,7 +90,10 @@ class ActivityController extends Controller
             ->exists();
 
         $data = $activity->toArray();
+        // is_owned : vrai si l'utilisateur est le créateur, a acheté un pack qui la contient, ou l'a achetée individuellement.
         $data['is_owned']        = $isCreator || $hasPack || $hasPurchased;
+        // has_subscription : les deux conditions doivent être vraies — l'utilisateur a un abonnement actif
+        // ET l'activité est explicitement marquée comme incluse dans l'abonnement par l'admin.
         $data['has_subscription'] = $hasActiveSubscription && (bool) $activity->included_in_subscription;
 
         return response()->json(['data' => $data]);
@@ -102,7 +106,8 @@ class ActivityController extends Controller
     {
         $this->authorize('create', Activity::class);
 
-        $activity = $this->activityService->create($request->validated());
+        $data = array_merge($request->validated(), ['iduser' => auth()->id()]);
+        $activity = $this->activityService->create($data);
 
         return response()->json([
             'message' => 'Activity created successfully',

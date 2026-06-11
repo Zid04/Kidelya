@@ -1,5 +1,6 @@
-﻿import { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import api from "@/api/axios"
 
 interface Child {
   idchild: number
@@ -29,25 +30,22 @@ export default function GroupEdit() {
   useEffect(() => {
     async function load() {
       try {
-        // Charger le groupe
-        const res = await fetch(`/api/groups/${id}`)
-        const json = await res.json()
+        // Charger le groupe et la liste des enfants en parallèle
+        const [groupRes, childRes] = await Promise.all([
+          api.get(`/groups/${id}`),
+          api.get("/me/children"),
+        ])
 
-        if (!json.group) {
+        if (!groupRes.data.group) {
           setError("Groupe introuvable.")
           return
         }
 
-        setGroup(json.group)
-        setName(json.group.name)
-        setSelectedChildren(json.group.children.map((c: Child) => c.idchild))
-
-        // Charger tous les enfants
-        const childRes = await fetch("/api/me/children")
-        const childJson = await childRes.json()
-        setAllChildren(childJson.children || [])
+        setGroup(groupRes.data.group)
+        setName(groupRes.data.group.name)
+        setSelectedChildren(groupRes.data.group.children.map((c: Child) => c.idchild))
+        setAllChildren(childRes.data.children || [])
       } catch (e) {
-        console.error("Erreur chargement groupe :", e)
         setError("Impossible de charger ce groupe.")
       } finally {
         setLoading(false)
@@ -70,22 +68,12 @@ export default function GroupEdit() {
     setError(null)
 
     try {
-      const res = await fetch(`/api/groups/${id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          children: selectedChildren,
-        }),
+      await api.post(`/groups/${id}`, {
+        name,
+        children: selectedChildren,
       })
-
-      if (!res.ok) {
-        throw new Error("Erreur lors de la mise à jour.")
-      }
-
       navigate(`/groups/${id}`)
     } catch (e) {
-      console.error(e)
       setError("Impossible de mettre à jour le groupe.")
     } finally {
       setSaving(false)

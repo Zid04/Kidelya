@@ -1,11 +1,13 @@
-export interface Planning{
+export interface Planning {
   idplanning: number
-  idactivities: number
-
-  datestart: string | null
-  dateend: string | null
-
+  title: string
+  date: string | null
+  start_time: string | null
+  end_time: string | null
+  description?: string | null
+  location?: string | null
+  iduser?: number
+  idreport?: number | null
   created_at?: string
   updated_at?: string
-
 }

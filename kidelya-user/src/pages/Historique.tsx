@@ -15,14 +15,15 @@ interface Transaction {
 export default function HistoriqueAchats() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function load() {
       try {
         const res = await api.get("/me/transactions")
         setTransactions(res.data.data || res.data)
-      } catch (e) {
-        console.error("Erreur chargement historique :", e)
+      } catch {
+        setError("Impossible de charger l'historique.")
       } finally {
         setLoading(false)
       }
@@ -40,6 +41,10 @@ export default function HistoriqueAchats() {
 
   return (
     <div className="min-h-screen bg-white px-6 py-10 max-w-5xl mx-auto">
+
+      {error && (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
+      )}
 
       {/* TITRE */}
       <div className="flex justify-between items-center mb-10">

@@ -10,11 +10,8 @@ export function useLocalStorage<T>(key: string, initial: T) {
       }
 
       return JSON.parse(item) as T
-    } catch (error) {
-      console.error("Erreur localStorage :", error)
-
+    } catch {
       localStorage.removeItem(key)
-
       return initial
     }
   })
@@ -24,8 +21,7 @@ export function useLocalStorage<T>(key: string, initial: T) {
       setValue(newValue)
 
       localStorage.setItem(key, JSON.stringify(newValue))
-    } catch (error) {
-      console.error("Erreur sauvegarde localStorage :", error)
+    } catch {
     }
   }
 

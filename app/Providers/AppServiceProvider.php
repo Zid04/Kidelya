@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Activity;
+use App\Models\CartItem;
 use App\Models\Child;
 use App\Models\Competence;
 use App\Models\Group;
@@ -14,6 +15,7 @@ use App\Models\ReportActivity;
 use App\Models\Theme;
 use App\Models\User;
 use App\Policies\ActivityPolicy;
+use App\Policies\CartItemPolicy;
 use App\Policies\ChildPolicy;
 use App\Policies\CompetencePolicy;
 use App\Policies\GroupPolicy;
@@ -83,6 +85,7 @@ class AppServiceProvider extends ServiceProvider
     protected function configurePolicies(): void
     {
         Gate::policy(Activity::class,       ActivityPolicy::class);
+        Gate::policy(CartItem::class,       CartItemPolicy::class);
         Gate::policy(Child::class,          ChildPolicy::class);
         Gate::policy(Competence::class,     CompetencePolicy::class);
         Gate::policy(Group::class,          GroupPolicy::class);

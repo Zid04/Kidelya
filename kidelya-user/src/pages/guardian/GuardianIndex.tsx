@@ -12,11 +12,12 @@ interface Guardian {
 export default function GuardiansIndex() {
   const [guardians, setGuardians] = useState<Guardian[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     api.get("/guardians")
       .then(res => setGuardians(res.data.data ?? []))
-      .catch(console.error)
+      .catch(() => setError("Impossible de charger les parents."))
       .finally(() => setLoading(false))
   }, [])
 
@@ -30,6 +31,10 @@ export default function GuardiansIndex() {
 
   return (
     <div className="min-h-screen bg-white px-6 py-10 max-w-5xl mx-auto">
+
+      {error && (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
+      )}
 
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-3xl font-bold text-[#93197D]">Parents / Guardians 🌸</h1>

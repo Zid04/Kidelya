@@ -47,7 +47,6 @@ export default function ActivityDetailPack() {
         const res = await api.get(`/activities/${idactivities}`)
         setActivity(res.data.data || res.data)
       } catch (e) {
-        console.error(e)
         setError("Impossible de charger cette activité.")
       } finally {
         setLoading(false)
@@ -64,7 +63,7 @@ export default function ActivityDetailPack() {
       const url = await createPackCheckout(packId)
       window.location.href = url
     } catch (e) {
-      console.error(e)
+      setError("Impossible de lancer le paiement. Veuillez réessayer.")
       setBuying(false)
     }
   }

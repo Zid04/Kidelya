@@ -39,6 +39,8 @@ class StripeController extends Controller
             return response()->json(['error' => 'Invalid signature'], 400);
         }
 
+        // Les types d'événements inconnus sont enregistrés mais pas rejetés — renvoyer un 200 empêche Stripe
+        // de relancer la requête et d'inonder les logs avec des événements qu'on ignore intentionnellement.
         match ($event->type) {
             'checkout.session.completed'    => $this->handleCheckoutCompleted($event->data->object),
             'customer.subscription.deleted' => $this->handleSubscriptionCancelled($event->data->object),
@@ -89,6 +91,8 @@ class StripeController extends Controller
                 return;
             }
 
+            // firstOrCreate : Stripe peut livrer le même webhook plusieurs fois ; ceci évite les doublons
+            // dans les achats sans avoir besoin d'une clé d'idempotence explicite.
             ActivityPurchase::firstOrCreate(
                 ['user_id' => $userId, 'activity_id' => $activityId],
                 ['credits_spent' => 0, 'purchased_at' => now()]
@@ -111,6 +115,8 @@ class StripeController extends Controller
             return;
         }
 
+        // updateOrCreate : un webhook rejoué réinitialise les dates plutôt que de créer un doublon,
+        // et réactive une entrée annulée par erreur.
         PackUser::updateOrCreate(
             ['iduser' => $userId, 'idpack' => $packId],
             [

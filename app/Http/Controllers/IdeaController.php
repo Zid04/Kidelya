@@ -12,7 +12,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class IdeaController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function __construct(
         private IdeaService $ideaService
     ) {}
@@ -31,7 +31,7 @@ class IdeaController extends Controller
         $this->authorize('create', Idea::class);
 
         return response()->json([
-            'message' => 'Idea created successfully',
+            'message' => 'Idée créée avec succès',
             'data' => $this->ideaService->create(
                 $request->validated(),
                 auth()->user()
@@ -53,7 +53,7 @@ class IdeaController extends Controller
         $this->authorize('update', $idea);
 
         return response()->json([
-            'message' => 'Idea updated successfully',
+            'message' => 'Idée mise à jour',
             'data' => $this->ideaService->update($idea, $request->validated())
         ]);
     }
@@ -65,7 +65,22 @@ class IdeaController extends Controller
         $this->ideaService->delete($idea);
 
         return response()->json([
-            'message' => 'Idea deleted successfully'
+            'message' => 'Idée supprimée'
         ]);
+    }
+
+    /**
+     * Convertit une idée en brouillon d'activité.
+     */
+    public function convertToActivity(Idea $idea): JsonResponse
+    {
+        $this->authorize('delete', $idea);
+
+        $activity = $this->ideaService->convertToActivity($idea, auth()->user());
+
+        return response()->json([
+            'message' => 'Idée convertie en activité brouillon',
+            'data'    => $activity,
+        ], 201);
     }
 }

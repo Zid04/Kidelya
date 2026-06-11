@@ -1,5 +1,6 @@
-﻿import { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import api from "@/api/axios"
 
 interface Group {
   idgroup: number
@@ -11,15 +12,15 @@ interface Group {
 export default function GroupsIndex() {
   const [groups, setGroups] = useState<Group[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("/api/groups")
-        const json = await res.json()
-        setGroups(json.groups || [])
-      } catch (e) {
-        console.error("Erreur chargement groupes :", e)
+        const res = await api.get("/groups")
+        setGroups(res.data.groups || [])
+      } catch {
+        setError("Impossible de charger les groupes.")
       } finally {
         setLoading(false)
       }
@@ -38,10 +39,14 @@ export default function GroupsIndex() {
   return (
     <div className="min-h-screen bg-white px-6 py-10 max-w-5xl mx-auto">
 
+      {error && (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
+      )}
+
       {/* HEADER */}
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-3xl font-bold text-[#93197D]">
-          Groupes d’enfants 🌸
+          Groupes d'enfants 🌸
         </h1>
 
         <Link

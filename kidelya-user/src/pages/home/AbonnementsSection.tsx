@@ -75,6 +75,7 @@ function CheckIcon({ active }: { active: boolean }) {
 export default function AbonnementsSection() {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([])
   const [loadingPlanId, setLoadingPlanId] = useState<number | null>(null)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const navigate = useNavigate()
   const { user } = useAuth()
 
@@ -86,8 +87,7 @@ export default function AbonnementsSection() {
           ? res.data.filter((p: SubscriptionPlan) => p.is_active)
           : []
         setPlans(activePlans.sort((a, b) => order[a.name] - order[b.name]))
-      } catch (err) {
-        console.error("Erreur récupération abonnements :", err)
+      } catch {
         setPlans([])
       }
     }
@@ -109,8 +109,8 @@ export default function AbonnementsSection() {
         plan_id: plan.idplan,
       })
       window.open(res.data.url, "_self")
-    } catch (err) {
-      console.error("Erreur création session Stripe :", err)
+    } catch {
+      setCheckoutError("Erreur lors de la création de la session de paiement. Veuillez réessayer.")
     } finally {
       setLoadingPlanId(null)
     }
@@ -147,6 +147,10 @@ export default function AbonnementsSection() {
             Accédez à encore plus d'activités grâce à nos abonnements
           </p>
         </div>
+
+        {checkoutError && (
+          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600 text-center">{checkoutError}</div>
+        )}
 
         {plans.length === 0 ? (
           <p className="mx-auto max-w-2xl text-center text-[#6F8D4C]">

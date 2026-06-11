@@ -1,5 +1,6 @@
-﻿import { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import api from "@/api/axios"
 
 interface Child {
   idchild: number
@@ -20,11 +21,9 @@ export default function GroupAddChild() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("/api/me/children")
-        const json = await res.json()
-        setChildren(json.children || [])
+        const res = await api.get("/me/children")
+        setChildren(res.data.children || [])
       } catch (e) {
-        console.error(e)
         setError("Impossible de charger les enfants.")
       } finally {
         setLoading(false)
@@ -44,18 +43,10 @@ export default function GroupAddChild() {
     setError(null)
 
     try {
-      const res = await fetch(`/api/groups/${id}/add-child`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idchild: selectedId }),
-      })
-      if (!res.ok) {
-        throw new Error("Erreur ajout enfant")
-      }
+      await api.post(`/groups/${id}/add-child`, { idchild: selectedId })
       navigate(`/groups/${id}`)
     } catch (e) {
-      console.error(e)
-      setError("Impossible d’ajouter l’enfant au groupe.")
+      setError("Impossible d'ajouter l'enfant au groupe.")
       setSaving(false)
     }
   }

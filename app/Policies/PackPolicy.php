@@ -19,7 +19,7 @@ class PackPolicy
 
     public function create(User $user): bool
     {
-        return true; 
+        return in_array($user->role->type, ['Admin', 'Partner']);
     }
 
     public function update(User $user, Pack $pack): bool

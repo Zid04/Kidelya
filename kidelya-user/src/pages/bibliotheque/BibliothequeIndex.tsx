@@ -35,6 +35,7 @@ export default function BibliothequeIndex() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [packs, setPacks] = useState<Pack[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [cartIds, setCartIds] = useState<Record<number, "adding" | "done">>({})
 
   async function handleAddToCart(activity: Activity, e: React.MouseEvent) {
@@ -81,8 +82,8 @@ export default function BibliothequeIndex() {
         setActivities(activitiesRes)
         const raw = packsRes.data
         setPacks(Array.isArray(raw?.data) ? raw.data : Array.isArray(raw) ? raw : [])
-      } catch (err) {
-        console.error("Erreur chargement bibliothèque :", err)
+      } catch {
+        setError("Impossible de charger les activités.")
       } finally {
         setLoading(false)
       }
@@ -238,6 +239,9 @@ export default function BibliothequeIndex() {
       <main className="mx-auto max-w-7xl px-6 pb-20">
 
         {/* ── CAROUSEL D'ACTIVITÉS ── */}
+        {error && (
+          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
+        )}
         {loading ? (
           <div className="py-16 text-center text-[#6F8D4C]">Chargement des activités...</div>
         ) : filtered.length === 0 ? (
