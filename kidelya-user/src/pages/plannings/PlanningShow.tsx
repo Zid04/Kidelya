@@ -125,7 +125,7 @@ export default function PlanningShow() {
   }
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center text-[#6F8D4C]">Chargement…</div>
+    <div className="min-h-screen flex items-center justify-center text-[#273068]">Chargement…</div>
   )
   if (error || !planning) return (
     <div className="min-h-screen flex items-center justify-center text-red-500">{error || "Planning introuvable."}</div>
@@ -150,31 +150,34 @@ export default function PlanningShow() {
       <div className="flex items-center gap-3 mb-8">
         <button
           onClick={() => navigate("/plannings")}
-          className="p-2 rounded-lg text-[#93197D] border border-[#93197D]/30 hover:bg-[#FFF3E0]"
+          className="p-2 rounded-lg text-[#273068] hover:bg-[#D5CDE2]"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <path d="M15 18l-6-6 6-6"/>
           </svg>
         </button>
-        <h1 className="text-2xl font-bold text-[#93197D] flex-1">{planning.title}</h1>
+        <h1 className="text-2xl font-bold text-[#7C67B2] flex-1">{planning.title}</h1>
         <div className="flex gap-2">
           <button
             onClick={handleDelete}
-            className="px-4 py-2 bg-white border border-[#E94E6F] text-[#E94E6F] rounded-lg font-semibold text-sm hover:bg-[#FFF5F7]"
+            className="flex items-center gap-1.5 text-xs font-semibold text-red-400 hover:text-red-600"
           >
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+            </svg>
             Supprimer
           </button>
         </div>
       </div>
 
       {/* Info card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-[#FDC600]/40 p-6 mb-6 space-y-4">
+      <div className="bg-[#FFFEFA] rounded-2xl shadow-sm p-6 mb-6 space-y-4">
 
         <div className="flex items-start gap-3">
           <span className="text-2xl">📅</span>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#93197D]">Date</p>
-            <p className="text-[#374151] font-medium capitalize">{fmtDate(planning.date)}</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#273068]">Date</p>
+            <p className="text-[#273068] font-medium capitalize">{fmtDate(planning.date)}</p>
           </div>
         </div>
 
@@ -182,8 +185,8 @@ export default function PlanningShow() {
           <div className="flex items-start gap-3">
             <span className="text-2xl">🕐</span>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#93197D]">Horaire</p>
-              <p className="text-[#374151] font-medium">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#273068]">Horaire</p>
+              <p className="text-[#273068] font-medium">
                 {fmtTime(planning.start_time)}
                 {planning.end_time && ` → ${fmtTime(planning.end_time)}`}
               </p>
@@ -195,8 +198,8 @@ export default function PlanningShow() {
           <div className="flex items-start gap-3">
             <span className="text-2xl">📍</span>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#93197D]">Lieu</p>
-              <p className="text-[#374151] font-medium">{planning.location}</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#273068]">Lieu</p>
+              <p className="text-[#273068] font-medium">{planning.location}</p>
             </div>
           </div>
         )}
@@ -205,26 +208,26 @@ export default function PlanningShow() {
           <div className="flex items-start gap-3">
             <span className="text-2xl">📝</span>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#93197D]">Description</p>
-              <p className="text-[#374151]">{planning.description}</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#273068]">Description</p>
+              <p className="text-[#273068]">{planning.description}</p>
             </div>
           </div>
         )}
 
         {planning.children.length > 0 && (
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#93197D] mb-2">Enfants concernés</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#273068] mb-2">Enfants concernés</p>
             <div className="flex flex-wrap gap-2">
               {planning.children.map(child => (
                 <Link
                   key={child.idchildren}
                   to={`/children/${child.idchildren}`}
-                  className="flex items-center gap-2 bg-[#FFF3E0] hover:bg-[#FFE8C2] px-3 py-2 rounded-xl transition-colors"
+                  className="flex items-center gap-2 bg-[#D5CDE2] hover:bg-[#CDC1DC] px-3 py-2 rounded-xl transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#93197D] flex items-center justify-center text-white font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-[#7C67B2] flex items-center justify-center text-white font-bold text-sm">
                     {child.firstname[0].toUpperCase()}
                   </div>
-                  <span className="text-[#93197D] font-semibold text-sm">
+                  <span className="text-[#273068] font-semibold text-sm">
                     {child.firstname} {child.lastname}
                   </span>
                 </Link>
@@ -234,15 +237,15 @@ export default function PlanningShow() {
         )}
 
         {planning.children.length === 0 && (
-          <p className="text-sm text-gray-400 italic">Aucun enfant associé à ce planning.</p>
+          <p className="text-sm text-[#273068] italic">Aucun enfant associé à ce planning.</p>
         )}
       </div>
 
       {/* Compte-rendu section — only for past plannings */}
       {isPast && (
-        <div className="bg-white rounded-2xl shadow-sm border border-[#6F8D4C]/30 p-6">
+        <div className="bg-[#FFFEFA] rounded-2xl shadow-sm p-6">
 
-          <h2 className="text-lg font-bold text-[#6F8D4C] mb-1">Compte-rendu d'activité</h2>
+          <h2 className="text-lg font-bold text-[#7C67B2] mb-1">Compte-rendu d'activité</h2>
           <p className="text-sm text-gray-500 mb-5">
             {planning.report ? "Modifiez votre rapport ci-dessous." : "Cette activité est passée. Rédigez votre rapport."}
           </p>
@@ -256,66 +259,66 @@ export default function PlanningShow() {
           <form onSubmit={handleSaveReport} className="space-y-4">
 
             <div>
-              <label className="block text-sm font-semibold text-[#6F8D4C] mb-1">Commentaires généraux</label>
+              <label className="block text-sm font-semibold text-[#273068] mb-1">Commentaires généraux</label>
               <textarea
                 value={comments}
                 onChange={e => setComments(e.target.value)}
                 rows={3}
                 placeholder="Comment s'est déroulée l'activité ?"
-                className="w-full border border-[#6F8D4C]/30 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#6F8D4C]/40"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#7C67B2]/40"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#6F8D4C] mb-1">Points positifs</label>
+              <label className="block text-sm font-semibold text-[#273068] mb-1">Points positifs</label>
               <textarea
                 value={positive}
                 onChange={e => setPositive(e.target.value)}
                 rows={2}
                 placeholder="Ce qui s'est bien passé…"
-                className="w-full border border-[#6F8D4C]/30 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#6F8D4C]/40"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#7C67B2]/40"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#6F8D4C] mb-1">Difficultés rencontrées</label>
+              <label className="block text-sm font-semibold text-[#273068] mb-1">Difficultés rencontrées</label>
               <textarea
                 value={difficulties}
                 onChange={e => setDifficulties(e.target.value)}
                 rows={2}
                 placeholder="Ce qui a été difficile…"
-                className="w-full border border-[#6F8D4C]/30 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#6F8D4C]/40"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#7C67B2]/40"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#6F8D4C] mb-1">Améliorations possibles</label>
+              <label className="block text-sm font-semibold text-[#273068] mb-1">Améliorations possibles</label>
               <textarea
                 value={improvements}
                 onChange={e => setImprovements(e.target.value)}
                 rows={2}
                 placeholder="Ce qu'on pourrait améliorer…"
-                className="w-full border border-[#6F8D4C]/30 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#6F8D4C]/40"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#7C67B2]/40"
               />
             </div>
 
             {/* ── Photos ── */}
             <div>
-              <label className="block text-sm font-semibold text-[#6F8D4C] mb-2">
+              <label className="block text-sm font-semibold text-[#273068] mb-2">
                 Photos du compte-rendu
               </label>
 
               {/* Photos déjà enregistrées */}
               {(planning.report?.photos?.length ?? 0) > 0 && (
                 <div className="mb-3">
-                  <p className="text-xs text-[#6F8D4C] mb-2">Photos enregistrées :</p>
+                  <p className="text-xs text-[#273068] mb-2">Photos enregistrées :</p>
                   <div className="grid grid-cols-3 gap-2">
                     {planning.report!.photos.map(photo => (
                       <img
                         key={photo.id}
                         src={mediaUrl(photo.photourl) ?? ""}
                         alt="Photo rapport"
-                        className="h-24 w-full object-cover rounded-xl border border-[#6F8D4C]/20"
+                        className="h-24 w-full object-cover rounded-xl border border-[#273068]/20"
                       />
                     ))}
                   </div>
@@ -325,14 +328,14 @@ export default function PlanningShow() {
               {/* Nouvelles photos sélectionnées (prévisualisation) */}
               {photoPreviews.length > 0 && (
                 <div className="mb-3">
-                  <p className="text-xs text-[#6F8D4C] mb-2">Nouvelles photos à ajouter :</p>
+                  <p className="text-xs text-[#273068] mb-2">Nouvelles photos à ajouter :</p>
                   <div className="grid grid-cols-3 gap-2">
                     {photoPreviews.map((src, i) => (
                       <div key={i} className="relative">
                         <img
                           src={src}
                           alt={`Aperçu ${i + 1}`}
-                          className="h-24 w-full object-cover rounded-xl border-2 border-[#6F8D4C]"
+                          className="h-24 w-full object-cover rounded-xl border-2 border-[#273068]"
                         />
                         <button
                           type="button"
@@ -348,12 +351,12 @@ export default function PlanningShow() {
               )}
 
               {/* Bouton ajout */}
-              <label className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed border-[#6F8D4C]/40 px-4 py-3 hover:border-[#6F8D4C] hover:bg-[#F0F7EB] transition-colors">
-                <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-[#6F8D4C]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <label className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed border-[#273068]/30 px-4 py-3 hover:border-[#273068] hover:bg-[#F0F7EB] transition-colors">
+                <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-[#273068]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
                   <polyline points="21 15 16 10 5 21"/>
                 </svg>
-                <span className="text-sm text-[#6F8D4C]">
+                <span className="text-sm text-[#273068]">
                   Ajouter des photos (jpg, png — max 5 Mo chacune)
                 </span>
                 <input
@@ -370,7 +373,7 @@ export default function PlanningShow() {
             <button
               type="submit"
               disabled={savingReport}
-              className="w-full py-3 bg-[#6F8D4C] text-white rounded-xl font-semibold hover:bg-[#5a7a3c] disabled:opacity-50 transition-colors"
+              className="w-full py-3 bg-[#E94E6F] text-white rounded-xl font-semibold hover:bg-[#d63f5f] disabled:opacity-50 transition-colors"
             >
               {savingReport ? "Enregistrement…" : planning.report ? "Mettre à jour le rapport" : "Enregistrer le rapport"}
             </button>

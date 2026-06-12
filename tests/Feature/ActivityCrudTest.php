@@ -85,7 +85,7 @@ it('un utilisateur peut supprimer sa propre activité', function () {
          ->deleteJson("/api/activities/{$activity->idactivities}")
          ->assertOk();
 
-    $this->assertDatabaseMissing('activities', ['idactivities' => $activity->idactivities]);
+    $this->assertSoftDeleted('activities', ['idactivities' => $activity->idactivities]);
 });
 
 it('un utilisateur ne peut pas supprimer l\'activité d\'un autre', function () {
@@ -143,5 +143,5 @@ it('un admin peut supprimer l\'activité de n\'importe quel utilisateur', functi
          ->deleteJson("/api/activities/{$activity->idactivities}")
          ->assertOk();
 
-    $this->assertDatabaseMissing('activities', ['idactivities' => $activity->idactivities]);
+    $this->assertSoftDeleted('activities', ['idactivities' => $activity->idactivities]);
 });

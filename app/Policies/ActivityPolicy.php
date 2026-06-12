@@ -29,24 +29,24 @@ class ActivityPolicy
     public function update(User $user, Activity $activity): bool
     {
         return $user->iduser === $activity->iduser
-            || $user->role->type === 'Admin';
+            || $user->role?->type === 'Admin';
     }
 
     public function delete(User $user, Activity $activity): bool
     {
         return $user->iduser === $activity->iduser
-            || $user->role->type === 'Admin';
+            || $user->role?->type === 'Admin';
     }
 
     public function publish(User $user, Activity $activity): bool
     {
         return $user->iduser === $activity->iduser
-            || $user->role->type === 'Admin';
+            || $user->role?->type === 'Admin';
     }
 
     public function unpublish(User $user, Activity $activity): bool
     {
         return $user->iduser === $activity->iduser
-            || $user->role->type === 'Admin';
+            || $user->role?->type === 'Admin';
     }
 }

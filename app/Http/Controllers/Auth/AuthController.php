@@ -54,12 +54,14 @@ class AuthController extends Controller
             'password'  => ['required', 'min:6'],
         ]);
 
+        $userRole = \App\Models\Role::where('type', 'User')->value('idrole');
+
         $user = User::create([
             'firstname' => $data['firstname'],
             'lastname'  => $data['lastname'],
             'email'     => $data['email'],
             'password'  => Hash::make($data['password']),
-            'idrole'    => 3, 
+            'idrole'    => $userRole,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;

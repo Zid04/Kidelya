@@ -20,4 +20,17 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Rediriger vers login uniquement si un token était présent (session expirée)
+    // Si pas de token, le 401 est normal (page publique) — ne pas rediriger
+    if (error.response?.status === 401 && load("token", null)) {
+      localStorage.removeItem("token")
+      window.location.href = "/login"
+    }
+    return Promise.reject(error)
+  }
+)
+
 export default api

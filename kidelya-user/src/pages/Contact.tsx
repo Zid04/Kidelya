@@ -92,11 +92,11 @@ export default function KidelyaContactPage() {
             Contactez-nous
           </p>
 
-          <h2 className="text-5xl leading-tight font-extrabold text-[#273068] max-w-xl">
+          <h2 className="text-5xl leading-tight font-black text-[#7C67B2] max-w-xl">
             Nous sommes là <br /> pour <span className="text-[#E94E6F]">vous aider</span>
           </h2>
 
-          <p className="mt-6 text-lg text-[#4F5F45] max-w-lg leading-relaxed">
+          <p className="mt-6 text-lg text-[#273068] max-w-lg leading-relaxed">
             Une question, un besoin d'aide ou une suggestion ? Écrivez-nous,
             nous vous répondons avec plaisir.
           </p>
@@ -145,8 +145,8 @@ export default function KidelyaContactPage() {
       {/* Contact Section */}
       <section className="px-6 lg:px-16 py-8 grid lg:grid-cols-[1.2fr_0.8fr] gap-8">
         {/* Form */}
-        <div className="bg-white rounded-[24px] p-8 border border-[#EDE8E0]">
-          <h3 className="text-3xl font-bold text-[#273068] mb-8">
+        <div className="bg-[#FFFEFA] rounded-[24px] p-8 shadow-sm">
+          <h3 className="text-3xl font-black text-[#7C67B2] mb-8">
             Envoyez-nous un message
           </h3>
 
@@ -165,7 +165,7 @@ export default function KidelyaContactPage() {
           <form onSubmit={handleSubmit} noValidate>
             {/* Nom + Mail */}
             <div className="grid md:grid-cols-2 gap-5 mb-5">
-              <div className="flex h-14 items-center gap-3 rounded-[12px] border border-[#E0E0E0] px-4">
+              <div className="flex h-14 items-center gap-3 rounded-[12px] border border-[#D5CDE2] px-4">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-[#BDBDBD]" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
                 </svg>
@@ -180,7 +180,7 @@ export default function KidelyaContactPage() {
                 />
               </div>
 
-              <div className="flex h-14 items-center gap-3 rounded-[12px] border border-[#E0E0E0] px-4">
+              <div className="flex h-14 items-center gap-3 rounded-[12px] border border-[#D5CDE2] px-4">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-[#BDBDBD]" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="4" width="20" height="16" rx="2" /><path d="M2 7l10 7 10-7" />
                 </svg>
@@ -197,7 +197,7 @@ export default function KidelyaContactPage() {
             </div>
 
             {/* Sujet */}
-            <div className="flex h-14 items-center gap-3 rounded-[12px] border border-[#E0E0E0] px-4 mb-5">
+            <div className="flex h-14 items-center gap-3 rounded-[12px] border border-[#D5CDE2] px-4 mb-5">
               <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-[#BDBDBD]" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round">
                 <path d="M4 6h16M4 12h16M4 18h16" />
               </svg>
@@ -213,7 +213,7 @@ export default function KidelyaContactPage() {
             </div>
 
             {/* Message */}
-            <div className="flex gap-3 rounded-[12px] border border-[#E0E0E0] px-4 py-4 mb-5">
+            <div className="flex gap-3 rounded-[12px] border border-[#D5CDE2] px-4 py-4 mb-5">
               <svg viewBox="0 0 24 24" className="mt-0.5 h-5 w-5 shrink-0 text-[#BDBDBD]" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
               </svg>
@@ -242,7 +242,7 @@ export default function KidelyaContactPage() {
               )}
             </button>
 
-            <p className="text-center text-sm text-[#4F5F45] mt-5">
+            <p className="text-center text-sm text-[#273068] mt-5">
               En envoyant ce formulaire, vous acceptez notre{" "}
               <a href="/Confidentialite" className="font-bold text-[#273068] hover:underline">
                 politique de confidentialité
@@ -252,14 +252,14 @@ export default function KidelyaContactPage() {
         </div>
 
         {/* Contact cards */}
-        <div className="bg-white rounded-[24px] p-8 border border-[#EDE8E0]">
-          <h3 className="text-3xl font-bold text-[#273068] mb-8">
+        <div className="bg-[#FFFEFA] rounded-[24px] p-8 shadow-sm">
+          <h3 className="text-3xl font-black text-[#7C67B2] mb-8">
             Autres moyens de nous contacter
           </h3>
 
           <div className="space-y-5">
             <div className="flex gap-4 p-5">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#C3B8D3]">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#D5CDE2]">
                 <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="#273068" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="4" width="20" height="16" rx="2" /><path d="M2 7l10 7 10-7" />
                 </svg>
@@ -267,7 +267,7 @@ export default function KidelyaContactPage() {
               <div>
                 <h4 className="font-bold text-lg text-[#273068]">Par email</h4>
                 <p className="font-medium text-[#273068] mt-1">bonjour@kidelya.com</p>
-                <p className="text-sm text-[#4F5F45] mt-1">Nous vous répondons sous 24h ouvrées.</p>
+                <p className="text-sm text-[#273068] mt-1">Nous vous répondons sous 24h ouvrées.</p>
               </div>
             </div>
 
@@ -280,12 +280,12 @@ export default function KidelyaContactPage() {
               <div>
                 <h4 className="font-bold text-lg text-[#273068]">Par téléphone</h4>
                 <p className="font-medium text-[#273068] mt-1">01 23 45 67 89</p>
-                <p className="text-sm text-[#4F5F45] mt-1">Du lundi au vendredi, 9h – 18h</p>
+                <p className="text-sm text-[#273068] mt-1">Du lundi au vendredi, 9h – 18h</p>
               </div>
             </div>
 
             <div className="flex gap-4 p-5">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#F5C400]">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#F4BB48]">
                 <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="#ffffff" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
                   <line x1="12" y1="17" x2="12.01" y2="17" />
@@ -294,13 +294,13 @@ export default function KidelyaContactPage() {
               <div>
                 <h4 className="font-bold text-lg text-[#273068]">Aide en ligne</h4>
                 <p className="font-medium text-[#273068] mt-1">Consultez notre FAQ</p>
-                <p className="text-sm text-[#4F5F45] mt-1">Des réponses à vos questions les plus fréquentes.</p>
+                <p className="text-sm text-[#273068] mt-1">Des réponses à vos questions les plus fréquentes.</p>
               </div>
             </div>
 
             <a
               href="/faq"
-              className="mt-2 flex items-center justify-center gap-2 rounded-[16px] px-6 py-4 text-sm font-semibold text-[#273068] transition hover:opacity-90 bg-[#FDEECE]"
+              className="mt-2 flex items-center justify-center gap-2 rounded-[16px] px-6 py-4 text-sm font-semibold text-[#7C67B2] transition hover:bg-[#c5bbd2] bg-[#D5CDE2]"
             >
               Aller à la FAQ
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="#273068" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -313,11 +313,11 @@ export default function KidelyaContactPage() {
 
       {/* FAQ */}
       <section className="px-6 lg:px-16 py-20 text-center relative">
-        <h3 className="text-4xl font-bold text-[#273068]">
+        <h3 className="text-4xl font-black text-[#7C67B2]">
           Besoin d'une réponse rapide ?
         </h3>
 
-        <p className="text-[#4F5F45] mt-4 text-lg">
+        <p className="text-[#273068] mt-4 text-lg">
           Consultez notre FAQ, vous y trouverez peut-être la réponse à votre question.
         </p>
 
@@ -328,14 +328,14 @@ export default function KidelyaContactPage() {
                 {item.icon}
               </div>
               <h4 className="text-xl font-bold text-[#273068]">{item.title}</h4>
-              <p className="text-[#4F5F45] mt-4 leading-relaxed text-sm">{item.description}</p>
+              <p className="text-[#273068] mt-4 leading-relaxed text-sm">{item.description}</p>
             </div>
           ))}
         </div>
 
         <a
           href="/faq"
-          className="mt-10 inline-block border border-[#273068]/30 text-[#273068] rounded-[12px] px-8 py-4 font-semibold hover:bg-[#f6f6f6] transition"
+          className="mt-10 inline-block bg-[#D5CDE2] text-[#7C67B2] rounded-[12px] px-8 py-4 font-semibold hover:bg-[#c5bbd2] transition"
         >
           Voir toutes les questions fréquentes
         </a>

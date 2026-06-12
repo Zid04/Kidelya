@@ -52,6 +52,12 @@ html.dark .bg-white    { background-color: var(--app-card)   !important; }
 html.dark .bg-gray-50  { background-color: var(--app-subtle) !important; }
 html.dark .bg-gray-100 { background-color: var(--app-subtle) !important; }
 
+/* Palette Kidelya — fond carte crème */
+html.dark .bg-\[\#FFFEFA\] { background-color: var(--app-card) !important; }
+
+/* Palette Kidelya — fond secondaire violet clair */
+html.dark .bg-\[\#D5CDE2\] { background-color: var(--app-subtle) !important; }
+
 /* Fonds arbitraires courants */
 html.dark .bg-\[\#FAF9F6\],
 html.dark .bg-\[\#F7F3EE\],
@@ -66,13 +72,21 @@ html.dark .bg-\[\#FFF4CC\],
 html.dark .bg-\[\#F7F0E8\],
 html.dark .bg-\[\#FFF5F7\],
 html.dark .bg-\[\#F5F0FF\],
-html.dark .bg-\[\#FFE7ED\] { background-color: var(--app-subtle) !important; }
+html.dark .bg-\[\#FFE7ED\],
+html.dark .bg-\[\#EEF0F8\],
+html.dark .bg-\[\#F1B9C3\],
+html.dark .bg-\[\#D8EAF2\],
+html.dark .bg-\[\#CDC1DC\],
+html.dark .bg-\[\#F0F7D1\],
+html.dark .bg-\[\#DCF0D0\],
+html.dark .bg-\[\#FEF3CC\] { background-color: var(--app-subtle) !important; }
 
 /* Bordures */
 html.dark .border-gray-100,
 html.dark .border-gray-200,
 html.dark .border-\[\#F1D9B5\],
-html.dark .border-\[\#E8DDD0\] { border-color: var(--app-border) !important; }
+html.dark .border-\[\#E8DDD0\],
+html.dark .border-\[\#D5CDE2\] { border-color: var(--app-border) !important; }
 
 /* Textes */
 html.dark .text-\[\#21164F\],
@@ -80,6 +94,7 @@ html.dark .text-\[\#2F236D\],
 html.dark .text-\[\#273068\] { color: var(--app-text)  !important; }
 html.dark .text-\[\#4F5F45\],
 html.dark .text-\[\#6F8D4C\],
+html.dark .text-\[\#7C67B2\],
 html.dark .text-gray-400,
 html.dark .text-gray-500,
 html.dark .text-gray-600    { color: var(--app-muted) !important; }
@@ -111,6 +126,12 @@ html.dark .shadow-md { box-shadow: 0 4px 8px 0 rgb(0 0 0 / 0.4) !important; }
 
 /* Hover gris */
 html.dark .hover\:bg-gray-50:hover { background-color: var(--app-subtle) !important; }
+
+/* ── Hover des liens sidebar ── */
+.sidebar-nav-link:hover {
+  background-color: var(--color-sidebar-hover-bg) !important;
+  color: #273068 !important;
+}
 
 /* ── Scrollbar masquée ── */
 .scrollbar-hide {

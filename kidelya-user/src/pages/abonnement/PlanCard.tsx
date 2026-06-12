@@ -57,8 +57,8 @@ export default function PlanCard({ plan, isLoading, onSelect }: Props) {
 
   return (
     <article
-      className={`flex w-full max-w-[250px] flex-col overflow-hidden rounded-2xl sm:w-[250px] ${
-        isPopular ? "shadow-xl md:-translate-y-5 backdrop-blur-sm" : "shadow-md backdrop-blur-sm"
+      className={`flex w-full max-w-[250px] flex-col overflow-hidden rounded-2xl bg-[#FFFEFA] sm:w-[250px] ${
+        isPopular ? "shadow-xl md:-translate-y-5" : "shadow-md"
       }`}
     >
       {isPopular && (
@@ -92,7 +92,7 @@ export default function PlanCard({ plan, isLoading, onSelect }: Props) {
           {PLAN_FEATURES[plan.name].map((feature) => (
             <li key={feature} className="flex items-start gap-[11px]">
               <CheckIcon active={isPopular} />
-              <span className="text-[11px] font-light leading-[19px] text-black">{feature}</span>
+              <span className="text-[11px] font-light leading-[19px] text-[#273068]">{feature}</span>
             </li>
           ))}
         </ul>
@@ -104,7 +104,7 @@ export default function PlanCard({ plan, isLoading, onSelect }: Props) {
             disabled={isLoading}
             className={`w-full rounded-[9px] px-4 py-2.5 text-sm font-medium transition ${
               isFree
-                ? "border border-[#273068] bg-transparent text-[#273068] hover:bg-[#f6f6f6]"
+                ? "bg-[#D5CDE2] text-[#273068] hover:bg-[#c5bbd2]"
                 : "bg-[#E94E6F] text-white hover:bg-[#d63f5f]"
             } disabled:cursor-not-allowed disabled:opacity-50`}
           >

@@ -46,4 +46,9 @@ class IdeaPolicy
     {
         return $user->iduser === $idea->iduser;
     }
+
+    public function convert(User $user, Idea $idea): bool
+    {
+        return $user->iduser === $idea->iduser;
+    }
 }

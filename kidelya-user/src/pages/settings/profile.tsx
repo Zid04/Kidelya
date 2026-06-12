@@ -15,12 +15,10 @@ export default function ProfileSettingsPage() {
   const { user, loading, refreshUser } = useUser()
   const [step, setStep] = useState<Step>("view")
 
-  // Étape 2 : vérification mot de passe
   const [password, setPassword] = useState("")
   const [passwordError, setPasswordError] = useState<string | null>(null)
   const [checkingPassword, setCheckingPassword] = useState(false)
 
-  // Étape 3 : édition
   const [form, setForm] = useState({ firstname: "", lastname: "", email: "" })
   const [errors, setErrors] = useState<{ firstname?: string; lastname?: string; email?: string }>({})
   const [saved, setSaved] = useState(false)
@@ -33,7 +31,6 @@ export default function ProfileSettingsPage() {
 
     try {
       await api.post("/login", { email: user?.email, password })
-      // Mot de passe correct → passe en mode édition
       setForm({
         firstname: user?.firstname ?? "",
         lastname:  user?.lastname  ?? "",
@@ -83,29 +80,29 @@ export default function ProfileSettingsPage() {
   }
 
   if (loading) {
-    return <p className="text-sm text-gray-400">Chargement…</p>
+    return <p className="text-sm text-[#273068]">Chargement…</p>
   }
 
   return (
     <div className="mx-auto max-w-xl space-y-8">
 
-      {/* ── ÉTAPE 1 : Vue lecture seule ── */}
+      {/* Vue lecture seule */}
       {step === "view" && (
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-black text-[#273068]">Mon profil</h2>
-          <p className="mt-1 text-sm text-gray-400">Vos informations personnelles actuelles.</p>
+        <div className="rounded-2xl bg-[#FFFEFA] p-6 shadow-sm">
+          <h2 className="text-xl font-black text-[#7C67B2]">Mon profil</h2>
+          <p className="mt-1 text-sm text-[#273068]">Vos informations personnelles actuelles.</p>
 
-          <div className="mt-6 space-y-4">
-            <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3">
-              <span className="text-xs font-semibold text-gray-400">Prénom</span>
+          <div className="mt-6 space-y-3">
+            <div className="flex items-center justify-between rounded-xl bg-[#D5CDE2] px-4 py-3">
+              <span className="text-xs font-semibold text-[#7C67B2]">Prénom</span>
               <span className="text-sm font-bold text-[#273068]">{user?.firstname}</span>
             </div>
-            <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3">
-              <span className="text-xs font-semibold text-gray-400">Nom</span>
+            <div className="flex items-center justify-between rounded-xl bg-[#D5CDE2] px-4 py-3">
+              <span className="text-xs font-semibold text-[#7C67B2]">Nom</span>
               <span className="text-sm font-bold text-[#273068]">{user?.lastname}</span>
             </div>
-            <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3">
-              <span className="text-xs font-semibold text-gray-400">Adresse e-mail</span>
+            <div className="flex items-center justify-between rounded-xl bg-[#D5CDE2] px-4 py-3">
+              <span className="text-xs font-semibold text-[#7C67B2]">Adresse e-mail</span>
               <span className="text-sm font-bold text-[#273068]">{user?.email}</span>
             </div>
           </div>
@@ -113,7 +110,7 @@ export default function ProfileSettingsPage() {
           <button
             type="button"
             onClick={() => setStep("password")}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#273068] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#1e2550]"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#7C67B2] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#6a58a0]"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
@@ -124,24 +121,24 @@ export default function ProfileSettingsPage() {
         </div>
       )}
 
-      {/* ── ÉTAPE 2 : Vérification mot de passe ── */}
+      {/* Vérification mot de passe */}
       {step === "password" && (
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl bg-[#FFFEFA] p-6 shadow-sm">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EEF0F8]">
-              <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#273068]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D5CDE2]">
+              <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#7C67B2]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
               </svg>
             </div>
             <div>
-              <h2 className="text-lg font-black text-[#273068]">Confirmer votre identité</h2>
-              <p className="text-xs text-gray-400">Entrez votre mot de passe actuel pour continuer.</p>
+              <h2 className="text-lg font-black text-[#7C67B2]">Confirmer votre identité</h2>
+              <p className="text-xs text-[#273068]">Entrez votre mot de passe actuel pour continuer.</p>
             </div>
           </div>
 
           <form onSubmit={handleVerifyPassword} className="space-y-4">
             <div className="grid gap-1.5">
-              <Label htmlFor="current-password" className="font-semibold text-[#273068]">
+              <Label htmlFor="current-password" className="font-semibold text-[#7C67B2]">
                 Mot de passe actuel
               </Label>
               <PasswordInput
@@ -170,7 +167,7 @@ export default function ProfileSettingsPage() {
               <button
                 type="button"
                 onClick={handleCancel}
-                className="flex-1 rounded-xl border border-gray-200 text-sm font-semibold text-gray-500 hover:bg-gray-50"
+                className="flex-1 rounded-xl bg-[#D5CDE2] text-sm font-semibold text-[#273068] hover:bg-[#c5bbd2]"
               >
                 Annuler
               </button>
@@ -179,25 +176,25 @@ export default function ProfileSettingsPage() {
         </div>
       )}
 
-      {/* ── ÉTAPE 3 : Formulaire d'édition ── */}
+      {/* Formulaire d'édition */}
       {step === "edit" && (
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl bg-[#FFFEFA] p-6 shadow-sm">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-50">
-              <svg viewBox="0 0 24 24" className="h-5 w-5 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D5CDE2]">
+              <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#7C67B2]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
               </svg>
             </div>
             <div>
-              <h2 className="text-lg font-black text-[#273068]">Modifier mes informations</h2>
-              <p className="text-xs text-gray-400">Identité vérifiée. Vous pouvez maintenant modifier vos données.</p>
+              <h2 className="text-lg font-black text-[#7C67B2]">Modifier mes informations</h2>
+              <p className="text-xs text-[#273068]">Identité vérifiée. Vous pouvez maintenant modifier vos données.</p>
             </div>
           </div>
 
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-1.5">
-                <Label htmlFor="firstname" className="font-semibold text-[#273068]">Prénom</Label>
+                <Label htmlFor="firstname" className="font-semibold text-[#7C67B2]">Prénom</Label>
                 <Input
                   id="firstname"
                   name="firstname"
@@ -209,7 +206,7 @@ export default function ProfileSettingsPage() {
                 <InputError message={errors.firstname ?? null} />
               </div>
               <div className="grid gap-1.5">
-                <Label htmlFor="lastname" className="font-semibold text-[#273068]">Nom</Label>
+                <Label htmlFor="lastname" className="font-semibold text-[#7C67B2]">Nom</Label>
                 <Input
                   id="lastname"
                   name="lastname"
@@ -223,7 +220,7 @@ export default function ProfileSettingsPage() {
             </div>
 
             <div className="grid gap-1.5">
-              <Label htmlFor="email" className="font-semibold text-[#273068]">Adresse e-mail</Label>
+              <Label htmlFor="email" className="font-semibold text-[#7C67B2]">Adresse e-mail</Label>
               <Input
                 id="email"
                 name="email"
@@ -240,21 +237,21 @@ export default function ProfileSettingsPage() {
               <Button
                 type="submit"
                 disabled={saving}
-                className="flex-1 rounded-xl bg-[#273068] text-sm font-bold text-white hover:bg-[#1e2550]"
+                className="flex-1 rounded-xl bg-[#7C67B2] text-sm font-bold text-white hover:bg-[#6a58a0]"
               >
                 {saving ? "Enregistrement…" : "Enregistrer les modifications"}
               </Button>
               <button
                 type="button"
                 onClick={handleCancel}
-                className="flex-1 rounded-xl border border-gray-200 text-sm font-semibold text-gray-500 hover:bg-gray-50"
+                className="flex-1 rounded-xl bg-[#D5CDE2] text-sm font-semibold text-[#273068] hover:bg-[#c5bbd2]"
               >
                 Annuler
               </button>
             </div>
 
             {saved && (
-              <p className="text-center text-sm font-semibold text-green-600">
+              <p className="text-center text-sm font-semibold text-[#6F8D4C]">
                 ✓ Modifications enregistrées avec succès
               </p>
             )}
@@ -262,7 +259,6 @@ export default function ProfileSettingsPage() {
         </div>
       )}
 
-      {/* ── Suppression de compte ── */}
       <DeleteUser />
     </div>
   )

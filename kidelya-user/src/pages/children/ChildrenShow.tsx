@@ -63,8 +63,14 @@ export default function ChildrenShow() {
   return (
     <div className="min-h-screen bg-white px-6 py-10 max-w-5xl mx-auto">
 
-      <div className="flex justify-between items-center mb-10">
-        <h1 className="text-3xl font-bold text-[#93197D] flex items-center gap-2">
+      <div className="flex items-center gap-3 mb-10">
+        <button
+          onClick={() => navigate(-1)}
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-[#FDC600]/40 shadow-sm hover:bg-[#FFF3E0] text-[#93197D]"
+        >
+          ←
+        </button>
+        <h1 className="text-3xl font-bold text-[#93197D] flex items-center gap-2 flex-1">
           {child.firstname} <span className="text-[#FDC600]">🌸</span>
         </h1>
         <div className="flex gap-3">

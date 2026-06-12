@@ -8,6 +8,7 @@ use App\Models\Pack;
 use App\Models\PackUser;
 use App\Models\UserSubscription;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class MeController extends Controller
 {
@@ -88,30 +89,51 @@ class MeController extends Controller
             ]);
         }
 
+        // Activités achetées individuellement
         $purchasedActivityIds = ActivityPurchase::where('user_id', $user->iduser)
             ->pluck('activity_id')
             ->toArray();
 
-        $activities = ActivityPurchase::where('user_id', $user->iduser)
-            ->with('activity')
-            ->get()
-            ->map(fn ($p) => [
-                'idactivities' => $p->activity?->idactivities,
-                'title'        => $p->activity?->title,
-                'photourl'     => $p->activity?->photourl,
-                'agemin'       => $p->activity?->agemin,
-                'agemax'       => $p->activity?->agemax,
-                'duration'     => $p->activity?->duration,
-                'credit_price' => $p->activity?->credit_price,
-            ])
-            ->filter(fn ($a) => $a['idactivities'])
-            ->values();
-
-        $purchasedPackIds = PackUser::where('iduser', $user->iduser)
+        // Packs actifs non expirés
+        $activePackIds = PackUser::where('iduser', $user->iduser)
+            ->where('status', 'active')
+            ->where(function ($q) {
+                $q->whereNull('expirationdate')->orWhere('expirationdate', '>=', now());
+            })
             ->pluck('idpack')
             ->toArray();
 
+        // Activités issues des packs actifs
+        $packActivityIds = !empty($activePackIds)
+            ? DB::table('packs_activities')
+                ->whereIn('idpack', $activePackIds)
+                ->pluck('idactivities')
+                ->toArray()
+            : [];
+
+        // Fusion : achats individuels + activités de packs
+        $allActivityIds = array_values(array_unique(array_merge($purchasedActivityIds, $packActivityIds)));
+
+        $activities = Activity::whereIn('idactivities', $allActivityIds)
+            ->where('is_published', true)
+            ->get()
+            ->map(fn ($a) => [
+                'idactivities' => $a->idactivities,
+                'title'        => $a->title,
+                'photourl'     => $a->photourl,
+                'agemin'       => $a->agemin,
+                'agemax'       => $a->agemax,
+                'duration'     => $a->duration,
+                'credit_price' => $a->credit_price,
+            ])
+            ->values();
+
+        // Seulement les packs actifs non expirés
         $packs = PackUser::where('iduser', $user->iduser)
+            ->where('status', 'active')
+            ->where(function ($q) {
+                $q->whereNull('expirationdate')->orWhere('expirationdate', '>=', now());
+            })
             ->with(['pack' => fn ($q) => $q->withCount('activities')])
             ->get()
             ->map(fn ($pu) => [
@@ -123,6 +145,8 @@ class MeController extends Controller
             ])
             ->filter(fn ($p) => $p['idpack'])
             ->values();
+
+        $purchasedPackIds = $activePackIds;
 
         $recommended_activities = Activity::where('is_published', true)
             ->where('is_purchasable', true)

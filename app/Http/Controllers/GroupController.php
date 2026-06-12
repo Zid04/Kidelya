@@ -20,6 +20,8 @@ class GroupController extends Controller
 
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', Group::class);
+
         return response()->json([
             'data' => $this->groupService->getAllForUser(auth()->user())
         ]);
@@ -44,9 +46,15 @@ class GroupController extends Controller
     {
         $this->authorize('view', $group);
 
-        return response()->json([
-            'data' => $group->load('children')
-        ]);
+        $group->load('children');
+
+        try {
+            $group->load('activities');
+        } catch (\Exception $e) {
+            $group->setRelation('activities', collect());
+        }
+
+        return response()->json(['data' => $group]);
     }
 
     public function update(UpdateGroupRequest $request, Group $group): JsonResponse
@@ -97,6 +105,36 @@ class GroupController extends Controller
 
         return response()->json([
             'message' => 'Child removed from group successfully'
+        ]);
+    }
+
+    public function addActivity(Group $group, Request $request): JsonResponse
+    {
+        $this->authorize('update', $group);
+
+        $request->validate([
+            'activity_id' => 'required|exists:activities,idactivities',
+        ]);
+
+        $this->groupService->addActivity($group, $request->activity_id);
+
+        return response()->json([
+            'message' => 'Activity added to group successfully'
+        ]);
+    }
+
+    public function removeActivity(Group $group, Request $request): JsonResponse
+    {
+        $this->authorize('update', $group);
+
+        $request->validate([
+            'activity_id' => 'required|exists:activities,idactivities',
+        ]);
+
+        $this->groupService->removeActivity($group, $request->activity_id);
+
+        return response()->json([
+            'message' => 'Activity removed from group successfully'
         ]);
     }
 }

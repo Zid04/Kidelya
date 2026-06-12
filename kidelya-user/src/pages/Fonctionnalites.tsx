@@ -216,7 +216,7 @@ export default function FonctionnalitesPage() {
             <span className="text-[#E94E6F]">souvenirs</span> des enfants
           </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-8 text-[#4F5F45]">
+          <p className="mt-6 max-w-xl text-lg leading-8 text-[#273068]">
             Kidelya réunit tout ce dont vous avez besoin pour simplifier votre
             quotidien et partager de beaux moments en famille ou en groupe.
           </p>
@@ -230,7 +230,7 @@ export default function FonctionnalitesPage() {
             </Link>
             <Link
               to="/abonnements"
-              className="rounded-[12px] border border-[#273068] bg-white px-7 py-4 text-sm font-semibold text-[#273068] hover:bg-[#f6f6f6]"
+              className="rounded-[12px] bg-[#D5CDE2] px-7 py-4 text-sm font-semibold text-[#273068] hover:bg-[#c5bbd2]"
             >
               Voir les abonnements
             </Link>
@@ -245,7 +245,7 @@ export default function FonctionnalitesPage() {
           {featureCards.map((item) => (
             <article
               key={item.title}
-              className="flex items-start gap-4 rounded-[18px] p-5 transition hover:-translate-y-1"
+              className="flex items-start gap-4 rounded-[18px] bg-[#FFFEFA] p-5 shadow-sm transition hover:-translate-y-1"
             >
               <div
                 className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${item.color}`}
@@ -258,11 +258,11 @@ export default function FonctionnalitesPage() {
               </div>
 
               <div>
-                <h2 className="text-[15px] font-extrabold text-[#273068]">
+                <h2 className="text-[15px] font-extrabold text-[#7C67B2]">
                   {item.title}
                 </h2>
 
-                <p className="mt-2 text-[13px] leading-6 text-[#4F5F45]">
+                <p className="mt-2 text-[13px] leading-6 text-[#273068]">
                   {item.desc}
                 </p>
               </div>
@@ -276,15 +276,15 @@ export default function FonctionnalitesPage() {
         <div className="grid gap-6 md:grid-cols-2">
 
           {/* SECTION 01 — image gauche, texte droite */}
-          <div className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+          <div className="flex flex-row items-center gap-5 rounded-[20px] bg-[#FFFEFA] p-8 shadow-sm">
             <div className="w-1/2 shrink-0 overflow-hidden rounded-[18px]">
               <img src={imgBibliotheque} alt="Bibliothèque d'activités" className="h-full w-full object-cover" />
             </div>
             <div className="flex-1">
               <span className="rounded-full bg-[#FFE1EA] px-3 py-1 text-xs font-bold text-[#E94E6F]">01</span>
-              <h2 className="mt-4 text-xl font-extrabold leading-tight">Une bibliothèque riche et inspirante</h2>
-              <p className="mt-3 text-[14px] leading-7 text-[#4F5F45]">Trouvez rapidement des activités adaptées à chaque âge et chaque envie.</p>
-              <ul className="mt-4 space-y-2 text-[13px] text-[#4F5F45]">
+              <h2 className="mt-4 text-xl font-extrabold leading-tight text-[#7C67B2]">Une bibliothèque riche et inspirante</h2>
+              <p className="mt-3 text-[14px] leading-7 text-[#273068]">Trouvez rapidement des activités adaptées à chaque âge et chaque envie.</p>
+              <ul className="mt-4 space-y-2 text-[13px] text-[#273068]">
                 <li>✓ Recherche par âge</li>
                 <li>✓ Recherche par thème</li>
                 <li>✓ Catégories variées</li>
@@ -294,12 +294,12 @@ export default function FonctionnalitesPage() {
           </div>
 
           {/* SECTION 02 — texte gauche, image droite */}
-          <div className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+          <div className="flex flex-row items-center gap-5 rounded-[20px] bg-[#FFFEFA] p-8 shadow-sm">
             <div className="flex-1">
               <span className="rounded-full bg-[#FFE1EA] px-3 py-1 text-xs font-bold text-[#E94E6F]">02</span>
-              <h2 className="mt-4 text-xl font-extrabold leading-tight">Créez vos propres activités</h2>
-              <p className="mt-3 text-[14px] leading-7 text-[#4F5F45]">Ajoutez facilement vos idées et personnalisez vos activités.</p>
-              <ul className="mt-4 space-y-2 text-[13px] text-[#4F5F45]">
+              <h2 className="mt-4 text-xl font-extrabold leading-tight text-[#7C67B2]">Créez vos propres activités</h2>
+              <p className="mt-3 text-[14px] leading-7 text-[#273068]">Ajoutez facilement vos idées et personnalisez vos activités.</p>
+              <ul className="mt-4 space-y-2 text-[13px] text-[#273068]">
                 <li>✓ Ajouter un titre et une description</li>
                 <li>✓ Ajouter des photos</li>
                 <li>✓ Choisir une catégorie</li>
@@ -319,12 +319,12 @@ export default function FonctionnalitesPage() {
         <div className="grid gap-6 md:grid-cols-2">
 
           {/* SECTION 03 — texte gauche, image droite */}
-          <div className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+          <div className="flex flex-row items-center gap-5 rounded-[20px] bg-[#FFFEFA] p-8 shadow-sm">
             <div className="flex-1">
               <span className="rounded-full bg-[#E8F7D9] px-3 py-1 text-xs font-bold text-[#67A63B]">03</span>
-              <h2 className="mt-4 text-xl font-extrabold">Planifiez en toute simplicité</h2>
-              <p className="mt-3 text-[14px] leading-7 text-[#4F5F45]">Organisez votre semaine grâce au calendrier intégré.</p>
-              <ul className="mt-4 space-y-2 text-[13px] text-[#4F5F45]">
+              <h2 className="mt-4 text-xl font-extrabold text-[#7C67B2]">Planifiez en toute simplicité</h2>
+              <p className="mt-3 text-[14px] leading-7 text-[#273068]">Organisez votre semaine grâce au calendrier intégré.</p>
+              <ul className="mt-4 space-y-2 text-[13px] text-[#273068]">
                 <li>✓ Vue jour, semaine ou mois</li>
                 <li>✓ Organisez vos activités</li>
                 <li>✓ Rappels et notifications</li>
@@ -337,24 +337,24 @@ export default function FonctionnalitesPage() {
           </div>
 
           {/* SECTION 04 — texte gauche, image droite */}
-          <div className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+          <div className="flex flex-row items-center gap-5 rounded-[20px] bg-[#FFFEFA] p-8 shadow-sm">
             <div className="flex-1">
-              <span className="rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">04</span>
-              <h2 className="mt-4 text-xl font-extrabold">Trouvez rapidement ce dont vous avez besoin</h2>
-              <p className="mt-3 text-[14px] leading-7 text-[#4F5F45]">Des outils de recherche performants pour gagner du temps.</p>
-              <ul className="mt-4 space-y-2 text-[13px] text-[#4F5F45]">
+              <span className="rounded-full bg-[#D5CDE2] px-3 py-1 text-xs font-bold text-[#7C67B2]">04</span>
+              <h2 className="mt-4 text-xl font-extrabold text-[#7C67B2]">Trouvez rapidement ce dont vous avez besoin</h2>
+              <p className="mt-3 text-[14px] leading-7 text-[#273068]">Des outils de recherche performants pour gagner du temps.</p>
+              <ul className="mt-4 space-y-2 text-[13px] text-[#273068]">
                 <li>✓ Recherche par mot-clé</li>
                 <li>✓ Filtre par âge</li>
                 <li>✓ Filtre par catégorie</li>
                 <li>✓ Filtre par date</li>
               </ul>
             </div>
-            <div className="w-1/2 shrink-0 overflow-hidden rounded-[18px] bg-[#F8F4FF] p-6">
-              <div className="space-y-4 rounded-[18px] bg-white p-4 shadow">
-                <div className="h-8 rounded-lg bg-[#F4F4F4]" />
-                <div className="h-8 rounded-lg bg-[#F4F4F4]" />
-                <div className="h-8 rounded-lg bg-[#F4F4F4]" />
-                <button className="w-full rounded-lg bg-[#273068] py-2 text-sm font-semibold text-white">Rechercher</button>
+            <div className="w-1/2 shrink-0 overflow-hidden rounded-[18px] bg-[#D5CDE2] p-6">
+              <div className="space-y-4 rounded-[18px] bg-[#FFFEFA] p-4 shadow-sm">
+                <div className="h-8 rounded-lg bg-[#D5CDE2]/60" />
+                <div className="h-8 rounded-lg bg-[#D5CDE2]/60" />
+                <div className="h-8 rounded-lg bg-[#D5CDE2]/60" />
+                <button className="w-full rounded-lg bg-[#7C67B2] py-2 text-sm font-semibold text-white">Rechercher</button>
               </div>
             </div>
           </div>
@@ -367,21 +367,21 @@ export default function FonctionnalitesPage() {
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
 
           {/* 05 */}
-          <article className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+          <article className="flex flex-row items-center gap-5 rounded-[20px] bg-[#FFFEFA] p-8 shadow-sm">
             <div className="flex-1">
               <span className="rounded-full bg-[#FFE1EA] px-3 py-1 text-xs font-bold text-[#E94E6F]">
                 05
               </span>
 
-              <h3 className="mt-5 text-[22px] font-extrabold text-[#273068]">
+              <h3 className="mt-5 text-[22px] font-extrabold text-[#7C67B2]">
                 Des packs adaptés à toutes les envies
               </h3>
 
-              <p className="mt-4 text-[14px] leading-7 text-[#4F5F45]">
+              <p className="mt-4 text-[14px] leading-7 text-[#273068]">
                 Des activités variées pour toutes les saisons et tous les thèmes.
               </p>
 
-              <ul className="mt-5 space-y-3 text-[13px] text-[#4F5F45]">
+              <ul className="mt-5 space-y-3 text-[13px] text-[#273068]">
                 <li>✓ Activités thématiques</li>
                 <li>✓ Packs variés</li>
                 <li>✓ Contenus adaptés</li>
@@ -400,21 +400,21 @@ export default function FonctionnalitesPage() {
           </article>
 
           {/* 06 */}
-          <article className="flex flex-row items-center gap-5 rounded-[20px] p-8">
+          <article className="flex flex-row items-center gap-5 rounded-[20px] bg-[#FFFEFA] p-8 shadow-sm">
             <div className="flex-1">
-              <span className="rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">
+              <span className="rounded-full bg-[#D5CDE2] px-3 py-1 text-xs font-bold text-[#7C67B2]">
                 06
               </span>
 
-              <h3 className="mt-5 text-[22px] font-extrabold text-[#273068]">
+              <h3 className="mt-5 text-[22px] font-extrabold text-[#7C67B2]">
                 Une solution adaptée à vos besoins
               </h3>
 
-              <p className="mt-4 text-[14px] leading-7 text-[#4F5F45]">
+              <p className="mt-4 text-[14px] leading-7 text-[#273068]">
                 Choisissez entre achat à l'unité et accès illimité.
               </p>
 
-              <ul className="mt-5 space-y-3 text-[13px] text-[#4F5F45]">
+              <ul className="mt-5 space-y-3 text-[13px] text-[#273068]">
                 <li>✓ Flexible</li>
                 <li>✓ Simple à utiliser</li>
                 <li>✓ Accessible partout</li>
@@ -422,7 +422,7 @@ export default function FonctionnalitesPage() {
 
               <Link
                 to="/abonnements"
-                className="mt-7 inline-flex rounded-[12px] bg-[#273068] px-5 py-3 text-sm font-semibold text-white"
+                className="mt-7 inline-flex rounded-[12px] bg-[#7C67B2] px-5 py-3 text-sm font-semibold text-white"
               >
                 Découvrir les formules
               </Link>
@@ -433,20 +433,20 @@ export default function FonctionnalitesPage() {
           </article>
 
           {/* 07 */}
-          <article className="rounded-[20px] p-8">
+          <article className="rounded-[20px] bg-[#FFFEFA] p-8 shadow-sm">
             <span className="rounded-full bg-[#E8F7D9] px-3 py-1 text-xs font-bold text-[#67A63B]">
               07
             </span>
 
-            <h3 className="mt-5 text-[22px] font-extrabold text-[#273068]">
+            <h3 className="mt-5 text-[22px] font-extrabold text-[#7C67B2]">
               Une plateforme pensée pour tous
             </h3>
 
-            <p className="mt-4 text-[14px] leading-7 text-[#4F5F45]">
+            <p className="mt-4 text-[14px] leading-7 text-[#273068]">
               Une expérience claire, lisible et adaptée à tous.
             </p>
 
-            <ul className="mt-5 space-y-3 text-[13px] text-[#4F5F45]">
+            <ul className="mt-5 space-y-3 text-[13px] text-[#273068]">
               <li>✓ Navigation intuitive</li>
               <li>✓ Interface moderne</li>
               <li>✓ Utilisation fluide</li>
@@ -455,7 +455,7 @@ export default function FonctionnalitesPage() {
             <div className="mt-6 flex gap-4">
               {/* Parent */}
               <div className="flex flex-1 flex-col items-center gap-1 text-center">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EAF3FF]">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#D5CDE2]">
                   <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="#273068" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
                   </svg>
@@ -494,16 +494,16 @@ export default function FonctionnalitesPage() {
 
       {/* SECTION 08 */}
       <section className="mx-auto max-w-7xl px-6 pb-16">
-        <div className="rounded-[20px] p-8">
+        <div className="rounded-[20px] bg-[#FFFEFA] p-8 shadow-sm">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
 
             {/* Message — en premier */}
             <div className="lg:w-56 shrink-0">
-              <span className="rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">08</span>
-              <h2 className="mt-4 text-2xl font-extrabold text-[#273068]">
+              <span className="rounded-full bg-[#D5CDE2] px-3 py-1 text-xs font-bold text-[#7C67B2]">08</span>
+              <h2 className="mt-4 text-2xl font-extrabold text-[#7C67B2]">
                 Un service fiable et sécurisé
               </h2>
-              <p className="mt-3 text-sm leading-6 text-[#4F5F45]">
+              <p className="mt-3 text-sm leading-6 text-[#273068]">
                 Vos données sont protégées et votre expérience reste notre priorité.
               </p>
             </div>
@@ -512,11 +512,11 @@ export default function FonctionnalitesPage() {
             <div className="flex flex-1 flex-wrap gap-6 lg:flex-nowrap">
               {reliableFeatures.map((item) => (
                 <div key={item.title} className="flex flex-1 flex-col items-center text-center min-w-[120px]">
-                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full">
+                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#D5CDE2]">
                     <ReliableIcon kind={item.icon as "shield" | "check" | "bolt" | "heart"} />
                   </div>
                   <h3 className="font-bold text-[#273068]">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-[#4F5F45]">{item.desc}</p>
+                  <p className="mt-2 text-sm leading-6 text-[#273068]">{item.desc}</p>
                 </div>
               ))}
             </div>

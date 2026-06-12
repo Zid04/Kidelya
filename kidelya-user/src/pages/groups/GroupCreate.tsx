@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom"
 import api from "@/api/axios"
 
 interface Child {
-  idchild: number
+  idchildren: number
   firstname: string
-  avatar?: string | null
+  photourl?: string | null
 }
 
 export default function GroupCreate() {
@@ -18,12 +18,13 @@ export default function GroupCreate() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
   useEffect(() => {
     async function load() {
       try {
-        const res = await api.get("/me/children")
-        setAllChildren(res.data.children || [])
+        const res = await api.get("/children")
+        setAllChildren(res.data.data || [])
       } catch (e) {
         setError("Impossible de charger les enfants.")
       } finally {
@@ -51,7 +52,8 @@ export default function GroupCreate() {
         name,
         children: selectedChildren,
       })
-      navigate("/groups")
+      setSuccess(true)
+      setTimeout(() => navigate("/groups"), 1500)
     } catch (e) {
       setError("Impossible de créer le groupe.")
     } finally {
@@ -59,105 +61,66 @@ export default function GroupCreate() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-[#6F8D4C]">
-        Chargement…
-      </div>
-    )
-  }
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-[#273068]">Chargement…</div>
 
   return (
     <div className="min-h-screen bg-white px-6 py-10 max-w-3xl mx-auto">
 
-      <h1 className="text-3xl font-bold text-[#93197D] mb-8">
-        Créer un groupe 🌸
-      </h1>
+      <div className="flex items-center gap-3 mb-8">
+        <button type="button" onClick={() => navigate(-1)}
+          className="-ml-4 px-4 py-2 bg-[#E94E6F] text-white rounded-lg font-semibold hover:bg-[#d63f5f]">
+          Retour
+        </button>
+        <h1 className="text-3xl font-bold text-[#7C67B2]">Créer un groupe</h1>
+      </div>
 
-      {error && (
-        <div className="mb-4 text-[#E94E6F] font-semibold">
-          {error}
+      {success && (
+        <div className="mb-4 rounded-xl border border-green-200 bg-green-50 px-5 py-4 text-sm font-semibold text-green-700">
+          Groupe créé avec succès ! Redirection…
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white rounded-xl shadow-sm border border-[#FDC600]/40 p-6 space-y-6"
-      >
-        {/* Nom du groupe */}
+      {error && (
+        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm font-semibold text-red-600">{error}</div>
+      )}
+
+      <form onSubmit={handleSubmit} className="bg-[#FFFEFA] rounded-xl shadow-sm p-6 space-y-6">
+
         <div>
-          <label className="block text-sm font-semibold text-[#93197D] mb-1">
-            Nom du groupe
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full border border-[#FDC600]/40 rounded-lg px-4 py-2"
-          />
+          <label className="block text-sm font-semibold text-[#7C67B2] mb-1">Nom du groupe *</label>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required
+            className="w-full border border-gray-200 rounded-lg px-4 py-2" />
         </div>
 
-        {/* Sélection des enfants */}
         <div>
-          <label className="block text-sm font-semibold text-[#93197D] mb-3">
-            Sélectionner les enfants
-          </label>
-
+          <label className="block text-sm font-semibold text-[#7C67B2] mb-3">Sélectionner les enfants</label>
           {allChildren.length === 0 ? (
-            <p className="text-[#6F8D4C]">Aucun enfant disponible.</p>
+            <p className="text-[#273068]">Aucun enfant disponible.</p>
           ) : (
             <div className="space-y-3">
               {allChildren.map((child) => (
-                <label
-                  key={child.idchild}
-                  className="flex items-center gap-3 bg-[#FFF3E0] p-3 rounded-lg cursor-pointer hover:bg-[#FFE8C2]"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedChildren.includes(child.idchild)}
-                    onChange={() => toggleChild(child.idchild)}
-                  />
-
-                  {child.avatar ? (
-                    <img
-                      src={child.avatar}
-                      alt={child.firstname}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
+                <label key={child.idchildren}
+                  className="flex items-center gap-3 bg-white p-3 rounded-lg cursor-pointer hover:bg-[#D5CDE2] transition-colors">
+                  <input type="checkbox" checked={selectedChildren.includes(child.idchildren)}
+                    onChange={() => toggleChild(child.idchildren)} />
+                  {child.photourl ? (
+                    <img src={child.photourl} alt={child.firstname} className="w-10 h-10 rounded-full object-cover" />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#93197D] font-bold">
+                    <div className="w-10 h-10 rounded-full bg-[#D5CDE2] flex items-center justify-center text-[#7C67B2] font-bold">
                       {child.firstname[0]}
                     </div>
                   )}
-
-                  <span className="text-[#93197D] font-semibold">
-                    {child.firstname}
-                  </span>
+                  <span className="text-[#273068] font-semibold">{child.firstname}</span>
                 </label>
               ))}
             </div>
           )}
         </div>
 
-        {/* Boutons */}
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            disabled={saving}
-            className="flex-1 px-4 py-3 bg-[#E94E6F] text-white rounded-lg font-semibold hover:bg-[#d63f5f] disabled:opacity-50"
-          >
-            {saving ? "Création…" : "Créer le groupe"}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="flex-1 px-4 py-3 bg-white border border-[#93197D] text-[#93197D] rounded-lg font-semibold hover:bg-[#FFF3E0]"
-          >
-            Annuler
-          </button>
-        </div>
+        <button type="submit" disabled={saving}
+          className="w-full py-3 bg-[#E94E6F] text-white rounded-lg font-semibold hover:bg-[#d63f5f] disabled:opacity-50">
+          {saving ? "Création…" : "Créer le groupe"}
+        </button>
       </form>
     </div>
   )

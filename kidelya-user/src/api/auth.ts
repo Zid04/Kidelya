@@ -5,10 +5,10 @@ export const authApi = {
     api.post("/login", { email, password }),
 
   register: (data: {
-    name: string
+    firstname: string
+    lastname: string
     email: string
     password: string
-    password_confirmation: string
   }) => api.post("/register", data),
 
   logout: () => api.post("/logout"),

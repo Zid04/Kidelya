@@ -1,5 +1,6 @@
 ﻿import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useAuth } from "@/context/useAuth"
 import heroAide from "@/assets/photo-faq-hero.png"
 import besoinAide from "@/assets/besoinAide.png"
 import oiseauBesoin from "@/assets/oiseauBesoin.png"
@@ -19,12 +20,12 @@ const faqs = [
 ]
 
 const guides = [
-  { label: "Bien démarrer avec Kidelya",   icon: "draft",     href: "/dashboard" },
-  { label: "Créer sa première activité",    icon: "edit-file", href: "/activities/create" },
-  { label: "Utiliser le calendrier",        icon: "calendar",  href: "/calendar" },
-  { label: "Acheter un pack d'activités",   icon: "cart",      href: "/packs" },
-  { label: "Comprendre les abonnements",    icon: "layers",    href: "/abonnements" },
-  { label: "Gérer les paramètres du compte",icon: "contact",   href: "/settings" },
+  { label: "Bien démarrer avec Kidelya",    icon: "draft",     href: "/dashboard",          protected: true },
+  { label: "Créer sa première activité",    icon: "edit-file", href: "/activities/create",  protected: true },
+  { label: "Utiliser le calendrier",        icon: "calendar",  href: "/calendar",           protected: true },
+  { label: "Acheter un pack d'activités",   icon: "cart",      href: "/packs",              protected: false },
+  { label: "Comprendre les abonnements",    icon: "layers",    href: "/abonnements",        protected: false },
+  { label: "Gérer les paramètres du compte",icon: "contact",   href: "/settings",           protected: true },
 ]
 
 // ─── Icônes ───────────────────────────────────────────────────
@@ -135,6 +136,15 @@ function GuideIcon({ kind }: { kind: string }) {
 export default function AidePage() {
   const [search, setSearch] = useState("")
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const { user } = useAuth()
+  const navigate = useNavigate()
+
+  function handleGuideClick(e: React.MouseEvent, g: { href: string; protected: boolean }) {
+    if (g.protected && !user) {
+      e.preventDefault()
+      navigate("/login", { state: { redirectAfter: g.href } })
+    }
+  }
 
   const filteredFaqs = faqs.filter(
     (item) =>
@@ -150,11 +160,11 @@ export default function AidePage() {
       <section className="mx-auto max-w-6xl px-6 pb-8 pt-14">
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_0.95fr]">
           <div className="text-center lg:text-left">
-            <h1 className="text-4xl font-extrabold md:text-5xl">
+            <h1 className="text-4xl font-black text-[#7C67B2] md:text-5xl">
               Comment pouvons-nous vous aider ?
             </h1>
             <div className="mx-auto mt-3 h-[3px] w-12 rounded-full bg-[#E94E6F] lg:mx-0" />
-            <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-7 text-[#4F5F45] lg:mx-0">
+            <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-7 text-[#273068] lg:mx-0">
               Trouvez rapidement des réponses à vos questions ou contactez notre équipe.
             </p>
             <div className="mt-8 max-w-xl">
@@ -163,7 +173,7 @@ export default function AidePage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Rechercher une question, un sujet..."
-                className="h-12 w-full rounded-[10px] border border-[#F1D9B5] bg-transparent px-4 text-sm outline-none focus:ring-2 focus:ring-[#E94E6F]/25"
+                className="h-12 w-full rounded-[10px] border border-[#D5CDE2] bg-transparent px-4 text-sm outline-none focus:ring-2 focus:ring-[#7C67B2]/25"
               />
             </div>
           </div>
@@ -179,19 +189,18 @@ export default function AidePage() {
 
         {/* FAQ */}
         <div>
-          <h2 className="mb-4 text-xl font-bold">Questions fréquentes</h2>
+          <h2 className="mb-4 text-xl font-black text-[#7C67B2]">Questions fréquentes</h2>
 
-          {/* Grand div légèrement jaunâtre */}
-          <div className="overflow-hidden rounded-[12px]" style={{ backgroundColor: "var(--app-warm-bg)" }}>
+          <div className="overflow-hidden rounded-[12px] bg-[#FFFEFA]">
             {filteredFaqs.length === 0 ? (
-              <p className="p-4 text-sm text-[#4F5F45]">Aucun résultat pour cette recherche.</p>
+              <p className="p-4 text-sm text-[#273068]">Aucun résultat pour cette recherche.</p>
             ) : (
               filteredFaqs.map((item, i) => {
                 const isOpen = openIndex === i
                 return (
                   <div
                     key={item.q}
-                    className={`text-sm text-[#4F5F45] ${i < filteredFaqs.length - 1 ? "border-b border-[#F1D9B5]/60" : ""}`}
+                    className={`text-sm text-[#273068] ${i < filteredFaqs.length - 1 ? "border-b border-[#D5CDE2]" : ""}`}
                   >
                     <button
                       type="button"
@@ -215,11 +224,7 @@ export default function AidePage() {
             )}
           </div>
 
-          {/* CTA bas — fond violet foncé faible opacité + image gauche */}
-          <div
-            className="mt-6 flex items-center gap-4 overflow-hidden rounded-[12px] px-6 py-5"
-            style={{ backgroundColor: "var(--app-muted-bg)" }}
-          >
+          <div className="mt-6 flex items-center gap-4 overflow-hidden rounded-[12px] bg-[#D5CDE2] px-6 py-5">
             <img
               src={besoinAide}
               alt=""
@@ -227,8 +232,8 @@ export default function AidePage() {
               className="h-20 w-20 shrink-0 rounded-[10px] object-cover"
             />
             <div className="flex-1 text-left">
-              <h4 className="font-semibold text-[#273068]">Besoin d'aide ?</h4>
-              <p className="mt-1 text-sm text-[#4F5F45]">
+              <h4 className="font-semibold text-[#7C67B2]">Besoin d'aide ?</h4>
+              <p className="mt-1 text-sm text-[#273068]">
                 Notre équipe est là pour vous accompagner
               </p>
               <Link
@@ -244,14 +249,14 @@ export default function AidePage() {
         {/* SIDEBAR */}
         <div className="space-y-5">
 
-          {/* Guides — même fond que "Besoin d'aide?" */}
-          <article className="rounded-[12px] p-5" style={{ backgroundColor: "var(--app-muted-bg)" }}>
-            <h3 className="font-semibold text-[#273068]">Guides et ressources</h3>
-            <ul className="mt-3 divide-y divide-[#F1D9B5]/60 text-sm text-[#4F5F45]">
+          <article className="rounded-[12px] bg-[#D5CDE2] p-5">
+            <h3 className="font-semibold text-[#7C67B2]">Guides et ressources</h3>
+            <ul className="mt-3 divide-y divide-[#FFFEFA]/60 text-sm text-[#273068]">
               {guides.map((g) => (
                 <li key={g.label}>
                   <Link
                     to={g.href}
+                    onClick={(e) => handleGuideClick(e, g)}
                     className="flex items-center gap-2 py-2 transition-colors hover:text-[#E94E6F]"
                   >
                     <span className="shrink-0">
@@ -265,15 +270,14 @@ export default function AidePage() {
             </ul>
           </article>
 
-          {/* Besoin d'aide rapidement — avec image oiseau à droite */}
-          <article className="overflow-hidden rounded-[12px] border border-[var(--app-border)] bg-[var(--app-card)]">
+          <article className="overflow-hidden rounded-[12px] bg-[#FFFEFA] shadow-sm">
             <div className="flex items-stretch">
               <div className="flex-1 p-5">
-                <h3 className="font-semibold text-[var(--app-text)]">Besoin d'aide rapidement ?</h3>
-                <ul className="mt-3 space-y-3 text-sm text-[var(--app-muted)]">
+                <h3 className="font-semibold text-[#7C67B2]">Besoin d'aide rapidement ?</h3>
+                <ul className="mt-3 space-y-3 text-sm text-[#273068]">
                   {/* Email — fond bleu circulaire */}
                   <li className="flex items-start gap-3">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#273068]/15">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#D5CDE2]">
                       <IconMail className="h-4 w-4 text-[#273068]" />
                     </span>
                     <span>
@@ -315,7 +319,7 @@ export default function AidePage() {
         <div className="grid gap-5 md:grid-cols-3">
 
           {/* Card 1 — Sécurité */}
-          <div className="flex items-center justify-between overflow-hidden rounded-[16px] bg-white border border-[#F1D9B5] px-5 py-5 shadow-sm">
+          <div className="flex items-center justify-between overflow-hidden rounded-[16px] bg-[#FFFEFA] px-5 py-5 shadow-sm">
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#273068]">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none">
@@ -323,15 +327,15 @@ export default function AidePage() {
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-bold text-[#273068]">Un service fiable et sécurisé</p>
-                <p className="mt-1 text-xs leading-5 text-[#4F5F45]">Vos données sont protégées et confidentielles.</p>
+                <p className="text-sm font-bold text-[#7C67B2]">Un service fiable et sécurisé</p>
+                <p className="mt-1 text-xs leading-5 text-[#273068]">Vos données sont protégées et confidentielles.</p>
               </div>
             </div>
             <img src={fleurService} alt="" aria-hidden="true" className="h-16 w-16 shrink-0 object-contain ml-3" />
           </div>
 
           {/* Card 2 — Support humain */}
-          <div className="flex items-center justify-between overflow-hidden rounded-[16px] bg-white border border-[#F1D9B5] px-5 py-5 shadow-sm">
+          <div className="flex items-center justify-between overflow-hidden rounded-[16px] bg-[#FFFEFA] px-5 py-5 shadow-sm">
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#67A63B]">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none">
@@ -342,15 +346,15 @@ export default function AidePage() {
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-bold text-[#273068]">Des réponses humaines</p>
-                <p className="mt-1 text-xs leading-5 text-[#4F5F45]">Nos équipes vous répondent avec bienveillance et efficacité.</p>
+                <p className="text-sm font-bold text-[#7C67B2]">Des réponses humaines</p>
+                <p className="mt-1 text-xs leading-5 text-[#273068]">Nos équipes vous répondent avec bienveillance et efficacité.</p>
               </div>
             </div>
             <img src={fleur2Service} alt="" aria-hidden="true" className="h-16 w-16 shrink-0 object-contain ml-3" />
           </div>
 
           {/* Card 3 — Réactivité */}
-          <div className="flex items-center justify-between overflow-hidden rounded-[16px] bg-white border border-[#F1D9B5] px-5 py-5 shadow-sm">
+          <div className="flex items-center justify-between overflow-hidden rounded-[16px] bg-[#FFFEFA] px-5 py-5 shadow-sm">
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#8B5CF6]">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none">
@@ -360,8 +364,8 @@ export default function AidePage() {
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-bold text-[#273068]">Disponibles rapidement</p>
-                <p className="mt-1 text-xs leading-5 text-[#4F5F45]">Un support réactif pour ne jamais vous laisser sans réponse.</p>
+                <p className="text-sm font-bold text-[#7C67B2]">Disponibles rapidement</p>
+                <p className="mt-1 text-xs leading-5 text-[#273068]">Un support réactif pour ne jamais vous laisser sans réponse.</p>
               </div>
             </div>
             <img src={fleurService3} alt="" aria-hidden="true" className="h-16 w-16 shrink-0 object-contain ml-3" />

@@ -3,9 +3,9 @@ import { useNavigate, useParams } from "react-router-dom"
 import api from "@/api/axios"
 
 interface Child {
-  idchild: number
+  idchildren: number
   firstname: string
-  avatar?: string | null
+  photourl?: string | null
 }
 
 interface Group {
@@ -33,18 +33,18 @@ export default function GroupEdit() {
         // Charger le groupe et la liste des enfants en parallèle
         const [groupRes, childRes] = await Promise.all([
           api.get(`/groups/${id}`),
-          api.get("/me/children"),
+          api.get("/children"),
         ])
 
-        if (!groupRes.data.group) {
+        if (!groupRes.data.data) {
           setError("Groupe introuvable.")
           return
         }
 
-        setGroup(groupRes.data.group)
-        setName(groupRes.data.group.name)
-        setSelectedChildren(groupRes.data.group.children.map((c: Child) => c.idchild))
-        setAllChildren(childRes.data.children || [])
+        setGroup(groupRes.data.data)
+        setName(groupRes.data.data.name)
+        setSelectedChildren(groupRes.data.data.children.map((c: Child) => c.idchildren))
+        setAllChildren(childRes.data.data || [])
       } catch (e) {
         setError("Impossible de charger ce groupe.")
       } finally {
@@ -68,7 +68,7 @@ export default function GroupEdit() {
     setError(null)
 
     try {
-      await api.post(`/groups/${id}`, {
+      await api.put(`/groups/${id}`, {
         name,
         children: selectedChildren,
       })
@@ -139,18 +139,18 @@ export default function GroupEdit() {
             <div className="space-y-3">
               {allChildren.map((child) => (
                 <label
-                  key={child.idchild}
+                  key={child.idchildren}
                   className="flex items-center gap-3 bg-[#FFF3E0] p-3 rounded-lg cursor-pointer hover:bg-[#FFE8C2]"
                 >
                   <input
                     type="checkbox"
-                    checked={selectedChildren.includes(child.idchild)}
-                    onChange={() => toggleChild(child.idchild)}
+                    checked={selectedChildren.includes(child.idchildren)}
+                    onChange={() => toggleChild(child.idchildren)}
                   />
 
-                  {child.avatar ? (
+                  {child.photourl ? (
                     <img
-                      src={child.avatar}
+                      src={child.photourl}
                       alt={child.firstname}
                       className="w-10 h-10 rounded-full object-cover"
                     />

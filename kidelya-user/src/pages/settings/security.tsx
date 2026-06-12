@@ -1,7 +1,6 @@
 import { useRef, useState } from "react"
 import { ShieldCheck } from "lucide-react"
 
-import Heading from "@/components/Heading"
 import InputError from "@/components/InputError"
 import PasswordInput from "@/components/password-input"
 import { Button } from "@/components/ui/Button"
@@ -25,12 +24,9 @@ type TwoFactorErrors = {
   code?: string
 }
 
-export default function SecurityPage({
-  canManageTwoFactor = true,
-}: SecurityProps) {
+export default function SecurityPage({ canManageTwoFactor = true }: SecurityProps) {
   const { user, refreshUser } = useUser()
 
-  // ----- PASSWORD FORM -----
   const currentPasswordInput = useRef<HTMLInputElement | null>(null)
   const passwordInput = useRef<HTMLInputElement | null>(null)
 
@@ -44,10 +40,7 @@ export default function SecurityPage({
   const [passwordSaved, setPasswordSaved] = useState(false)
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswordForm({
-      ...passwordForm,
-      [e.target.name]: e.target.value,
-    })
+    setPasswordForm({ ...passwordForm, [e.target.name]: e.target.value })
   }
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
@@ -59,56 +52,33 @@ export default function SecurityPage({
     try {
       await api.put("/users/me/password", passwordForm)
       setPasswordSaved(true)
-      setPasswordForm({
-        current_password: "",
-        password: "",
-        password_confirmation: "",
-      })
+      setPasswordForm({ current_password: "", password: "", password_confirmation: "" })
     } catch (err: unknown) {
-      const axiosErr = err as {
-        response?: { data?: { errors?: PasswordErrors } }
-      }
+      const axiosErr = err as { response?: { data?: { errors?: PasswordErrors } } }
       const errors = axiosErr.response?.data?.errors || {}
       setPasswordErrors(errors)
-
-      if (errors.password && passwordInput.current) {
-        passwordInput.current.focus()
-      } else if (errors.current_password && currentPasswordInput.current) {
-        currentPasswordInput.current.focus()
-      }
+      if (errors.password && passwordInput.current) passwordInput.current.focus()
+      else if (errors.current_password && currentPasswordInput.current) currentPasswordInput.current.focus()
     } finally {
       setPasswordLoading(false)
     }
   }
 
-  // ----- TWO FACTOR (EMAIL CODE) -----
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(
-    Boolean(user?.is_two_factor_enabled),
-  )
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(Boolean(user?.is_two_factor_enabled))
   const [showTwoFactorSetup, setShowTwoFactorSetup] = useState(false)
   const [twoFactorForm, setTwoFactorForm] = useState({ code: "" })
   const [twoFactorErrors, setTwoFactorErrors] = useState<TwoFactorErrors>({})
   const [twoFactorLoading, setTwoFactorLoading] = useState(false)
 
-  const handleTwoFactorCodeChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setTwoFactorForm({ code: e.target.value })
-  }
-
   const handleSendTwoFactorCode = async () => {
     setTwoFactorErrors({})
     setTwoFactorLoading(true)
-
     try {
       await api.post("/users/me/two-factor/send-code")
       setShowTwoFactorSetup(true)
     } catch (err: unknown) {
-      const axiosErr = err as {
-        response?: { data?: { errors?: TwoFactorErrors } }
-      }
-      const errors = axiosErr.response?.data?.errors || {}
-      setTwoFactorErrors(errors)
+      const axiosErr = err as { response?: { data?: { errors?: TwoFactorErrors } } }
+      setTwoFactorErrors(axiosErr.response?.data?.errors || {})
     } finally {
       setTwoFactorLoading(false)
     }
@@ -117,21 +87,15 @@ export default function SecurityPage({
   const handleConfirmTwoFactor = async () => {
     setTwoFactorErrors({})
     setTwoFactorLoading(true)
-
     try {
-      await api.post("/users/me/two-factor/confirm", {
-        code: twoFactorForm.code,
-      })
+      await api.post("/users/me/two-factor/confirm", { code: twoFactorForm.code })
       setTwoFactorEnabled(true)
       setShowTwoFactorSetup(false)
       setTwoFactorForm({ code: "" })
       await refreshUser()
     } catch (err: unknown) {
-      const axiosErr = err as {
-        response?: { data?: { errors?: TwoFactorErrors } }
-      }
-      const errors = axiosErr.response?.data?.errors || {}
-      setTwoFactorErrors(errors)
+      const axiosErr = err as { response?: { data?: { errors?: TwoFactorErrors } } }
+      setTwoFactorErrors(axiosErr.response?.data?.errors || {})
     } finally {
       setTwoFactorLoading(false)
     }
@@ -140,7 +104,6 @@ export default function SecurityPage({
   const handleDisableTwoFactor = async () => {
     setTwoFactorErrors({})
     setTwoFactorLoading(true)
-
     try {
       await api.post("/users/me/two-factor/disable")
       setTwoFactorEnabled(false)
@@ -148,159 +111,153 @@ export default function SecurityPage({
       setTwoFactorForm({ code: "" })
       await refreshUser()
     } catch (err: unknown) {
-      const axiosErr = err as {
-        response?: { data?: { errors?: TwoFactorErrors } }
-      }
-      const errors = axiosErr.response?.data?.errors || {}
-      setTwoFactorErrors(errors)
+      const axiosErr = err as { response?: { data?: { errors?: TwoFactorErrors } } }
+      setTwoFactorErrors(axiosErr.response?.data?.errors || {})
     } finally {
       setTwoFactorLoading(false)
     }
   }
 
   return (
-    <div className="space-y-10">
-      {/* Update password */}
-      <div className="space-y-6">
-        <Heading
-          variant="small"
-          title="Update password"
-          description="Ensure your account is using a long, random password to stay secure."
-        />
+    <div className="space-y-8 max-w-xl">
 
-        <form onSubmit={handlePasswordSubmit} className="space-y-6">
-          {/* Current password */}
-          <div className="grid gap-2">
-            <Label htmlFor="current_password">Current password</Label>
+      {/* Changer le mot de passe */}
+      <div className="rounded-2xl bg-[#FFFEFA] p-6 shadow-sm space-y-5">
+        <div>
+          <h2 className="text-xl font-black text-[#7C67B2]">Mot de passe</h2>
+          <p className="mt-1 text-sm text-[#273068]">Utilisez un mot de passe long et unique pour sécuriser votre compte.</p>
+        </div>
+
+        <form onSubmit={handlePasswordSubmit} className="space-y-4">
+          <div className="grid gap-1.5">
+            <Label htmlFor="current_password" className="font-semibold text-[#7C67B2]">Mot de passe actuel</Label>
             <PasswordInput
               id="current_password"
               name="current_password"
               ref={currentPasswordInput}
               autoComplete="current-password"
-              placeholder="Current password"
+              placeholder="Mot de passe actuel"
               value={passwordForm.current_password}
               onChange={handlePasswordChange}
+              className="h-11 rounded-xl border border-gray-200"
             />
             <InputError message={passwordErrors.current_password ?? null} />
           </div>
 
-          {/* New password */}
-          <div className="grid gap-2">
-            <Label htmlFor="password">New password</Label>
+          <div className="grid gap-1.5">
+            <Label htmlFor="password" className="font-semibold text-[#7C67B2]">Nouveau mot de passe</Label>
             <PasswordInput
               id="password"
               name="password"
               ref={passwordInput}
               autoComplete="new-password"
-              placeholder="New password"
+              placeholder="Nouveau mot de passe"
               value={passwordForm.password}
               onChange={handlePasswordChange}
+              className="h-11 rounded-xl border border-gray-200"
             />
             <InputError message={passwordErrors.password ?? null} />
           </div>
 
-          {/* Confirm password */}
-          <div className="grid gap-2">
-            <Label htmlFor="password_confirmation">
-              Confirm password
-            </Label>
+          <div className="grid gap-1.5">
+            <Label htmlFor="password_confirmation" className="font-semibold text-[#7C67B2]">Confirmer le mot de passe</Label>
             <PasswordInput
               id="password_confirmation"
               name="password_confirmation"
               autoComplete="new-password"
-              placeholder="Confirm password"
+              placeholder="Confirmer le mot de passe"
               value={passwordForm.password_confirmation}
               onChange={handlePasswordChange}
+              className="h-11 rounded-xl border border-gray-200"
             />
-            <InputError
-              message={passwordErrors.password_confirmation ?? null}
-            />
+            <InputError message={passwordErrors.password_confirmation ?? null} />
           </div>
 
-          <div className="flex items-center gap-4">
-            <Button disabled={passwordLoading}>
-              {passwordLoading ? "Saving..." : "Save password"}
+          <div className="flex items-center gap-4 pt-1">
+            <Button
+              disabled={passwordLoading}
+              className="rounded-xl bg-[#7C67B2] text-sm font-bold text-white hover:bg-[#6a58a0]"
+            >
+              {passwordLoading ? "Enregistrement…" : "Enregistrer le mot de passe"}
             </Button>
-
             {passwordSaved && (
-              <p className="text-sm text-neutral-600">Saved</p>
+              <p className="text-sm font-semibold text-[#6F8D4C]">✓ Enregistré</p>
             )}
           </div>
         </form>
       </div>
 
-      {/* Two-factor authentication (email code) */}
+      {/* Double authentification */}
       {canManageTwoFactor && (
-        <div className="space-y-6">
-          <Heading
-            variant="small"
-            title="Two-factor authentication"
-            description="Manage your two-factor authentication settings."
-          />
+        <div className="rounded-2xl bg-[#FFFEFA] p-6 shadow-sm space-y-5">
+          <div>
+            <h2 className="text-xl font-black text-[#7C67B2]">Double authentification</h2>
+            <p className="mt-1 text-sm text-[#273068]">Renforcez la sécurité de votre compte avec un code envoyé par e-mail.</p>
+          </div>
 
           {twoFactorEnabled ? (
-            <div className="flex flex-col items-start space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Two-factor authentication is enabled. A verification code will
-                be sent to your email each time you log in.
-              </p>
-
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 rounded-xl bg-[#D5CDE2] px-4 py-3">
+                <svg viewBox="0 0 24 24" className="h-4 w-4 text-[#7C67B2]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 3L4 6.5V11C4 15.4 7.4 19.5 12 21C16.6 19.5 20 15.4 20 11V6.5L12 3Z" />
+                </svg>
+                <p className="text-sm font-semibold text-[#273068]">La double authentification est activée.</p>
+              </div>
               <Button
-                variant="warning"
                 onClick={handleDisableTwoFactor}
                 disabled={twoFactorLoading}
+                className="rounded-xl bg-[#E94E6F] text-sm font-bold text-white hover:bg-[#d63f5f]"
               >
-                Disable 2FA
+                Désactiver la 2FA
               </Button>
-
               <InputError message={twoFactorErrors.code ?? null} />
             </div>
           ) : (
-            <div className="flex flex-col items-start space-y-4">
-              <p className="text-sm text-muted-foreground">
-                When you enable two-factor authentication, a verification code
-                will be sent to your email each time you log in.
+            <div className="space-y-4">
+              <p className="text-sm text-[#273068]">
+                Un code de vérification sera envoyé à votre e-mail à chaque connexion.
               </p>
 
               {!showTwoFactorSetup ? (
                 <Button
                   onClick={handleSendTwoFactorCode}
                   disabled={twoFactorLoading}
+                  className="rounded-xl bg-[#7C67B2] text-sm font-bold text-white hover:bg-[#6a58a0]"
                 >
                   <ShieldCheck className="mr-2 h-4 w-4" />
-                  Enable 2FA
+                  Activer la 2FA
                 </Button>
               ) : (
                 <div className="space-y-4">
-                  <Label htmlFor="two_factor_code">
-                    Enter the code sent to your email
-                  </Label>
-                  <Input
-                    id="two_factor_code"
-                    name="code"
-                    placeholder="123456"
-                    value={twoFactorForm.code}
-                    onChange={handleTwoFactorCodeChange}
-                  />
-                  <InputError message={twoFactorErrors.code ?? null} />
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="two_factor_code" className="font-semibold text-[#7C67B2]">
+                      Code reçu par e-mail
+                    </Label>
+                    <Input
+                      id="two_factor_code"
+                      name="code"
+                      placeholder="123456"
+                      value={twoFactorForm.code}
+                      onChange={(e) => setTwoFactorForm({ code: e.target.value })}
+                      className="h-11 rounded-xl border border-gray-200"
+                    />
+                    <InputError message={twoFactorErrors.code ?? null} />
+                  </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-3">
                     <Button
                       onClick={handleConfirmTwoFactor}
                       disabled={twoFactorLoading}
+                      className="rounded-xl bg-[#7C67B2] text-sm font-bold text-white hover:bg-[#6a58a0]"
                     >
-                      Confirm 2FA
+                      Confirmer la 2FA
                     </Button>
                     <Button
                       type="button"
-                      variant="outline"
-                      onClick={() => {
-                        setShowTwoFactorSetup(false)
-                        setTwoFactorForm({ code: "" })
-                        setTwoFactorErrors({})
-                      }}
+                      onClick={() => { setShowTwoFactorSetup(false); setTwoFactorForm({ code: "" }); setTwoFactorErrors({}) }}
+                      className="rounded-xl bg-[#D5CDE2] text-sm font-semibold text-[#273068] hover:bg-[#c5bbd2]"
                     >
-                      Cancel
+                      Annuler
                     </Button>
                   </div>
                 </div>

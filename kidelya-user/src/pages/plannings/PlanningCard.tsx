@@ -10,7 +10,7 @@ export default function PlanningCard({ planning: p, isPast }: Props) {
   return (
     <Link
       to={`/plannings/${p.idplanning}`}
-      className={`block bg-white rounded-2xl border shadow-sm p-5 hover:shadow-md transition-all group ${
+      className={`block bg-[#FFFEFA] rounded-2xl border shadow-sm p-5 hover:shadow-md transition-all group ${
         isPast ? "border-[#6F8D4C]/30 hover:border-[#6F8D4C]" : "border-gray-100 hover:border-[#E94E6F]/40"
       }`}
     >

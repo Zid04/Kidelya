@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import api from "@/api/axios"
 import { PackArtwork } from "@/components/kidelya/PackArtwork"
@@ -71,7 +71,7 @@ export default function PackDetail() {
 
     try {
       await api.post("/cart/add", { idpack: pack.idpack, quantity: 1 })
-      alert("Pack ajoute au panier !")
+      alert("Pack ajouté au panier !")
     } catch (e) {
       alert("Erreur lors de l'ajout au panier.")
     } finally {
@@ -81,7 +81,7 @@ export default function PackDetail() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white text-[#6F8D4C]">
+      <div className="flex min-h-screen items-center justify-center bg-[#FFFEFA] text-[#7C67B2]">
         Chargement du pack...
       </div>
     )
@@ -89,7 +89,7 @@ export default function PackDetail() {
 
   if (!pack) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white text-[#6F8D4C]">
+      <div className="flex min-h-screen items-center justify-center bg-[#FFFEFA] text-[#7C67B2]">
         Pack introuvable.
       </div>
     )
@@ -99,25 +99,23 @@ export default function PackDetail() {
   const activitiesCount = pack.activities?.length ?? 0
 
   return (
-    <div className="min-h-screen bg-white text-[#21164F]">
+    <div className="min-h-screen bg-[#FFFEFA] text-[#273068]">
       <main className="mx-auto max-w-7xl px-6 py-10">
-        <div className="mb-8 text-sm text-[#6F8D4C]">
+        {/* Fil d'Ariane */}
+        <div className="mb-8 text-sm text-[#273068]">
           <Link to="/" className="hover:text-[#E94E6F]">Accueil</Link>
           <span className="mx-2">/</span>
-          <Link to="/packs" className="hover:text-[#E94E6F]">Packs d'activites</Link>
+          <Link to="/packs" className="hover:text-[#E94E6F]">Packs d'activités</Link>
           <span className="mx-2">/</span>
-          <span className="font-semibold text-[#2F236D]">{pack.title}</span>
+          <span className="font-semibold text-[#7C67B2]">{pack.title}</span>
         </div>
 
+        {/* Hero */}
         <section className="grid gap-10 lg:grid-cols-[1.1fr,1fr,0.9fr]">
           <div>
-            <div className="overflow-hidden rounded-3xl border border-[#F1D9B5] bg-white shadow-md">
+            <div className="overflow-hidden rounded-3xl bg-[#FFFEFA] shadow-md">
               {packImage ? (
-                <img
-                  src={packImage}
-                  alt={pack.title}
-                  className="h-96 w-full object-cover"
-                />
+                <img src={packImage} alt={pack.title} className="h-96 w-full object-cover" />
               ) : (
                 <PackArtwork title={pack.title} className="h-96" />
               )}
@@ -126,46 +124,47 @@ export default function PackDetail() {
 
           <div className="flex flex-col justify-center">
             <p className="mb-3 text-sm font-black uppercase tracking-wide text-[#E94E6F]">
-              Pack thematique
+              Pack thématique
             </p>
-            <h1 className="mb-5 text-4xl font-black leading-tight text-[#2F236D]">
+            <h1 className="mb-5 text-4xl font-black leading-tight text-[#7C67B2]">
               {pack.title}
             </h1>
-            <p className="mb-7 text-base leading-7 text-[#4F5F45]">
+            <p className="mb-7 text-base leading-7 text-[#273068]">
               {pack.description}
             </p>
 
-            <div className="grid gap-4 text-sm text-[#2F236D] sm:grid-cols-2">
-              <div className="rounded-2xl bg-white p-4 shadow-sm">
-                <span className="block text-xs font-bold text-[#6F8D4C]">Age</span>
-                {pack.min_age ?? 3} - {pack.max_age ?? 8} ans
+            <div className="grid gap-4 text-sm sm:grid-cols-2">
+              <div className="rounded-2xl bg-[#D5CDE2] p-4">
+                <span className="block text-xs font-bold text-[#7C67B2] mb-1">Âge</span>
+                <span className="text-[#273068] font-semibold">{pack.min_age ?? 3} - {pack.max_age ?? 8} ans</span>
               </div>
-              <div className="rounded-2xl bg-white p-4 shadow-sm">
-                <span className="block text-xs font-bold text-[#6F8D4C]">Activites</span>
-                {minDuration && maxDuration ? `${minDuration} - ${maxDuration} min` : "Duree variable"}
+              <div className="rounded-2xl bg-[#D5CDE2] p-4">
+                <span className="block text-xs font-bold text-[#7C67B2] mb-1">Durée</span>
+                <span className="text-[#273068] font-semibold">{minDuration && maxDuration ? `${minDuration} - ${maxDuration} min` : "Durée variable"}</span>
               </div>
-              <div className="rounded-2xl bg-white p-4 shadow-sm">
-                <span className="block text-xs font-bold text-[#6F8D4C]">Niveau</span>
-                {pack.level ?? "Facile"}
+              <div className="rounded-2xl bg-[#D5CDE2] p-4">
+                <span className="block text-xs font-bold text-[#7C67B2] mb-1">Niveau</span>
+                <span className="text-[#273068] font-semibold">{pack.level ?? "Facile"}</span>
               </div>
-              <div className="rounded-2xl bg-white p-4 shadow-sm">
-                <span className="block text-xs font-bold text-[#6F8D4C]">Contenu</span>
-                {activitiesCount} activites incluses
+              <div className="rounded-2xl bg-[#D5CDE2] p-4">
+                <span className="block text-xs font-bold text-[#7C67B2] mb-1">Contenu</span>
+                <span className="text-[#273068] font-semibold">{activitiesCount} activités incluses</span>
               </div>
             </div>
           </div>
 
-          <aside className="h-fit rounded-3xl border border-[#F1D9B5] bg-white p-7 shadow-lg">
-            <h2 className="mb-3 text-lg font-bold text-[#2F236D]">Prix</h2>
+          {/* Aside achat */}
+          <aside className="h-fit rounded-3xl bg-[#FFFEFA] p-7 shadow-md">
+            <h2 className="mb-3 text-lg font-bold text-[#7C67B2]">Prix</h2>
             <p className="mb-6 text-4xl font-black text-[#E94E6F]">
               {formatPrice(pack.tarification)}
             </p>
-            <div className="mb-5 rounded-2xl border border-[#E94E6F]/40 bg-[#FFF5F7] p-4 text-sm">
-              <div className="flex items-center justify-between font-bold text-[#2F236D]">
+            <div className="mb-5 rounded-2xl bg-[#F1B9C3]/30 p-4 text-sm">
+              <div className="flex items-center justify-between font-bold text-[#273068]">
                 <span>Achat unique</span>
                 <span>{formatPrice(pack.tarification)}</span>
               </div>
-              <p className="mt-1 text-xs text-[#6F8D4C]">Acces au pack apres achat.</p>
+              <p className="mt-1 text-xs text-[#6F8D4C]">Accès au pack après achat.</p>
             </div>
             <button
               onClick={addToCart}
@@ -176,13 +175,13 @@ export default function PackDetail() {
             </button>
             <Link
               to="/abonnements"
-              className="block w-full rounded-xl border border-[#8F6BC8] bg-white px-4 py-3 text-center text-sm font-bold text-[#2F236D] hover:bg-[#F5F0FF]"
+              className="block w-full rounded-xl bg-[#D5CDE2] px-4 py-3 text-center text-sm font-bold text-[#7C67B2] hover:bg-[#c5bbd2]"
             >
               Voir les abonnements
             </Link>
             <button
               onClick={(e) => togglePack(pack.idpack, e)}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#E94E6F] px-4 py-3 text-sm font-semibold text-[#E94E6F] hover:bg-[#FFF5F7] transition-colors"
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#E94E6F] px-4 py-3 text-sm font-semibold text-[#E94E6F] hover:bg-[#F1B9C3]/20 transition-colors"
             >
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill={favPackIds.has(pack.idpack) ? "#E94E6F" : "none"} stroke="#E94E6F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -190,32 +189,34 @@ export default function PackDetail() {
               {favPackIds.has(pack.idpack) ? "En favoris" : "Ajouter aux favoris"}
             </button>
             <p className="mt-5 text-center text-xs font-semibold text-[#6F8D4C]">
-              Paiement securise
+              Paiement sécurisé
             </p>
           </aside>
         </section>
 
-        <section className="mt-10 grid gap-4 rounded-3xl border border-[#F1D9B5] bg-white/80 p-5 shadow-sm md:grid-cols-4">
+        {/* Bénéfices */}
+        <section className="mt-10 grid gap-4 rounded-3xl bg-[#D5CDE2] p-5 md:grid-cols-4">
           {[
-            ["Activites variees", "Des activites pretes a realiser."],
-            ["Telechargement", "Acces rapide apres achat."],
+            ["Activités variées", "Des activités prêtes à réaliser."],
+            ["Téléchargement", "Accès rapide après achat."],
             ["Imprimables", "Fiches utiles et pratiques."],
-            ["Adapte enfants", "Pense pour un usage simple."],
+            ["Adapté enfants", "Pensé pour un usage simple."],
           ].map(([title, text]) => (
-            <div key={title} className="rounded-2xl bg-white p-4">
-              <h3 className="font-black text-[#2F236D]">{title}</h3>
-              <p className="mt-1 text-xs leading-5 text-[#6F8D4C]">{text}</p>
+            <div key={title} className="rounded-2xl bg-[#FFFEFA] p-4">
+              <h3 className="font-black text-[#7C67B2]">{title}</h3>
+              <p className="mt-1 text-xs leading-5 text-[#273068]">{text}</p>
             </div>
           ))}
         </section>
 
+        {/* Activités du pack + À propos */}
         <section className="mt-10 grid gap-8 lg:grid-cols-[1.35fr,0.65fr]">
-          <div className="rounded-3xl border border-[var(--app-border)] bg-[var(--app-card)] p-6 shadow-md">
+          <div className="rounded-3xl bg-[#FFFEFA] p-6 shadow-sm">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-black text-[var(--app-text)]">
-                Ce pack contient {activitiesCount} activites
+              <h2 className="text-xl font-black text-[#7C67B2]">
+                Ce pack contient {activitiesCount} activités
               </h2>
-              <span className="text-sm font-bold text-[#8F6BC8]">Apercu</span>
+              <span className="text-sm font-bold text-[#E94E6F]">Aperçu</span>
             </div>
 
             {pack.activities && pack.activities.length > 0 ? (
@@ -226,52 +227,58 @@ export default function PackDetail() {
                     <Link
                       key={activity.idactivities}
                       to={`/activities/pack/${activity.idactivities}`}
-                      className="flex items-center gap-4 rounded-2xl border border-[var(--app-border)] bg-[var(--app-subtle)] p-3 transition hover:opacity-80"
+                      className="flex items-center gap-4 rounded-2xl bg-[#D5CDE2] p-3 transition hover:opacity-80"
                     >
                       {image ? (
                         <img src={image} alt={activity.title} className="h-16 w-16 rounded-xl object-cover" />
                       ) : (
-                        <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[var(--app-card)] text-sm font-black text-[#E94E6F]">
+                        <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[#7C67B2] text-sm font-black text-white">
                           {index + 1}
                         </div>
                       )}
                       <div className="min-w-0">
-                        <h3 className="truncate text-sm font-black text-[var(--app-text)]">
+                        <h3 className="truncate text-sm font-black text-[#273068]">
                           {activity.title}
                         </h3>
-                        <p className="text-xs text-[#6F8D4C]">
-                          {activity.agemin}-{activity.agemax} ans · {activity.duration} min
-                        </p>
+                        <div className="mt-1 flex flex-wrap gap-1">
+                          <span className="rounded-full bg-[#F1B9C3] px-2 py-0.5 text-[10px] font-bold text-[#E94E6F]">
+                            {activity.agemin}-{activity.agemax} ans
+                          </span>
+                          <span className="rounded-full bg-[#D8EAF2] px-2 py-0.5 text-[10px] font-bold text-[#7BA7C0]">
+                            {activity.duration} min
+                          </span>
+                        </div>
                       </div>
                     </Link>
                   )
                 })}
               </div>
             ) : (
-              <p className="text-sm text-[#6F8D4C]">
-                Les activites de ce pack seront bientot disponibles.
+              <p className="text-sm text-[#273068]">
+                Les activités de ce pack seront bientôt disponibles.
               </p>
             )}
           </div>
 
-          <aside className="rounded-3xl bg-[#FFF0F2] p-7">
-            <h2 className="mb-4 text-xl font-black text-[#2F236D]">
-              A propos de ce pack
+          <aside className="rounded-3xl bg-[#D5CDE2] p-7">
+            <h2 className="mb-4 text-xl font-black text-[#7C67B2]">
+              À propos de ce pack
             </h2>
-            <p className="text-sm leading-7 text-[#4F5F45]">
-              {pack.description || "Un pack Kidelya pense pour proposer des moments creatifs, simples et adaptes aux enfants."}
+            <p className="text-sm leading-7 text-[#273068]">
+              {pack.description || "Un pack Kidelya pensé pour proposer des moments créatifs, simples et adaptés aux enfants."}
             </p>
-            <div className="mt-6 space-y-3 text-sm text-[#2F236D]">
-              {["Occuper les enfants a la maison", "Activites en famille", "Ateliers en groupe", "Moments creatifs"].map((item) => (
+            <div className="mt-6 space-y-3 text-sm text-[#273068]">
+              {["Occuper les enfants à la maison", "Activités en famille", "Ateliers en groupe", "Moments créatifs"].map((item) => (
                 <p key={item} className="font-semibold">✓ {item}</p>
               ))}
             </div>
           </aside>
         </section>
 
+        {/* Packs similaires */}
         <section className="mt-10">
-          <h2 className="mb-5 text-xl font-black text-[#2F236D]">
-            Ils ont aussi aime
+          <h2 className="mb-5 text-xl font-black text-[#7C67B2]">
+            Ils ont aussi aimé
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {relatedPacks
@@ -283,7 +290,7 @@ export default function PackDetail() {
                   <Link
                     key={p.idpack}
                     to={`/packs/${p.idpack}`}
-                    className="overflow-hidden rounded-2xl border border-[#F1D9B5] bg-white shadow-md"
+                    className="overflow-hidden rounded-2xl bg-[#FFFEFA] shadow-sm hover:shadow-md transition-shadow"
                   >
                     {image ? (
                       <img src={image} alt={p.title} className="h-36 w-full object-cover" />
@@ -291,8 +298,8 @@ export default function PackDetail() {
                       <PackArtwork title={p.title} compact className="h-36" />
                     )}
                     <div className="p-4">
-                      <p className="text-xs font-black uppercase text-[#E94E6F]">Pack thematique</p>
-                      <h3 className="mt-1 font-black text-[#2F236D]">{p.title}</h3>
+                      <p className="text-xs font-black uppercase text-[#E94E6F]">Pack thématique</p>
+                      <h3 className="mt-1 font-black text-[#273068]">{p.title}</h3>
                       <p className="mt-2 text-sm font-bold text-[#E94E6F]">
                         {formatPrice(p.tarification)}
                       </p>

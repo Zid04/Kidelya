@@ -127,7 +127,7 @@ export default function AboutPage() {
               </svg>
             </span>
           </h1>
-          <p className="mx-auto mt-4 sm:mt-6 max-w-2xl text-sm sm:text-[15px] leading-6 sm:leading-7 text-[#4F5F45]">
+          <p className="mx-auto mt-4 sm:mt-6 max-w-2xl text-sm sm:text-[15px] leading-6 sm:leading-7 text-[#273068]">
             Kidelya est née d'une idée simple : offrir aux familles, aux professionnels et aux passionnés
             un espace unique pour créer, organiser et partager des activités qui font grandir les enfants.
           </p>
@@ -138,9 +138,9 @@ export default function AboutPage() {
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-12">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {stats.map((s) => (
-            <div key={s.label} className="rounded-[16px] border border-[#F1D9B5] bg-white p-3 sm:p-5 text-center shadow-sm">
+            <div key={s.label} className="rounded-[16px] bg-[#FFFEFA] p-3 sm:p-5 text-center shadow-sm">
               <p className="text-2xl sm:text-3xl font-extrabold text-[#E94E6F]">{s.value}</p>
-              <p className="mt-1 text-xs text-[#4F5F45]">{s.label}</p>
+              <p className="mt-1 text-xs text-[#273068]">{s.label}</p>
             </div>
           ))}
         </div>
@@ -151,20 +151,20 @@ export default function AboutPage() {
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
 
           {/* Mission */}
-          <article className="relative overflow-hidden rounded-[20px] border border-[#F1D9B5] bg-white p-5 sm:p-6 md:p-8 shadow-sm">
+          <article className="relative overflow-hidden rounded-[20px] bg-[#FFFEFA] p-5 sm:p-6 md:p-8 shadow-sm">
             <div className="absolute right-0 top-0 h-32 w-32 rounded-bl-full bg-[#FFF3D9]/60" />
             <span className="mb-4 inline-block rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">
               Notre mission
             </span>
             <h2 className="mt-1 text-xl sm:text-2xl font-bold">Rendre le quotidien plus simple et plus beau</h2>
-            <p className="mt-4 text-[14px] leading-7 text-[#4F5F45]">
+            <p className="mt-4 text-[14px] leading-7 text-[#273068]">
               Nous voulons rendre l'organisation d'activités plus simple, plus inspirante et plus accessible.
               Kidelya accompagne les parents, éducateurs, animateurs et professionnels avec des outils intuitifs
               et des contenus adaptés à chaque âge.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
               {["Accessible", "Inspirant", "Bienveillant"].map((tag) => (
-                <span key={tag} className="rounded-full bg-white border border-[#F1D9B5] px-3 py-1 text-xs font-semibold text-[#273068]">
+                <span key={tag} className="rounded-full bg-[#D5CDE2] px-3 py-1 text-xs font-semibold text-[#273068]">
                   {tag}
                 </span>
               ))}
@@ -172,7 +172,7 @@ export default function AboutPage() {
           </article>
 
           {/* Ce que nous défendons */}
-          <article className="rounded-[20px] border border-[#F1D9B5] bg-white p-5 sm:p-6 md:p-8 shadow-sm">
+          <article className="rounded-[20px] bg-[#FFFEFA] p-5 sm:p-6 md:p-8 shadow-sm">
             <span className="mb-4 inline-block rounded-full bg-[#FFE7ED] px-3 py-1 text-xs font-bold text-[#E94E6F]">
               Nos engagements
             </span>
@@ -188,7 +188,7 @@ export default function AboutPage() {
                   <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${item.color}`}>
                     <Icon kind={item.icon} className="h-4 w-4 text-[#273068]" />
                   </span>
-                  <span className="pt-1 text-sm text-[#4F5F45]">{item.text}</span>
+                  <span className="pt-1 text-sm text-[#273068]">{item.text}</span>
                 </li>
               ))}
             </ul>
@@ -229,7 +229,7 @@ export default function AboutPage() {
           {values.map((v, i) => (
             <article
               key={v.title}
-              className="group relative overflow-hidden rounded-[20px] border border-[#F1D9B5] bg-white p-5 sm:p-6 md:p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+              className="group relative overflow-hidden rounded-[20px] bg-[#FFFEFA] p-5 sm:p-6 md:p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="absolute right-4 top-4 text-5xl font-black opacity-5 select-none" style={{ color: v.accent }}>
                 0{i + 1}
@@ -238,7 +238,7 @@ export default function AboutPage() {
                 <Icon kind={v.icon} className="h-5 w-5" style={{ color: v.accent }} />
               </div>
               <h3 className="text-base sm:text-lg font-bold">{v.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-[#4F5F45]">{v.desc}</p>
+              <p className="mt-2 text-sm leading-6 text-[#273068]">{v.desc}</p>
               <div className="mt-4 h-[2px] w-8 rounded-full transition-all group-hover:w-16" style={{ backgroundColor: v.accent }} />
             </article>
           ))}
@@ -250,12 +250,12 @@ export default function AboutPage() {
         <div className="grid gap-6 lg:grid-cols-2">
 
           {/* Pour qui */}
-          <article className="rounded-[20px] border border-[#F1D9B5] bg-white p-5 sm:p-6 md:p-8 shadow-sm">
+          <article className="rounded-[20px] bg-[#FFFEFA] p-5 sm:p-6 md:p-8 shadow-sm">
             <span className="mb-4 inline-block rounded-full bg-[#FFF3D9] px-3 py-1 text-xs font-bold text-[#F5A623]">
               Notre public
             </span>
             <h2 className="mt-1 text-lg sm:text-xl font-bold">Pour qui est faite Kidelya ?</h2>
-            <p className="mt-3 text-sm text-[#4F5F45]">
+            <p className="mt-3 text-sm text-[#273068]">
               Kidelya s'adresse à toutes les personnes qui souhaitent proposer des activités enrichissantes aux enfants.
             </p>
             <ul className="mt-5 space-y-3">
@@ -264,14 +264,14 @@ export default function AboutPage() {
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#FFF3D9]">
                     <Icon kind={item.icon} className="h-4 w-4 text-[#F5A623]" />
                   </span>
-                  <span className="text-sm text-[#4F5F45]">{item.label}</span>
+                  <span className="text-sm text-[#273068]">{item.label}</span>
                 </li>
               ))}
             </ul>
           </article>
 
           {/* Pourquoi Kidelya */}
-          <article className="rounded-[20px] border border-[#F1D9B5] bg-white p-5 sm:p-6 md:p-8 shadow-sm">
+          <article className="rounded-[20px] bg-[#FFFEFA] p-5 sm:p-6 md:p-8 shadow-sm">
             <span className="mb-4 inline-block rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#273068]">
               Nos atouts
             </span>
@@ -280,8 +280,8 @@ export default function AboutPage() {
               {strengths.map((item) => (
                 <li key={item.label} className="flex items-center gap-4">
                   <span className="shrink-0 text-xs font-black text-[#E94E6F]/40">{item.num}</span>
-                  <div className="h-px flex-1 bg-[#F1D9B5]" />
-                  <span className="text-sm text-[#4F5F45]">{item.label}</span>
+                  <div className="h-px flex-1 bg-[#D5CDE2]" />
+                  <span className="text-sm text-[#273068]">{item.label}</span>
                 </li>
               ))}
             </ul>
@@ -291,12 +291,12 @@ export default function AboutPage() {
 
       {/* ── CTA ── */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-16">
-        <div className="relative overflow-hidden rounded-[20px] border border-[#F1D9B5] bg-white px-5 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10 shadow-sm">
+        <div className="relative overflow-hidden rounded-[20px] bg-[#FFFEFA] px-5 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10 shadow-sm">
           <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-[#E94E6F]/5" />
           <div className="absolute -left-10 bottom-0 h-32 w-32 rounded-full bg-[#273068]/5" />
           <div className="relative z-10 text-center">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Rejoignez l'aventure Kidelya</h2>
-            <p className="mx-auto mt-3 max-w-xl text-[14px] leading-7 text-[#4F5F45]">
+            <p className="mx-auto mt-3 max-w-xl text-[14px] leading-7 text-[#273068]">
               Découvrez une nouvelle façon de créer, organiser et partager des activités enrichissantes pour les enfants.
             </p>
             <div className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-4">

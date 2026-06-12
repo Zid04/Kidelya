@@ -12,7 +12,7 @@ class ActivityService
      */
     public function getPaginated(array $filters = [], int $perPage = 10): LengthAwarePaginator
     {
-        return Activity::with(['user', 'themes', 'competences', 'plannings', 'packs'])
+        return Activity::with(['user', 'themes', 'competences'])
 
             // Filtre : âge
             ->when(isset($filters['age']), function ($query) use ($filters) {
@@ -37,6 +37,16 @@ class ActivityService
                 $query->whereHas('competences', function ($q) use ($filters) {
                     $q->whereIn('idcompetence', (array) $filters['competences']);
                 });
+            })
+
+            // Filtre : statut de publication
+            ->when(isset($filters['published']), function ($query) use ($filters) {
+                $query->where('is_published', (bool) $filters['published']);
+            })
+
+            // Filtre : achetable
+            ->when(isset($filters['purchasable']), function ($query) use ($filters) {
+                $query->where('is_purchasable', (bool) $filters['purchasable']);
             })
 
             ->latest()

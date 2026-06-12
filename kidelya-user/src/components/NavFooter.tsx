@@ -36,7 +36,7 @@ export default function NavFooter() {
   ]
 
   return (
-    <footer className="border-t border-[#F1D9B5]/70 bg-transparent text-[#273068]">
+    <footer className="bg-transparent text-black">
       <div className="mx-auto max-w-7xl px-6 py-6">
         <div className="grid gap-5 md:grid-cols-[1fr_0.8fr_0.8fr_1fr]">
           <div>
@@ -48,13 +48,13 @@ export default function NavFooter() {
               />
             </div>
 
-            <p className="max-w-[210px] text-[11px] leading-5 text-[#5F6F4A]">
+            <p className="max-w-[210px] text-[11px] leading-5 text-black">
               Des activités pour grandir, créer et s’épanouir ensemble.
             </p>
           </div>
 
           <div>
-            <h3 className="mb-2 text-[12px] font-extrabold text-[#273068]">
+            <h3 className="mb-2 text-[12px] font-extrabold text-black">
               Navigation
             </h3>
             <ul className="space-y-1.5">
@@ -62,7 +62,7 @@ export default function NavFooter() {
                 <li key={item.label}>
                   <Link
                     to={item.to}
-                    className="text-[11px] text-[#5F6F4A] transition-colors hover:text-[#E94E6F]"
+                    className="text-[11px] text-black transition-colors hover:text-[#E94E6F]"
                   >
                     {item.label}
                   </Link>
@@ -72,7 +72,7 @@ export default function NavFooter() {
           </div>
 
           <div>
-            <h3 className="mb-2 text-[12px] font-extrabold text-[#273068]">
+            <h3 className="mb-2 text-[12px] font-extrabold text-black">
               Aide
             </h3>
             <ul className="space-y-1.5">
@@ -80,7 +80,7 @@ export default function NavFooter() {
                 <li key={item.label}>
                   <Link
                     to={item.to}
-                    className="text-[11px] text-[#5F6F4A] transition-colors hover:text-[#E94E6F]"
+                    className="text-[11px] text-black transition-colors hover:text-[#E94E6F]"
                   >
                     {item.label}
                   </Link>
@@ -90,11 +90,11 @@ export default function NavFooter() {
           </div>
 
           <div>
-            <h3 className="mb-2 text-[12px] font-extrabold text-[#273068]">
+            <h3 className="mb-2 text-[12px] font-extrabold text-black">
               Newsletter
             </h3>
 
-            <p className="mb-2 max-w-[240px] text-[11px] leading-5 text-[#5F6F4A]">
+            <p className="mb-2 max-w-[240px] text-[11px] leading-5 text-black">
               Recevez nos idées d’activités et nos nouveautés.
             </p>
 
@@ -106,7 +106,7 @@ export default function NavFooter() {
                 placeholder="Votre email"
                 required
                 disabled={status === "loading" || status === "success"}
-                className="min-w-0 flex-1 rounded-[8px] border border-[#F1D9B5] bg-white/80 px-2.5 py-1.5 text-[11px] text-[#273068] outline-none focus:ring-2 focus:ring-[#E94E6F]/25 disabled:opacity-60"
+                className="min-w-0 flex-1 rounded-[8px] border border-[#273068] bg-white/80 px-2.5 py-1.5 text-[11px] text-black outline-none focus:ring-2 focus:ring-[#E94E6F]/25 disabled:opacity-60"
               />
               <button
                 type="submit"
@@ -126,7 +126,7 @@ export default function NavFooter() {
           </div>
         </div>
 
-        <div className="mt-4 border-t border-[#F1D9B5]/70 pt-3 text-center text-[10px] text-[#5F6F4A]">
+        <div className="mt-4 border-t border-[#273068] pt-3 text-center text-[10px] text-black">
           © 2026 Kidelya - Tous droits réservés
         </div>
       </div>

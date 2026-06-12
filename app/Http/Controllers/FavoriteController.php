@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Favorite;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', Favorite::class);
+
         $favorites = Favorite::where('iduser', auth()->id())
             ->with(['activity', 'pack'])
             ->get();

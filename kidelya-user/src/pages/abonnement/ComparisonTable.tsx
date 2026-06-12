@@ -4,7 +4,7 @@ function CellIcon({ ok }: { ok: boolean }) {
   return ok ? (
     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#E94E6F] text-white text-xs font-bold">✓</span>
   ) : (
-    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7D7D7] text-white text-xs font-bold">–</span>
+    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D5CDE2] text-[#7C67B2] text-xs font-bold">–</span>
   )
 }
 
@@ -84,32 +84,32 @@ const ROWS = [
 export default function ComparisonTable() {
   return (
     <section className="mt-14">
-      <h3 className="mb-5 text-center text-xl font-semibold text-[#273068]">Comparez nos formules</h3>
+      <h3 className="mb-5 text-center text-xl font-semibold text-[#7C67B2]">Comparez nos formules</h3>
 
       <div className="overflow-x-auto rounded-xl backdrop-blur-sm">
         <table className="w-full min-w-[860px] border-collapse text-sm">
           <thead>
-            <tr className="bg-[#FFF3E0]/70 text-[#273068]">
+            <tr className="bg-[#D5CDE2] text-[#7C67B2]">
               <th className="p-3 text-left font-semibold">
                 Fonctionnalités
-                <p className="mt-1 text-[11px] font-normal text-[#6F8D4C]">Ce qui est inclus dans chaque formule</p>
+                <p className="mt-1 text-[11px] font-normal text-[#273068]">Ce qui est inclus dans chaque formule</p>
               </th>
               <th className="p-3 text-center font-semibold">
                 Gratuit
-                <p className="mt-1 text-[11px] font-normal text-[#6F8D4C]">Découverte</p>
+                <p className="mt-1 text-[11px] font-normal text-[#273068]">Découverte</p>
               </th>
               <th className="p-3 text-center font-semibold">
                 Mensuel
-                <p className="mt-1 text-[11px] font-normal text-[#6F8D4C]">Le plus choisi</p>
+                <p className="mt-1 text-[11px] font-normal text-[#273068]">Le plus choisi</p>
               </th>
               <th className="p-3 text-center font-semibold">
                 Annuel
-                <p className="mt-1 text-[11px] font-normal text-[#6F8D4C]">Économique</p>
+                <p className="mt-1 text-[11px] font-normal text-[#273068]">Économique</p>
               </th>
             </tr>
           </thead>
 
-          <tbody className="text-[#4F5F45]">
+          <tbody className="text-[#273068]">
             {ROWS.map((row) => (
               <tr key={row.label}>
                 <td className="p-3">

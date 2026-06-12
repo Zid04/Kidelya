@@ -10,6 +10,8 @@ use App\Services\ActivityService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ActivityController extends Controller
 {
@@ -28,10 +30,16 @@ class ActivityController extends Controller
         $activities = Activity::where('iduser', $user->iduser)
             ->with(['themes', 'competences'])
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(20);
 
         return response()->json([
-            'data' => $activities,
+            'data' => $activities->items(),
+            'meta' => [
+                'total'        => $activities->total(),
+                'per_page'     => $activities->perPage(),
+                'current_page' => $activities->currentPage(),
+                'last_page'    => $activities->lastPage(),
+            ],
         ]);
     }
 
@@ -79,7 +87,10 @@ class ActivityController extends Controller
             ->pluck('idpack')
             ->toArray();
 
-        $hasPack = $activity->packs->whereIn('idpack', $userPackIds)->isNotEmpty();
+        $hasPack = !empty($userPackIds) && DB::table('packs_activities')
+            ->whereIn('idpack', $userPackIds)
+            ->where('idactivities', $activity->idactivities)
+            ->exists();
 
         $hasPurchased = ActivityPurchase::where('user_id', $user->iduser)
             ->where('activity_id', $activity->idactivities)
@@ -90,11 +101,8 @@ class ActivityController extends Controller
             ->exists();
 
         $data = $activity->toArray();
-        // is_owned : vrai si l'utilisateur est le créateur, a acheté un pack qui la contient, ou l'a achetée individuellement.
         $data['is_owned']        = $isCreator || $hasPack || $hasPurchased;
-        // has_subscription : les deux conditions doivent être vraies — l'utilisateur a un abonnement actif
-        // ET l'activité est explicitement marquée comme incluse dans l'abonnement par l'admin.
-        $data['has_subscription'] = $hasActiveSubscription && (bool) $activity->included_in_subscription;
+        $data['has_subscription'] = $hasActiveSubscription;
 
         return response()->json(['data' => $data]);
     }
@@ -107,11 +115,39 @@ class ActivityController extends Controller
         $this->authorize('create', Activity::class);
 
         $data = array_merge($request->validated(), ['iduser' => auth()->id()]);
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('activities', 'public');
+            $data['photourl'] = Storage::url($path);
+        }
+        unset($data['photo']);
+
+        $rawSteps = $request->input('steps', []);
+        if (!empty($rawSteps)) {
+            $processedSteps = [];
+            foreach ($rawSteps as $i => $step) {
+                if ($request->hasFile("steps.$i.image")) {
+                    $imgPath = $request->file("steps.$i.image")->store('steps', 'public');
+                    $imageUrl = Storage::url($imgPath);
+                } else {
+                    $imageUrl = $step['image_url'] ?? null;
+                }
+                $processedSteps[] = ['text' => $step['text'] ?? '', 'image' => $imageUrl];
+            }
+            $data['steps'] = $processedSteps;
+        }
+
+        $themes      = $data['themes']      ?? [];
+        $competences = $data['competences'] ?? [];
+        unset($data['themes'], $data['competences']);
+
         $activity = $this->activityService->create($data);
+        $activity->themes()->sync($themes);
+        $activity->competences()->sync($competences);
 
         return response()->json([
             'message' => 'Activity created successfully',
-            'data'    => $activity
+            'data'    => $activity->load(['themes', 'competences'])
         ], 201);
     }
 
@@ -122,11 +158,44 @@ class ActivityController extends Controller
     {
         $this->authorize('update', $activity);
 
-        $updated = $this->activityService->update($activity, $request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            if ($activity->photourl) {
+                $old = str_replace('/storage/', '', $activity->photourl);
+                Storage::disk('public')->delete($old);
+            }
+            $path = $request->file('photo')->store('activities', 'public');
+            $data['photourl'] = Storage::url($path);
+        }
+        unset($data['photo']);
+
+        $rawSteps = $request->input('steps', []);
+        if (!empty($rawSteps)) {
+            $processedSteps = [];
+            foreach ($rawSteps as $i => $step) {
+                if ($request->hasFile("steps.$i.image")) {
+                    $imgPath = $request->file("steps.$i.image")->store('steps', 'public');
+                    $imageUrl = Storage::url($imgPath);
+                } else {
+                    $imageUrl = $step['image_url'] ?? null;
+                }
+                $processedSteps[] = ['text' => $step['text'] ?? '', 'image' => $imageUrl];
+            }
+            $data['steps'] = $processedSteps;
+        }
+
+        $themes      = $data['themes']      ?? null;
+        $competences = $data['competences'] ?? null;
+        unset($data['themes'], $data['competences']);
+
+        $updated = $this->activityService->update($activity, $data);
+        if ($themes !== null)      $updated->themes()->sync($themes);
+        if ($competences !== null) $updated->competences()->sync($competences);
 
         return response()->json([
             'message' => 'Activity updated successfully',
-            'data'    => $updated
+            'data'    => $updated->load(['themes', 'competences'])
         ]);
     }
 

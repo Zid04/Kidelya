@@ -41,8 +41,8 @@ export default function PackCard({
     <article
       onClick={onSelect}
       style={{ scrollSnapAlign: "start", minWidth: "220px", maxWidth: "220px" }}
-      className={`flex cursor-pointer flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg ${
-        isActive ? "border-[#E94E6F] ring-2 ring-[#E94E6F]/30" : "border-[#F1D9B5]"
+      className={`flex cursor-pointer flex-col overflow-hidden rounded-2xl shadow-sm transition hover:-translate-y-1 hover:shadow-lg ${
+        isActive ? "bg-[#FFFEFA] ring-2 ring-[#E94E6F]/40" : "bg-[#FFFEFA]"
       }`}
     >
       {/* Image */}

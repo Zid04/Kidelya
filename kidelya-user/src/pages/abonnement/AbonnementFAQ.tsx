@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 function RefreshIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6 mb-2 text-[#273068]" fill="none">
+    <svg viewBox="0 0 24 24" className="h-6 w-6 mb-2 text-[#7C67B2]" fill="none">
       <path d="M4 12a8 8 0 018-8 8 8 0 016.93 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
       <path d="M20 4v4h-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M20 12a8 8 0 01-8 8 8 8 0 01-6.93-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
@@ -47,12 +47,12 @@ const GUARANTEES = [
 export default function AbonnementFAQ() {
   return (
     <section className="mt-14">
-      <h3 className="mb-5 text-center text-xl font-semibold text-[#273068]">Questions fréquentes</h3>
+      <h3 className="mb-5 text-center text-xl font-semibold text-[#7C67B2]">Questions fréquentes</h3>
 
       <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
         <div>
           {FAQ.map(([question, answer]) => (
-            <details key={question} className="border-b border-[#F1D9B5]/60 bg-transparent px-2 py-3 text-sm text-[#4F5F45] last:border-b-0">
+            <details key={question} className="border-b border-[#D5CDE2] bg-transparent px-2 py-3 text-sm text-[#273068] last:border-b-0">
               <summary className="cursor-pointer font-semibold text-[#273068] list-none flex items-center justify-between">
                 {question}
                 <span className="ml-2 text-[#E94E6F] text-lg leading-none">+</span>
@@ -67,13 +67,13 @@ export default function AbonnementFAQ() {
             <div key={title} className="flex flex-col items-center text-center px-4 py-3">
               {icon}
               <p className="text-sm font-semibold text-[#273068]">{title}</p>
-              <p className="mt-1 text-xs text-[#4F5F45]">{desc}</p>
+              <p className="mt-1 text-xs text-[#273068]">{desc}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <p className="mt-6 text-center text-xs text-[#6F8D4C]">
+      <p className="mt-6 text-center text-xs text-[#273068]">
         Une question ?{" "}
         <Link to="/contact" className="font-semibold text-[#E94E6F]">Contactez-nous</Link>
       </p>

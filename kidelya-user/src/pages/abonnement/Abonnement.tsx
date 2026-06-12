@@ -55,15 +55,15 @@ export default function AbonnementPage() {
 
       <main className="mx-auto max-w-6xl px-6 pb-16">
         {error && (
-          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">
+          <div className="mb-6 rounded-xl bg-[#F1B9C3] px-5 py-4 text-sm font-semibold text-[#E94E6F]">
             {error}
           </div>
         )}
 
         {loading ? (
-          <div className="py-16 text-center text-[#6F8D4C]">Chargement des formules...</div>
+          <div className="py-16 text-center text-[#7C67B2]">Chargement des formules...</div>
         ) : plans.length === 0 && !error ? (
-          <p className="mx-auto max-w-2xl py-16 text-center text-[#6F8D4C]">
+          <p className="mx-auto max-w-2xl py-16 text-center text-[#273068]">
             Les formules sont momentanément indisponibles.
           </p>
         ) : (
@@ -74,7 +74,7 @@ export default function AbonnementPage() {
           </div>
         )}
 
-        <p className="mt-10 text-center text-xs text-black">
+        <p className="mt-10 text-center text-xs text-[#273068]">
           Paiement 100% sécurisé. Annulez quand vous voulez. Sans engagement.
         </p>
 

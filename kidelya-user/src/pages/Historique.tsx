@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import api from "@/api/axios"
 
@@ -10,6 +10,13 @@ interface Transaction {
   status: "success" | "refunded" | "failed"
   created_at: string
   payment_ref?: string | null
+}
+
+const TYPE_LABEL: Record<Transaction["type"], string> = {
+  activity:     "Activité",
+  pack:         "Pack",
+  credits:      "Crédits",
+  subscription: "Abonnement",
 }
 
 export default function HistoriqueAchats() {
@@ -33,8 +40,8 @@ export default function HistoriqueAchats() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-[#6F8D4C]">
-        Chargement de l’historique…
+      <div className="min-h-screen flex items-center justify-center text-[#7C67B2]">
+        Chargement de l'historique…
       </div>
     )
   }
@@ -43,81 +50,49 @@ export default function HistoriqueAchats() {
     <div className="min-h-screen bg-white px-6 py-10 max-w-5xl mx-auto">
 
       {error && (
-        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
+        <div className="mb-6 rounded-xl bg-red-50 px-5 py-4 text-sm font-semibold text-red-600">{error}</div>
       )}
 
-      {/* TITRE */}
+      {/* En-tête */}
       <div className="flex justify-between items-center mb-10">
-        <h1 className="text-3xl font-bold text-[#93197D]">
-          Historique d’achat 🌸
-        </h1>
-
+        <h1 className="text-3xl font-black text-[#7C67B2]">Historique d'achat</h1>
         <Link
           to="/mes-achats"
-          className="px-4 py-2 bg-[#E94E6F] text-white rounded-lg font-semibold hover:bg-[#d63f5f]"
+          className="-ml-0 px-4 py-2 bg-[#E94E6F] text-white rounded-lg font-semibold hover:bg-[#d63f5f]"
         >
           Retour
         </Link>
       </div>
 
-      {/* SI AUCUNE TRANSACTION */}
       {transactions.length === 0 && (
-        <p className="text-[#6F8D4C] text-center">
-          Aucun achat pour le moment.
-        </p>
+        <p className="text-[#273068] text-center py-10">Aucun achat pour le moment.</p>
       )}
 
-      {/* LISTE DES TRANSACTIONS */}
       <div className="space-y-4">
         {transactions.map((t) => (
           <div
             key={t.id}
-            className="bg-white rounded-xl shadow-sm border border-[#FDC600]/40 p-5 flex justify-between items-center"
+            className="bg-[#FFFEFA] rounded-xl shadow-sm p-5 flex justify-between items-center"
           >
-            {/* Infos principales */}
             <div>
-              <h3 className="text-lg font-semibold text-[#93197D]">
-                {t.title}
-              </h3>
-
-              <p className="text-sm text-[#6F8D4C]">
-                {new Date(t.created_at).toLocaleDateString("fr-FR")} •{" "}
-                {t.type === "activity" && "Activité"}
-                {t.type === "pack" && "Pack"}
-                {t.type === "credits" && "Crédits"}
-                {t.type === "subscription" && "Abonnement"}
+              <h3 className="text-lg font-semibold text-[#7C67B2]">{t.title}</h3>
+              <p className="text-sm text-[#273068] mt-0.5">
+                {new Date(t.created_at).toLocaleDateString("fr-FR")} · {TYPE_LABEL[t.type]}
               </p>
-
               {t.payment_ref && (
-                <p className="text-xs text-[#6F8D4C] mt-1">
-                  Référence : {t.payment_ref}
-                </p>
+                <p className="text-xs text-[#273068] mt-1">Référence : {t.payment_ref}</p>
               )}
             </div>
 
-            {/* Montant + statut */}
             <div className="text-right">
-              <p className="text-xl font-bold text-[#E94E6F]">
-                {t.amount.toFixed(2)} €
-              </p>
-
-              {t.status === "success" && (
-                <span className="text-xs px-3 py-1 bg-[#DFFFD6] text-[#4C8D4C] rounded-full font-semibold">
-                  Succès
-                </span>
-              )}
-
-              {t.status === "refunded" && (
-                <span className="text-xs px-3 py-1 bg-[#FFF3E0] text-[#E94E6F] rounded-full font-semibold">
-                  Remboursé
-                </span>
-              )}
-
-              {t.status === "failed" && (
-                <span className="text-xs px-3 py-1 bg-[#FFE0E0] text-[#E94E6F] rounded-full font-semibold">
-                  Échoué
-                </span>
-              )}
+              <p className="text-xl font-black text-[#E94E6F]">{t.amount.toFixed(2)} €</p>
+              <span className={`mt-1 inline-block text-xs px-3 py-0.5 rounded-full font-semibold ${
+                t.status === "success"  ? "bg-[#D5CDE2] text-[#7C67B2]" :
+                t.status === "refunded" ? "bg-[#F4BB48]/30 text-[#273068]" :
+                "bg-[#F1B9C3] text-[#E94E6F]"
+              }`}>
+                {t.status === "success" ? "Succès" : t.status === "refunded" ? "Remboursé" : "Échoué"}
+              </span>
             </div>
           </div>
         ))}

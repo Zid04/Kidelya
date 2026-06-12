@@ -12,6 +12,8 @@ class CartController extends Controller
     use AuthorizesRequests;
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', CartItem::class);
+
         $items = CartItem::where('iduser', auth()->id())
             ->with(['activity', 'pack'])
             ->get();

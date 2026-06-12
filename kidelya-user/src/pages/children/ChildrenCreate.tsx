@@ -47,7 +47,16 @@ export default function ChildrenCreate() {
   return (
     <div className="min-h-screen bg-white px-6 py-10 max-w-xl mx-auto">
 
-      <h1 className="text-3xl font-bold text-[#93197D] mb-8">Ajouter un enfant 🌸</h1>
+      <div className="flex items-center gap-3 mb-8">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="-ml-4 px-4 py-2 bg-[#E94E6F] text-white rounded-lg font-semibold hover:bg-[#d63f5f]"
+        >
+          Retour
+        </button>
+        <h1 className="text-3xl font-bold text-[#7C67B2]">Ajouter un enfant</h1>
+      </div>
 
       {success && (
         <div className="mb-4 rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-sm font-semibold text-green-700">
@@ -59,45 +68,45 @@ export default function ChildrenCreate() {
         <div className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">{errors.general}</div>
       )}
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-[#FDC600]/40 p-6 space-y-5">
+      <form onSubmit={handleSubmit} className="bg-[#FFFEFA] rounded-xl shadow-sm p-6 space-y-5">
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-semibold text-[#93197D] mb-1">Prénom *</label>
+            <label className="block text-sm font-semibold text-[#7C67B2] mb-1">Prénom *</label>
             <input
               type="text" value={firstname} onChange={e => setFirstname(e.target.value)} required
-              className="w-full border border-[#FDC600]/40 rounded-lg px-4 py-2"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2"
             />
             {errors.firstname && <p className="mt-1 text-xs text-red-500">{errors.firstname}</p>}
           </div>
           <div>
-            <label className="block text-sm font-semibold text-[#93197D] mb-1">Nom *</label>
+            <label className="block text-sm font-semibold text-[#7C67B2] mb-1">Nom *</label>
             <input
               type="text" value={lastname} onChange={e => setLastname(e.target.value)} required
-              className="w-full border border-[#FDC600]/40 rounded-lg px-4 py-2"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2"
             />
             {errors.lastname && <p className="mt-1 text-xs text-red-500">{errors.lastname}</p>}
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-[#93197D] mb-1">Date de naissance *</label>
+          <label className="block text-sm font-semibold text-[#7C67B2] mb-1">Date de naissance *</label>
           <input
             type="date" value={birthday} onChange={e => setBirthday(e.target.value)} required
-            className="w-full border border-[#FDC600]/40 rounded-lg px-4 py-2"
+            className="w-full border border-gray-200 rounded-lg px-4 py-2"
           />
           {errors.birthday && <p className="mt-1 text-xs text-red-500">{errors.birthday}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-[#93197D] mb-2">Sexe *</label>
+          <label className="block text-sm font-semibold text-[#7C67B2] mb-2">Sexe *</label>
           <div className="flex gap-4">
             {(["male", "female", "other"] as const).map(s => (
               <label key={s} className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-4 py-3 font-semibold transition-colors ${
-                sexe === s ? "border-[#E94E6F] bg-[#FFF5F7] text-[#E94E6F]" : "border-gray-200 text-[#374151] hover:border-[#E94E6F]/50"
+                sexe === s ? "border-[#7C67B2] bg-[#D5CDE2] text-[#273068]" : "border-gray-200 text-[#374151] hover:border-[#7C67B2]/50"
               }`}>
                 <input type="radio" name="sexe" value={s} checked={sexe === s} onChange={() => setSexe(s)} className="sr-only" />
-                {s === "male" ? "👦 Garçon" : s === "female" ? "👧 Fille" : "⚧ Autre"}
+                {s === "male" ? "Garçon" : s === "female" ? "Fille" : "Autre"}
               </label>
             ))}
           </div>
@@ -105,28 +114,20 @@ export default function ChildrenCreate() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-[#93197D] mb-1">Note (optionnel)</label>
+          <label className="block text-sm font-semibold text-[#7C67B2] mb-1">Note (optionnel)</label>
           <textarea
             value={specificationNote} onChange={e => setSpecificationNote(e.target.value)}
             rows={3} placeholder="Allergies, besoins spécifiques…"
-            className="w-full border border-[#FDC600]/40 rounded-lg px-4 py-2 resize-none"
+            className="w-full border border-gray-200 rounded-lg px-4 py-2 resize-none"
           />
         </div>
 
-        <div className="flex gap-4 pt-2">
-          <button
-            type="submit" disabled={saving || !sexe}
-            className="flex-1 px-4 py-3 bg-[#E94E6F] text-white rounded-lg font-semibold hover:bg-[#d63f5f] disabled:opacity-50"
-          >
-            {saving ? "Enregistrement…" : "Ajouter l'enfant"}
-          </button>
-          <button
-            type="button" onClick={() => navigate(-1)}
-            className="flex-1 px-4 py-3 bg-white border border-[#93197D] text-[#93197D] rounded-lg font-semibold hover:bg-[#FFF3E0]"
-          >
-            Annuler
-          </button>
-        </div>
+        <button
+          type="submit" disabled={saving || !sexe}
+          className="w-full py-3 bg-[#E94E6F] text-white rounded-lg font-semibold hover:bg-[#d63f5f] disabled:opacity-50"
+        >
+          {saving ? "Enregistrement…" : "Ajouter l'enfant"}
+        </button>
       </form>
     </div>
   )

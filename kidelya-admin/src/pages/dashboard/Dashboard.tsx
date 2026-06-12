@@ -13,7 +13,6 @@ export default function Dashboard() {
     queryKey: ['stats-summary'],
     queryFn: async () => {
       const res = await api.get('/stats/summary')
-          console.log('summary raw:', res.data)
       return res.data.data
     }
   })
@@ -31,7 +30,6 @@ export default function Dashboard() {
     queryKey: ['last-users'],
     queryFn: async () => {
       const res = await api.get('/users')
-  console.log('users raw:', res.data)
       return res.data.data?.slice(0, 5) ?? []
     }
   })
@@ -40,7 +38,6 @@ export default function Dashboard() {
     queryKey: ['last-subs'],
     queryFn: async () => {
       const res = await api.get('/subscriptions')
-        console.log('sum raw:', res.data)
       return res.data.data?.slice(0, 5) ?? []
     }
   })

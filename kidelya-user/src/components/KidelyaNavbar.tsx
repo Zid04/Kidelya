@@ -46,10 +46,10 @@ export default function KidelyaNavbar() {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`whitespace-nowrap text-sm font-medium transition-colors ${
+                className={`whitespace-nowrap text-sm font-medium transition-colors rounded-md px-2 py-1 ${
                   pathname === link.href
                     ? "text-[#E94E6F]"
-                    : "text-[#273068] hover:text-[#E94E6F]"
+                    : "text-[#273068] hover:bg-[#D5CDE2] hover:text-[#7C67B2]"
                 }`}
               >
                 {link.label}
@@ -120,7 +120,7 @@ export default function KidelyaNavbar() {
                 className={`block rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   pathname === link.href
                     ? "text-[#E94E6F]"
-                    : "text-[#273068] hover:bg-[#F5F0FF] hover:text-[#E94E6F]"
+                    : "text-[#273068] hover:bg-[#D5CDE2] hover:text-[#7C67B2]"
                 }`}
                 onClick={() => setMenuOpen(false)}
               >

@@ -85,24 +85,35 @@ export default function MesActivites() {
     setDuplicating(a.idactivities)
     setDupError(null)
     try {
-      const copy = {
-        title:          `${a.title} (copie)`,
-        description:    a.description   ?? null,
-        agemin:         a.agemin        ?? null,
-        agemax:         a.agemax        ?? null,
-        duration:       a.duration      ?? null,
-        season:         a.season        ?? null,
-        location:       a.location      ?? null,
-        category:       a.category      ?? null,
-        difficulty:     a.difficulty    ?? "facile",
-        steps:          Array.isArray(a.steps) ? a.steps : (a.steps ? [a.steps] : []),
-        materials:      Array.isArray(a.materials) ? a.materials : [],
-        credit_price:   a.credit_price  ?? 0,
-        is_purchasable: a.is_purchasable ?? false,
-        is_published:   false,
-        iduser:         a.iduser,          // ID de l'activité originale = l'utilisateur connecté
-      }
-      const res = await createActivity(copy)
+      const data = new FormData()
+      data.append("title", `${a.title} (copie)`)
+      if (a.description) data.append("description", a.description)
+      if (a.agemin != null)    data.append("agemin",    String(a.agemin))
+      if (a.agemax != null)    data.append("agemax",    String(a.agemax))
+      if (a.duration != null)  data.append("duration",  String(a.duration))
+      if (a.season)    data.append("season",    a.season)
+      if (a.location)  data.append("location",  a.location)
+      if (a.category)  data.append("category",  a.category)
+      if (a.difficulty) data.append("difficulty", a.difficulty)
+      if (a.credit_price != null) data.append("credit_price", String(a.credit_price))
+      data.append("is_purchasable", a.is_purchasable ? "1" : "0")
+      data.append("is_published",   "0")
+
+      // Étapes — références aux images existantes via image_url (pas de re-upload)
+      const steps = Array.isArray(a.steps) ? a.steps : []
+      steps.forEach((step, i) => {
+        const s = typeof step === "string" ? { text: step, image: null } : step
+        if (s.text?.trim()) {
+          data.append(`steps[${i}][text]`, s.text.trim())
+          if (s.image) data.append(`steps[${i}][image_url]`, s.image)
+        }
+      })
+
+      // Matériaux
+      const mats = Array.isArray(a.materials) ? a.materials : []
+      mats.forEach((m) => data.append("materials[]", m))
+
+      const res = await createActivity(data)
       const newActivity = res.data ?? res
       if (newActivity?.idactivities) {
         setActivities((prev) => [newActivity, ...prev])
@@ -214,7 +225,7 @@ export default function MesActivites() {
       ) : (
         <div className="grid grid-cols-3 gap-5">
           {paginated.map((a) => (
-            <article key={a.idactivities} className="overflow-hidden rounded-2xl bg-white shadow-sm">
+            <article key={a.idactivities} className="overflow-hidden rounded-2xl bg-[#FFFEFA] shadow-sm">
               {/* Image */}
               {a.photourl ? (
                 <img src={a.photourl} alt={a.title} className="h-44 w-full object-cover" />
@@ -228,12 +239,12 @@ export default function MesActivites() {
 
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {a.agemin != null && a.agemax != null && (
-                    <span className="rounded-full bg-[#273068] px-2.5 py-0.5 text-[10px] font-bold text-white">
+                    <span className="rounded-full bg-[#F1B9C3] px-2.5 py-0.5 text-[10px] font-bold text-[#E94E6F]">
                       {a.agemin} - {a.agemax} ans
                     </span>
                   )}
                   {a.category && (
-                    <span className="rounded-full bg-[#FFE7ED] px-2.5 py-0.5 text-[10px] font-bold text-[#E94E6F]">
+                    <span className="rounded-full bg-[#CDC1DC] px-2.5 py-0.5 text-[10px] font-bold text-[#273068]">
                       {a.category}
                     </span>
                   )}

@@ -35,22 +35,19 @@ use App\Http\Controllers\MeController;
 | Routes publiques (sans authentification)
 |----------------------------------------------------------------------
 */
-Route::post('register', [AuthController::class, 'register']);
-Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-Route::post('login', [AuthController::class, 'login']);
-Route::post('contact', [ContactController::class, 'send']);
-Route::post('newsletter', [ContactController::class, 'newsletter']);
-Route::post('admin/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login']);
+Route::post('register', [AuthController::class, 'register'])->name('auth.register');
+Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('auth.logout');
+Route::post('contact', [ContactController::class, 'send'])->name('contact.send');
+Route::post('newsletter', [ContactController::class, 'newsletter'])->name('newsletter.subscribe');
+Route::post('admin/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login'])->name('admin.login');
 
 // Webhook Stripe — DOIT être hors du middleware auth
-Route::post('stripe/webhook', [StripeController::class, 'webhook']);
+Route::post('stripe/webhook', [StripeController::class, 'webhook'])->name('stripe.webhook');
 
-Route::get('/public/packs', [PublicPackController::class, 'index'])
-    ->name('public.packs.index');
-Route::get('/public/packs/{pack}', [PublicPackController::class, 'show'])
-    ->name('public.packs.show');
-Route::get('/subscriptions/plans', [SubscriptionController::class, 'index'])
-    ->name('subscriptions.plans');
+Route::get('public/packs', [PublicPackController::class, 'index'])->name('public.packs.index');
+Route::get('public/packs/{pack}', [PublicPackController::class, 'show'])->name('public.packs.show');
+Route::get('subscriptions/plans', [SubscriptionController::class, 'index'])->name('subscriptions.plans');
 
 /*
 |----------------------------------------------------------------------
@@ -146,6 +143,10 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('groups.children.add');
     Route::delete('groups/{group}/children', [GroupController::class, 'removeChild'])
         ->name('groups.children.remove');
+    Route::post('groups/{group}/activities', [GroupController::class, 'addActivity'])
+        ->name('groups.activities.add');
+    Route::delete('groups/{group}/activities', [GroupController::class, 'removeActivity'])
+        ->name('groups.activities.remove');
 
     /*
     |----------------------------------------------------------------------
@@ -173,9 +174,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /*
     |----------------------------------------------------------------------
-    | Subscriptions (Pack Users)
+    | Subscriptions
     |----------------------------------------------------------------------
     */
+    // Pack purchases (PackUserController)
     Route::get('subscriptions', [PackUserController::class, 'index'])
         ->name('subscriptions.index');
     Route::get('subscriptions/{subscription}', [PackUserController::class, 'show'])
@@ -186,6 +188,18 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('subscriptions.renew');
     Route::patch('subscriptions/{subscription}/deactivate', [PackUserController::class, 'deactivate'])
         ->name('subscriptions.deactivate');
+    // Stripe recurring plans (SubscriptionController)
+    Route::post('subscriptions/subscribe', [SubscriptionController::class, 'subscribe'])
+        ->name('subscriptions.subscribe');
+    Route::post('subscriptions/cancel', [SubscriptionController::class, 'cancel'])
+        ->name('subscriptions.cancel');
+    Route::get('subscriptions/status', [SubscriptionController::class, 'status'])
+        ->name('subscriptions.status');
+    // Stripe subscription checkout
+    Route::post('stripe/subscription/checkout', [StripeSubscriptionController::class, 'checkout'])
+        ->name('stripe.subscription.checkout');
+    Route::post('stripe/subscription/cancel', [StripeSubscriptionController::class, 'cancel'])
+        ->name('stripe.subscription.cancel');
 
     /*
     |----------------------------------------------------------------------
@@ -220,7 +234,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('checkout', [StripeController::class, 'createCheckout'])
             ->name('checkout');
         Route::post('activity-checkout', [StripeController::class, 'createActivityCheckout'])
-            ->name('activity-checkout');
+            ->name('activity.checkout');
         Route::get('payments', [StripeController::class, 'payments'])
             ->name('payments');
         Route::post('refund', [StripeController::class, 'refund'])
@@ -262,40 +276,47 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('report-activities', ReportActivityController::class);
 
     /*
-|----------------------------------------------------------------------
-| Settings
-|----------------------------------------------------------------------
-*/
-Route::get('settings', [SettingController::class, 'index'])
-    ->name('settings.index');
-Route::patch('settings', [SettingController::class, 'update'])
-    ->name('settings.update');
+    |----------------------------------------------------------------------
+    | Settings
+    |----------------------------------------------------------------------
+    */
+    Route::get('settings', [SettingController::class, 'index'])
+        ->name('settings.index');
+    Route::patch('settings', [SettingController::class, 'update'])
+        ->name('settings.update');
 
-    Route::post('/subscriptions/subscribe', [SubscriptionController::class, 'subscribe']);
-    Route::post('/subscriptions/cancel', [SubscriptionController::class, 'cancel']);
-    Route::get('/subscriptions/status', [SubscriptionController::class, 'status']);
+    /*
+    |----------------------------------------------------------------------
+    | Favorites
+    |----------------------------------------------------------------------
+    */
+    Route::get('favorites', [FavoriteController::class, 'index'])
+        ->name('favorites.index');
+    Route::post('favorites/add', [FavoriteController::class, 'add'])
+        ->name('favorites.add');
+    Route::delete('favorites/remove', [FavoriteController::class, 'remove'])
+        ->name('favorites.remove');
 
-    Route::post('/stripe/subscription/checkout', [StripeSubscriptionController::class, 'checkout']);
-    Route::post('/stripe/subscription/cancel', [StripeSubscriptionController::class, 'cancel']);
+    /*
+    |----------------------------------------------------------------------
+    | Cart
+    |----------------------------------------------------------------------
+    */
+    Route::get('cart', [CartController::class, 'index'])
+        ->name('cart.index');
+    Route::post('cart/add', [CartController::class, 'add'])
+        ->name('cart.add');
+    Route::patch('cart/{cartItem}', [CartController::class, 'update'])
+        ->name('cart.update');
+    Route::delete('cart/{cartItem}', [CartController::class, 'remove'])
+        ->name('cart.remove');
+    Route::delete('cart', [CartController::class, 'clear'])
+        ->name('cart.clear');
 
-    // FAVORIS
-    Route::get('/favorites', [FavoriteController::class, 'index']);
-    Route::post('/favorites/add', [FavoriteController::class, 'add']);
-    Route::delete('/favorites/remove', [FavoriteController::class, 'remove']);
+    Route::get('dashboard', [DashboardController::class, 'index'])
+        ->name('api.dashboard');
 
-    // PANIER
-    Route::get('/cart', [CartController::class, 'index']);
-    Route::post('/cart/add', [CartController::class, 'add']);
-    Route::patch('/cart/{cartItem}', [CartController::class, 'update']);
-    Route::delete('/cart/{cartItem}', [CartController::class, 'remove']);
-    Route::delete('/cart', [CartController::class, 'clear']);
-
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-
-    // ── Ma bibliothèque ──────────────────────────────────────────
-    Route::get('/me/purchases', [MeController::class, 'purchases'])->name('me.purchases');
-
-    // ── Historique des transactions ──────────────────────────────
-    Route::get('/me/transactions', [MeController::class, 'transactions'])->name('me.transactions');
+    Route::get('me/purchases', [MeController::class, 'purchases'])->name('me.purchases');
+    Route::get('me/transactions', [MeController::class, 'transactions'])->name('me.transactions');
 
 });

@@ -20,8 +20,7 @@ export default function ActivityShow() {
     async function load() {
       try {
         const data = await getMyActivity(Number(id))
-        const canAccess = data.is_owned === true || data.has_subscription === true || data.iduser != null
-        if (!canAccess) { setAccessDenied(true); return }
+        if (!data.is_owned && !data.has_subscription) { setAccessDenied(true); return }
         setActivity(data)
       } catch {
         setError("Impossible de charger cette activité.")
@@ -52,7 +51,9 @@ export default function ActivityShow() {
     </div>
   )
 
-  const steps  = Array.isArray(activity.steps)    ? activity.steps    : []
+  const steps  = (Array.isArray(activity.steps) ? activity.steps : []).map((s) =>
+    typeof s === "string" ? { text: s, image: null } : s
+  )
   const mats   = Array.isArray(activity.materials) ? activity.materials : []
   const themes = activity.themes      ?? []
   const comps  = activity.competences ?? []
@@ -213,7 +214,12 @@ export default function ActivityShow() {
                       <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#21164F] text-xs font-black text-white">
                         {i + 1}
                       </span>
-                      <p className="pt-0.5 text-sm leading-6 text-gray-600">{step}</p>
+                      <div className="flex-1">
+                        <p className="pt-0.5 text-sm leading-6 text-gray-600">{step.text}</p>
+                        {step.image && (
+                          <img src={step.image} alt="" className="mt-2 rounded-lg max-h-40 w-auto object-cover" />
+                        )}
+                      </div>
                     </li>
                   ))}
                 </ol>
@@ -337,7 +343,12 @@ export default function ActivityShow() {
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#21164F] text-sm font-black text-white">
                   {i + 1}
                 </span>
-                <p className="text-sm leading-6 text-gray-600">{step}</p>
+                <div className="flex-1">
+                  <p className="text-sm leading-6 text-gray-600">{step.text}</p>
+                  {step.image && (
+                    <img src={step.image} alt="" className="mt-3 rounded-xl max-h-52 w-auto object-cover" />
+                  )}
+                </div>
               </div>
             ))
           )}

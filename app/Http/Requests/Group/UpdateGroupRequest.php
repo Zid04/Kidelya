@@ -16,6 +16,8 @@ class UpdateGroupRequest extends FormRequest
         return [
             'name'        => 'sometimes|string|max:100',
             'description' => 'nullable|string|max:255',
+            'children'    => 'nullable|array',
+            'children.*'  => 'integer|exists:children,idchildren',
         ];
     }
 

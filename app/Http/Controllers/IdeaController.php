@@ -74,7 +74,7 @@ class IdeaController extends Controller
      */
     public function convertToActivity(Idea $idea): JsonResponse
     {
-        $this->authorize('delete', $idea);
+        $this->authorize('convert', $idea);
 
         $activity = $this->ideaService->convertToActivity($idea, auth()->user());
 

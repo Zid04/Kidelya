@@ -136,7 +136,7 @@ export default function PlanningIndex() {
           onSelectDay={(day) => { if (!isPastDay(day) && !freeLimitReached) { setSelectedDate(new Date(year, month, day)); setSaveSuccess(false); setSaveError(null) } }}
         />
 
-        <div className="rounded-2xl bg-white p-6 shadow-sm border border-gray-100 flex flex-col">
+        <div className="rounded-2xl bg-[#FFFEFA] p-6 shadow-sm border border-gray-100 flex flex-col">
           <PlanningForm
             selectedDate={selectedDate} freeLimitReached={freeLimitReached}
             saving={saving} saveSuccess={saveSuccess} saveError={saveError}
@@ -148,7 +148,7 @@ export default function PlanningIndex() {
       </div>
 
       {plannings.length === 0 && !loadError ? (
-        <div className="mt-8 rounded-2xl bg-white border border-gray-100 shadow-sm p-10 text-center">
+        <div className="mt-8 rounded-2xl bg-[#FFFEFA] border border-gray-100 shadow-sm p-10 text-center">
           <p className="text-3xl mb-2">📅</p>
           <p className="text-[#273068] font-semibold">Aucun planning créé</p>
           <p className="text-sm text-[#9CA3AF] mt-1">Sélectionnez une date dans le calendrier pour commencer.</p>

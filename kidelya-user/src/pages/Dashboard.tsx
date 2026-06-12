@@ -39,7 +39,8 @@ function IconActivitesPlanifiees() {
 function IconAchatPack() {
   return (
     <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" />
+      <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61H19a2 2 0 001.99-1.74L22 6H6" />
     </svg>
   )
 }
@@ -93,16 +94,16 @@ export default function DashboardUser() {
   }
 
   const statsCards = [
-    { label: "Activités créées",     value: stats.activities_created,   icon: <IconActivitesCrees />,       bg: "bg-[#7B8CDE]", link: "/activities" },
+    { label: "Activités créées",     value: stats.activities_created,   icon: <IconActivitesCrees />,       bg: "bg-[#D5CDE2]", link: "/activities" },
     { label: "Activités faites",     value: stats.activities_favorites,  icon: <IconActivitesFaites />,      bg: "bg-[#E94E6F]", link: "/activities" },
-    { label: "Activités planifiées", value: stats.activities_planned,    icon: <IconActivitesPlanifiees />,  bg: "bg-[#6DBF67]", link: "/calendar" },
+    { label: "Activités planifiées", value: stats.activities_planned,    icon: <IconActivitesPlanifiees />,  bg: "bg-[#6F8D4C]", link: "/calendar" },
     { label: "Achat de pack",        value: stats.packs_purchased,       icon: <IconAchatPack />,            bg: "bg-[#F5A623]", link: "/packs" },
   ]
 
   const sidebarItems = [
-    { title: "Boutique",                 titleColor: "text-[#21164F]", desc: "Activités prêtes à l'emploi classées par âge et par thème.", link: "/library",     btn: "Explorer",          btnColor: "bg-[#8F6BC8] text-white", img: fleur1TB,       bg: "bg-white border border-gray-100" },
-    { title: "Packs d'activités",        titleColor: "text-[#E94E6F]", desc: "Des thèmes variés pour toutes les saisons et toutes les envies.", link: "/packs",   btn: "Voir les packs",    btnColor: "bg-[#6DBF67] text-white", img: fleur2TB,       bg: "bg-white border border-gray-100" },
-    { title: "Planifiez vos activités",  titleColor: "text-[#21164F]", desc: "Organisez vos activités dans un calendrier dédié.", link: "/calendar",              btn: "Voir le calendrier", btnColor: "bg-[#E94E6F] text-white", img: calendariconTB, bg: "bg-white border border-gray-100" },
+    { title: "Boutique",                 titleColor: "text-[#21164F]", desc: "Activités prêtes à l'emploi classées par âge et par thème.", link: "/library",     btn: "Explorer",          btnColor: "bg-[#8F6BC8] text-white", img: fleur1TB,       bg: "bg-[#FFFEFA] border border-gray-100" },
+    { title: "Packs d'activités",        titleColor: "text-[#6F8D4C]", desc: "Des thèmes variés pour toutes les saisons et toutes les envies.", link: "/packs",   btn: "Voir les packs",    btnColor: "bg-[#6F8D4C] text-white", img: fleur2TB,       bg: "bg-[#FFFEFA] border border-gray-100" },
+    { title: "Planifiez vos activités",  titleColor: "text-[#E94E6F]", desc: "Organisez vos activités dans un calendrier dédié.", link: "/calendar",              btn: "Voir le calendrier", btnColor: "bg-[#E94E6F] text-white", img: calendariconTB, bg: "bg-[#FFFEFA] border border-gray-100" },
     { title: "Passez à un abonnement",   titleColor: "text-white",     desc: "Débloquez l'accès illimité aux packs et au planning.", link: "/abonnements",        btn: "Découvrir les offres", btnColor: "bg-white text-[#8F6BC8]", img: fleur3TB, bg: "bg-[#8F6BC8]" },
   ]
 
@@ -142,7 +143,7 @@ export default function DashboardUser() {
               <Link
                 key={s.label}
                 to={s.link}
-                className="flex flex-col items-center gap-2 rounded-2xl border border-gray-100 bg-white p-3 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:flex-row sm:p-4 sm:text-left"
+                className="flex flex-col items-center gap-2 rounded-2xl border border-gray-100 bg-[#FFFEFA] p-3 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:flex-row sm:p-4 sm:text-left"
               >
                 <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${s.bg}`}>
                   {s.icon}
@@ -156,7 +157,7 @@ export default function DashboardUser() {
           </div>
 
           {/* Mini-card abonnement */}
-          <div className={`flex items-center gap-4 rounded-2xl p-4 ${plan ? "bg-[#F5F0FF] border border-[#8F6BC8]/20" : "bg-gray-50 border border-gray-100"}`}>
+          <div className={`flex items-center gap-4 rounded-2xl p-4 ${plan ? "bg-[#FFFEFA] border border-[#8F6BC8]/20" : "bg-[#FFFEFA] border border-gray-100"}`}>
             <span className={`h-10 w-10 flex shrink-0 items-center justify-center rounded-full text-white text-sm font-black ${plan ? "bg-[#8F6BC8]" : "bg-gray-300"}`}>
               {plan ? "★" : "○"}
             </span>
@@ -164,7 +165,7 @@ export default function DashboardUser() {
               <p className="text-sm font-black text-[#2F236D]">{plan ? plan.name : "Plan gratuit"}</p>
               {plan && daysLeft !== null ? (
                 <>
-                  <p className="text-xs text-[#6F8D4C]">{daysLeft} jour{daysLeft !== 1 ? "s" : ""} restant{daysLeft !== 1 ? "s" : ""}</p>
+                  <p className="text-xs text-[#7C67B2]">{daysLeft} jour{daysLeft !== 1 ? "s" : ""} restant{daysLeft !== 1 ? "s" : ""}</p>
                   <div className="mt-1.5 h-1.5 bg-[#8F6BC8]/20 rounded-full">
                     <div className="h-1.5 bg-[#8F6BC8] rounded-full transition-all" style={{ width: `${progressPct}%` }} />
                   </div>
@@ -184,7 +185,7 @@ export default function DashboardUser() {
           {/* Dernières activités */}
           <section>
             <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-base font-black text-[#21164F] sm:text-lg">Dernières activités</h2>
+              <h2 className="text-base font-black text-[#9076B6] sm:text-lg">Dernières activités</h2>
               <Link to="/activities" className="text-xs font-semibold text-[#21164F] hover:text-[#8F6BC8]">
                 Voir toutes →
               </Link>
@@ -194,7 +195,7 @@ export default function DashboardUser() {
             ) : (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {activities.slice(0, 3).map((a) => (
-                  <article key={a.idactivities} className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+                  <article key={a.idactivities} className="overflow-hidden rounded-2xl border border-gray-100 bg-[#FFFEFA] shadow-sm">
                     <div className="h-28 bg-gray-100" />
                     <div className="p-3">
                       <div className="flex items-start justify-between gap-2">
@@ -211,7 +212,7 @@ export default function DashboardUser() {
 
           {/* Recommandé pour vous */}
           <section>
-            <h2 className="mb-3 text-base font-black text-[#21164F] sm:text-lg">Recommandé pour vous</h2>
+            <h2 className="mb-3 text-base font-black text-[#9076B6] sm:text-lg">Recommandé pour vous</h2>
             {recommendedPacks.length === 0 ? (
               <p className="text-sm text-gray-400">Aucun pack disponible.</p>
             ) : (
@@ -221,7 +222,7 @@ export default function DashboardUser() {
                     <Link
                       key={p.idpack}
                       to={`/packs/${p.idpack}`}
-                      className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-0.5"
+                      className="overflow-hidden rounded-2xl border border-gray-100 bg-[#FFFEFA] shadow-sm transition hover:-translate-y-0.5"
                     >
                       <div className="h-24 bg-gray-100" />
                       <div className="p-3">
@@ -234,7 +235,7 @@ export default function DashboardUser() {
                     </Link>
                   ))}
                 </div>
-                <Link to="/packs" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm hover:bg-gray-50">
+                <Link to="/packs" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-[#FFFEFA] shadow-sm hover:bg-[#FFFEFA]">
                   <svg viewBox="0 0 24 24" className="h-4 w-4 text-[#21164F]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 18l6-6-6-6" />
                   </svg>
@@ -247,25 +248,25 @@ export default function DashboardUser() {
           <section>
             <h2 className="mb-3 text-base font-black text-[var(--app-text)] sm:text-lg">Accès rapide</h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <Link to="/activities/create" className="flex items-start gap-3 rounded-2xl bg-[var(--app-card)] border border-[var(--app-border)] p-4 transition hover:opacity-90">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#7B8CDE] text-lg font-black text-white">+</span>
+              <Link to="/activities/create" className="flex items-start gap-3 rounded-2xl bg-[#D5CDE2] border border-[var(--app-border)] p-4 transition hover:opacity-90">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-lg font-black text-[#273068]">+</span>
                 <div>
-                  <p className="text-sm font-black text-[var(--app-text)]">Créer une activité</p>
-                  <p className="text-xs text-[var(--app-muted)]">Créez votre propre activité</p>
+                  <p className="text-sm font-black text-[#273068]">Créer une activité</p>
+                  <p className="text-xs text-[#273068]">Créez votre propre activité</p>
                 </div>
               </Link>
-              <Link to="/library" className="flex items-start gap-3 rounded-2xl bg-[var(--app-card)] border border-[var(--app-border)] p-4 transition hover:opacity-90">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#6DBF67] text-white">
+              <Link to="/library" className="flex items-start gap-3 rounded-2xl bg-[#F0F7D1] border border-[var(--app-border)] p-4 transition hover:opacity-90">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#6F8D4C] text-white">
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4 19.5A2.5 2.5 0 016.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" />
                   </svg>
                 </span>
                 <div>
-                  <p className="text-sm font-black text-[#6DBF67]">Explorer la bibliothèque</p>
-                  <p className="text-xs text-[var(--app-muted)]">Découvrez de nouvelles activités</p>
+                  <p className="text-sm font-black text-[#6F8D4C]">Explorer la bibliothèque</p>
+                  <p className="text-xs text-[#6F8D4C]">Découvrez de nouvelles activités</p>
                 </div>
               </Link>
-              <Link to="/packs" className="flex items-start gap-3 rounded-2xl bg-[var(--app-card)] border border-[var(--app-border)] p-4 transition hover:opacity-90">
+              <Link to="/packs" className="flex items-start gap-3 rounded-2xl bg-[#FFEDEB] border border-[var(--app-border)] p-4 transition hover:opacity-90">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#E94E6F] text-white">
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />

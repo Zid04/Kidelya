@@ -6,16 +6,19 @@ use App\Models\Activity;
 use App\Models\ActivityPurchase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ActivityLibraryController extends Controller
 {
     public function show(Request $request, Activity $activity): JsonResponse
     {
-        if (!$activity->is_published || !$activity->is_purchasable) {
+        $activity->load(['user.role', 'themes:idtheme,name', 'competences:idcompetence,name', 'packs:idpack']);
+
+        $isAdminActivity = $activity->user?->role?->type === 'Admin';
+
+        if (!$activity->is_published || !$isAdminActivity) {
             return response()->json(['message' => 'Activité non disponible'], 404);
         }
-
-        $activity->load(['themes:idtheme,name', 'competences:idcompetence,name', 'packs:idpack']);
         $user = $request->user();
 
         // Achat individuel
@@ -23,7 +26,7 @@ class ActivityLibraryController extends Controller
             ->where('activity_id', $activity->idactivities)
             ->exists();
 
-        // Pack actif contenant cette activité
+        // Packs actifs de l'utilisateur
         $userPackIds = $user->packSubscriptions()
             ->where('status', 'active')
             ->where(function ($q) {
@@ -32,15 +35,17 @@ class ActivityLibraryController extends Controller
             ->pluck('idpack')
             ->toArray();
 
-        $hasPack = $activity->packs->whereIn('idpack', $userPackIds)->isNotEmpty();
+        // Requête directe sur la table pivot — plus fiable que la comparaison de collection
+        $hasPack = !empty($userPackIds) && DB::table('packs_activities')
+            ->whereIn('idpack', $userPackIds)
+            ->where('idactivities', $activity->idactivities)
+            ->exists();
 
-        // Abonnement global
-        $hasSubscription = false;
-        if ($activity->included_in_subscription) {
-            $hasSubscription = $user->activeSubscription()
-                ->where('ends_at', '>=', now())
-                ->exists();
-        }
+
+        // Abonnement global : tout abonné actif a accès illimité à toutes les activités
+        $hasSubscription = $user->activeSubscription()
+            ->where('ends_at', '>=', now())
+            ->exists();
 
         $canAccess = $hasPurchased || $hasPack || $hasSubscription;
 
@@ -81,6 +86,7 @@ class ActivityLibraryController extends Controller
             'packs:idpack,title,illustration'
         ])
         ->where('is_published', true)
+        ->whereHas('user', fn ($q) => $q->whereHas('role', fn ($q) => $q->where('type', 'Admin')))
         ->get()
         ->map(function ($activity) {
 

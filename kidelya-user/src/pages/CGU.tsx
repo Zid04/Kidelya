@@ -122,9 +122,9 @@ export default function CGUPage() {
   return (
     <div className="min-h-screen bg-white text-[#273068]">
       <section className="mx-auto max-w-5xl px-6 pb-8 pt-14 text-center">
-        <h1 className="text-4xl font-extrabold md:text-5xl">Conditions Générales d’Utilisation</h1>
+        <h1 className="text-4xl font-black text-[#7C67B2] md:text-5xl">Conditions Générales d’Utilisation</h1>
         <div className="mx-auto mt-3 h-[3px] w-12 rounded-full bg-[#E94E6F]" />
-        <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-7 text-[#4F5F45]">
+        <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-7 text-[#273068]">
           Les présentes Conditions Générales d’Utilisation encadrent l’accès et
           l’utilisation de la plateforme Kidelya.
         </p>
@@ -135,9 +135,9 @@ export default function CGUPage() {
           {sections.map((section) => (
             <article
               key={section.title}
-              className="rounded-[14px] border border-[#F1D9B5] bg-white p-6 text-[#4F5F45]"
+              className="rounded-[14px] bg-[#FFFEFA] p-6 text-[#273068] shadow-sm"
             >
-              <h2 className="text-xl font-bold text-[#273068]">{section.title}</h2>
+              <h2 className="text-xl font-black text-[#7C67B2]">{section.title}</h2>
               <div className="mt-3 leading-7">{section.content}</div>
             </article>
           ))}
@@ -145,9 +145,9 @@ export default function CGUPage() {
       </section>
 
       <section className="mx-auto max-w-5xl px-6 pb-16 text-center">
-        <div className="rounded-[14px] border border-[#F1D9B5] bg-white p-7">
-          <h2 className="text-2xl font-bold text-[#273068]">10. Contact</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-[#4F5F45]">
+        <div className="rounded-[14px] bg-[#D5CDE2] p-7">
+          <h2 className="text-2xl font-black text-[#7C67B2]">10. Contact</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-[#273068]">
             Pour toute question concernant ces CGU, vous pouvez nous contacter à :
             <br />
             <strong className="text-[#E94E6F]">bonjour@kidelya.com</strong>

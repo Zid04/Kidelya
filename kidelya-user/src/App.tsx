@@ -39,6 +39,7 @@ import GroupsCreate from "./pages/groups/GroupCreate"
 import GroupsEdit from "./pages/groups/GroupsEdit"
 import GroupAddChild from "./pages/groups/GroupAddChild"
 import GroupRemoveChild from "./pages/groups/GroupRemoveChild"
+import GroupAddActivity from "./pages/groups/GroupAddActivity"
 
 // GUARDIANS
 import GuardianIndex from "./pages/guardian/GuardianIndex"
@@ -143,6 +144,7 @@ export default function App() {
           <Route path="/groups/:id/edit" element={<GroupsEdit />} />
           <Route path="/groups/:id/add-child" element={<GroupAddChild />} />
           <Route path="/groups/:id/remove-child" element={<GroupRemoveChild />} />
+          <Route path="/groups/:id/add-activity" element={<GroupAddActivity />} />
 
           {/* GUARDIANS */}
           <Route path="/guardians" element={<GuardianIndex />} />

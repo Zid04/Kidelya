@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Activity;
 use App\Models\CartItem;
 use App\Models\Child;
+use App\Models\Favorite;
 use App\Models\Competence;
 use App\Models\Group;
 use App\Models\Guardian;
@@ -17,6 +18,7 @@ use App\Models\User;
 use App\Policies\ActivityPolicy;
 use App\Policies\CartItemPolicy;
 use App\Policies\ChildPolicy;
+use App\Policies\FavoritePolicy;
 use App\Policies\CompetencePolicy;
 use App\Policies\GroupPolicy;
 use App\Policies\GuardianPolicy;
@@ -86,6 +88,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::policy(Activity::class,       ActivityPolicy::class);
         Gate::policy(CartItem::class,       CartItemPolicy::class);
+        Gate::policy(Favorite::class,       FavoritePolicy::class);
         Gate::policy(Child::class,          ChildPolicy::class);
         Gate::policy(Competence::class,     CompetencePolicy::class);
         Gate::policy(Group::class,          GroupPolicy::class);

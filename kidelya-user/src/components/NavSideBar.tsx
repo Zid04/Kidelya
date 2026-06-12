@@ -113,7 +113,7 @@ export default function NavSidebar() {
               key={item.href}
               to={item.href}
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+              className="sidebar-nav-link flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
               style={{
                 backgroundColor: isActive ? "var(--color-sidebar-active-bg)" : "transparent",
                 color: isActive ? "var(--color-sidebar-text)" : "var(--color-sidebar-link)",

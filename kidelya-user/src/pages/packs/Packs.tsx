@@ -147,7 +147,7 @@ export default function PacksPage() {
   }
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white text-[#21164F]">
+    <div className="min-h-screen overflow-x-hidden bg-[#FFFEFA] text-[#273068]">
       <PacksHero/>
 
       <PackFilters

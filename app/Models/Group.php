@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\GroupFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Activity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -38,6 +39,16 @@ class Group extends Model
             'groups_children',
             'idgroup',
             'idchildren'
+        );
+    }
+
+    public function activities(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Activity::class,
+            'groups_activities',
+            'idgroup',
+            'idactivities'
         );
     }
 }

@@ -43,7 +43,7 @@ export default function PlanningCalendar({
   const isSelected = (d: number) => selectedDate?.getDate() === d && selectedDate?.getMonth() === month && selectedDate?.getFullYear() === year
 
   return (
-    <div className="lg:col-span-2 rounded-2xl bg-white p-6 shadow-sm border border-gray-100">
+    <div className="lg:col-span-2 rounded-2xl bg-[#FFFEFA] p-6 shadow-sm border border-gray-100">
       {/* Navigation mois */}
       <div className="mb-6 flex items-center justify-between">
         <button onClick={onPrevMonth} className="rounded-lg p-2 text-[#273068] hover:bg-[#EEF0F8]">

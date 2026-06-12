@@ -14,7 +14,7 @@ export interface Activity {
   location?: string | null
   photourl?: string | null
 
-  steps?: string | null
+  steps?: Array<{ text: string; image: string | null }> | null
   category?: string | null
   difficulty?: string | null
 

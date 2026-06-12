@@ -3,9 +3,9 @@ import { useNavigate, useParams } from "react-router-dom"
 import api from "@/api/axios"
 
 interface Child {
-  idchild: number
+  idchildren: number
   firstname: string
-  avatar?: string | null
+  photourl?: string | null
 }
 
 export default function GroupAddChild() {
@@ -21,8 +21,8 @@ export default function GroupAddChild() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await api.get("/me/children")
-        setChildren(res.data.children || [])
+        const res = await api.get("/children")
+        setChildren(res.data.data || [])
       } catch (e) {
         setError("Impossible de charger les enfants.")
       } finally {
@@ -43,7 +43,7 @@ export default function GroupAddChild() {
     setError(null)
 
     try {
-      await api.post(`/groups/${id}/add-child`, { idchild: selectedId })
+      await api.post(`/groups/${id}/children`, { child_id: selectedId })
       navigate(`/groups/${id}`)
     } catch (e) {
       setError("Impossible d'ajouter l'enfant au groupe.")
@@ -81,19 +81,19 @@ export default function GroupAddChild() {
           <div className="space-y-3">
             {children.map((child) => (
               <label
-                key={child.idchild}
+                key={child.idchildren}
                 className="flex items-center gap-3 bg-[#FFF3E0] p-3 rounded-lg cursor-pointer hover:bg-[#FFE8C2]"
               >
                 <input
                   type="radio"
                   name="child"
-                  checked={selectedId === child.idchild}
-                  onChange={() => setSelectedId(child.idchild)}
+                  checked={selectedId === child.idchildren}
+                  onChange={() => setSelectedId(child.idchildren)}
                 />
 
-                {child.avatar ? (
+                {child.photourl ? (
                   <img
-                    src={child.avatar}
+                    src={child.photourl}
                     alt={child.firstname}
                     className="w-10 h-10 rounded-full object-cover"
                   />

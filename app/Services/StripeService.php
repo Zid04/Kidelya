@@ -21,7 +21,7 @@ class StripeService
     /**
      * Créer une session de paiement Stripe Checkout
      */
-    public function createCheckoutSession(User $user, Pack $pack): Session
+    public function createCheckoutSession(User $user, Pack $pack, int $quantity = 1): Session
     {
         return Session::create([
             'payment_method_types' => ['card'],
@@ -34,7 +34,7 @@ class StripeService
             'line_items' => [[
                 'price_data' => [
                     'currency'     => 'eur',
-                    'unit_amount'  => $pack->tarification * 100,
+                    'unit_amount'  => (int) round($pack->tarification * 100),
                     'recurring'    => [
                         'interval' => $pack->type === 'yearly' ? 'year' : 'month',
                     ],
@@ -43,10 +43,84 @@ class StripeService
                         'description' => $pack->description,
                     ],
                 ],
-                'quantity' => 1,
+                'quantity' => $quantity,
             ]],
             'success_url' => config('app.frontend_url') . '/success?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url'  => config('app.frontend_url') . '/cancel',
+        ]);
+    }
+
+    /**
+     * Créer une session de paiement Stripe Checkout pour plusieurs packs
+     */
+    public function createMultiPackCheckoutSession(User $user, array $packs, array $quantities = []): Session
+    {
+        $packs     = array_values($packs);
+        $lineItems = [];
+        foreach ($packs as $i => $pack) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency'     => 'eur',
+                    'unit_amount'  => (int) round($pack->tarification * 100),
+                    'product_data' => [
+                        'name'        => $pack->title,
+                        'description' => $pack->description ?? '',
+                    ],
+                ],
+                'quantity' => (int) ($quantities[$i] ?? 1),
+            ];
+        }
+
+        $packIds = implode(',', array_map(fn(Pack $p) => $p->idpack, $packs));
+
+        return Session::create([
+            'payment_method_types' => ['card'],
+            'mode'                 => 'payment',
+            'customer_email'       => $user->email,
+            'metadata'             => [
+                'user_id'  => $user->iduser,
+                'pack_ids' => $packIds,
+            ],
+            'line_items'  => $lineItems,
+            'success_url' => config('app.frontend_url') . '/success?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'  => config('app.frontend_url') . '/cancel',
+        ]);
+    }
+
+    /**
+     * Créer une session de paiement pour plusieurs activités
+     */
+    public function createMultiActivityCheckoutSession(User $user, array $activities): Session
+    {
+        $lineItems = [];
+        foreach ($activities as $activity) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency'     => 'eur',
+                    'unit_amount'  => (int) round(($activity->credit_price ?? 0) * 100),
+                    'product_data' => [
+                        'name'        => $activity->title,
+                        'description' => $activity->description ?? '',
+                    ],
+                ],
+                'quantity' => 1,
+            ];
+        }
+
+        $activityIds = implode(',', array_map(fn(Activity $a) => $a->idactivities, $activities));
+
+        return Session::create([
+            'payment_method_types' => ['card'],
+            'mode'                 => 'payment',
+            'customer_email'       => $user->email,
+            'metadata'             => [
+                'user_id'      => $user->iduser,
+                'activity_ids' => $activityIds,
+                'type'         => 'activity_purchase',
+            ],
+            'line_items'  => $lineItems,
+            'success_url' => config('app.frontend_url') . '/payment/success?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'  => config('app.frontend_url') . '/payment/failed',
         ]);
     }
 

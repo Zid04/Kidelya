@@ -61,7 +61,7 @@ export default function Users() {
 
   const createAdminMutation = useMutation({
     mutationFn: async (payload: AdminForm) => {
-      await api.post('/api/admin/register', payload)
+      await api.post('/admin/register', payload)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] })

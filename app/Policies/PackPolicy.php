@@ -19,43 +19,43 @@ class PackPolicy
 
     public function create(User $user): bool
     {
-        return in_array($user->role->type, ['Admin', 'Partner']);
+        return in_array($user->role?->type, ['Admin', 'Partner']);
     }
 
     public function update(User $user, Pack $pack): bool
     {
         return $user->iduser === $pack->createdby
-            || $user->role->type === 'Admin';
+            || $user->role?->type === 'Admin';
     }
 
     public function delete(User $user, Pack $pack): bool
     {
         return $user->iduser === $pack->createdby
-            || $user->role->type === 'Admin';
+            || $user->role?->type === 'Admin';
     }
 
     public function publish(User $user, Pack $pack): bool
     {
         return $user->iduser === $pack->createdby
-            || $user->role->type === 'Admin';
+            || $user->role?->type === 'Admin';
     }
 
     public function unpublish(User $user, Pack $pack): bool
     {
         return $user->iduser === $pack->createdby
-            || $user->role->type === 'Admin';
+            || $user->role?->type === 'Admin';
     }
 
     
     public function attachActivity(User $user, Pack $pack): bool
     {
         return $user->iduser === $pack->createdby
-            || $user->role->type === 'Admin';
+            || $user->role?->type === 'Admin';
     }
 
     public function detachActivity(User $user, Pack $pack): bool
     {
         return $user->iduser === $pack->createdby
-            || $user->role->type === 'Admin';
+            || $user->role?->type === 'Admin';
     }
 }

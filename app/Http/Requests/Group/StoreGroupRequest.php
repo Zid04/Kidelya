@@ -16,6 +16,8 @@ class StoreGroupRequest extends FormRequest
         return [
             'name'        => 'required|string|max:100',
             'description' => 'nullable|string|max:255',
+            'children'    => 'nullable|array',
+            'children.*'  => 'integer|exists:children,idchildren',
         ];
     }
 

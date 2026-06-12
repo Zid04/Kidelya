@@ -15,7 +15,8 @@ class DashboardController extends Controller
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
-        // Récupération des plannings via les enfants du user
+        // Récupération des plannings via les enfants du user (eager loading pour éviter le N+1)
+        $user->load('children.plannings');
         $plannings = $user->children
             ->flatMap(fn ($child) => $child->plannings)
             ->unique('idplanning');

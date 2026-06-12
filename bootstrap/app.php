@@ -32,6 +32,34 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $isApiRequest = fn ($request) => $request->expectsJson()
+            || str_starts_with($request->path(), 'api/');
+
+        $exceptions->render(function (
+            \Illuminate\Auth\AuthenticationException $e,
+            $request
+        ) use ($isApiRequest) {
+            if ($isApiRequest($request)) {
+                return response()->json(['message' => 'Non authentifié.'], 401);
+            }
+        });
+
+        $exceptions->render(function (
+            \Illuminate\Auth\Access\AuthorizationException $e,
+            $request
+        ) use ($isApiRequest) {
+            if ($isApiRequest($request)) {
+                return response()->json(['message' => 'Action non autorisée.'], 403);
+            }
+        });
+
+        $exceptions->render(function (
+            \Illuminate\Database\Eloquent\ModelNotFoundException $e,
+            $request
+        ) use ($isApiRequest) {
+            if ($isApiRequest($request)) {
+                return response()->json(['message' => 'Ressource introuvable.'], 404);
+            }
+        });
     }
    )->create();

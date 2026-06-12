@@ -81,54 +81,68 @@ class StripeController extends Controller
             return;
         }
 
-        // ── Achat d'activité individuelle ─────────────────────────
-        if ($type === 'activity_purchase' && $activityId) {
-            $user     = User::find($userId);
-            $activity = Activity::find($activityId);
-
-            if (!$user || !$activity) {
-                Log::warning('User or Activity not found', compact('userId', 'activityId'));
+        // ── Achat d'activité individuelle ou multiple ─────────────
+        if ($type === 'activity_purchase') {
+            $user = User::find($userId);
+            if (!$user) {
+                Log::warning('User not found for activity purchase', compact('userId'));
                 return;
             }
 
-            // firstOrCreate : Stripe peut livrer le même webhook plusieurs fois ; ceci évite les doublons
-            // dans les achats sans avoir besoin d'une clé d'idempotence explicite.
-            ActivityPurchase::firstOrCreate(
-                ['user_id' => $userId, 'activity_id' => $activityId],
-                ['credits_spent' => 0, 'purchased_at' => now()]
-            );
+            $activityIds = isset($session->metadata->activity_ids)
+                ? array_filter(array_map('intval', explode(',', $session->metadata->activity_ids)))
+                : ($activityId ? [(int) $activityId] : []);
 
-            Log::info('Achat activité enregistré', ['user_id' => $userId, 'activity_id' => $activityId]);
-            return;
-        }
-
-        if (!$packId) {
-            Log::warning('Checkout session missing metadata', ['session' => $session->id]);
+            foreach ($activityIds as $id) {
+                $activity = Activity::find($id);
+                if (!$activity) {
+                    Log::warning('Activity not found', ['activity_id' => $id]);
+                    continue;
+                }
+                ActivityPurchase::firstOrCreate(
+                    ['user_id' => $userId, 'activity_id' => $id],
+                    ['credits_spent' => 0, 'purchased_at' => now()]
+                );
+                Log::info('Achat activité enregistré', ['user_id' => $userId, 'activity_id' => $id]);
+            }
             return;
         }
 
         $user = User::find($userId);
-        $pack = Pack::find($packId);
-
-        if (!$user || !$pack) {
-            Log::warning('User or Pack not found', compact('userId', 'packId'));
+        if (!$user) {
+            Log::warning('User not found for pack checkout', ['user_id' => $userId]);
             return;
         }
 
-        // updateOrCreate : un webhook rejoué réinitialise les dates plutôt que de créer un doublon,
-        // et réactive une entrée annulée par erreur.
-        PackUser::updateOrCreate(
-            ['iduser' => $userId, 'idpack' => $packId],
-            [
-                'status'           => 'active',
-                'subscriptiondate' => now(),
-                'expirationdate'   => now()->addDays($pack->duration),
-            ]
-        );
+        // Support pour multi-packs (pack_ids = "1,2,3") et single pack (pack_id)
+        $packIds = isset($session->metadata->pack_ids)
+            ? array_filter(array_map('intval', explode(',', $session->metadata->pack_ids)))
+            : ($packId ? [$packId] : []);
 
-        $user->notify(new SubscriptionConfirmedNotification($pack));
+        if (empty($packIds)) {
+            Log::warning('Checkout session missing pack metadata', ['session' => $session->id]);
+            return;
+        }
 
-        Log::info('Abonnement activé', ['user_id' => $userId, 'pack_id' => $packId]);
+        foreach ($packIds as $id) {
+            $pack = Pack::find($id);
+            if (!$pack) {
+                Log::warning('Pack not found', ['pack_id' => $id]);
+                continue;
+            }
+
+            PackUser::updateOrCreate(
+                ['iduser' => $userId, 'idpack' => $id],
+                [
+                    'status'           => 'active',
+                    'subscriptiondate' => now(),
+                    'expirationdate'   => now()->addDays($pack->duration ?? 30),
+                ]
+            );
+
+            $user->notify(new SubscriptionConfirmedNotification($pack));
+            Log::info('Abonnement pack activé', ['user_id' => $userId, 'pack_id' => $id]);
+        }
     }
 
     /**
@@ -156,33 +170,56 @@ class StripeController extends Controller
     }
 
     /**
-     * Créer une session Checkout pour un pack
+     * Créer une session Checkout (un pack ou plusieurs via pack_ids)
      */
     public function createCheckout(Request $request): JsonResponse
     {
         $request->validate([
-            'pack_id' => 'required|exists:packs,idpack',
+            'pack_id'      => 'nullable|exists:packs,idpack',
+            'pack_ids'     => 'nullable|array|min:1',
+            'pack_ids.*'   => 'integer|exists:packs,idpack',
+            'quantity'     => 'nullable|integer|min:1',
+            'quantities'   => 'nullable|array',
+            'quantities.*' => 'integer|min:1',
         ]);
 
-        $pack    = Pack::findOrFail($request->pack_id);
-        $user    = $request->user();
-        $session = $this->stripeService->createCheckoutSession($user, $pack);
+        $user = $request->user();
+
+        if ($request->filled('pack_ids') && count($request->pack_ids) > 1) {
+            $packs      = Pack::findMany($request->pack_ids)->all();
+            $quantities = $request->quantities ?? [];
+            $session    = $this->stripeService->createMultiPackCheckoutSession($user, $packs, $quantities);
+        } else {
+            $packId   = $request->pack_id ?? $request->pack_ids[0];
+            $pack     = Pack::findOrFail($packId);
+            $quantity = max(1, (int) ($request->quantity ?? 1));
+            $session  = $this->stripeService->createCheckoutSession($user, $pack, $quantity);
+        }
 
         return response()->json(['url' => $session->url]);
     }
 
     /**
-     * Créer une session Checkout pour l'achat individuel d'une activité
+     * Créer une session Checkout pour l'achat d'une ou plusieurs activités
      */
     public function createActivityCheckout(Request $request): JsonResponse
     {
         $request->validate([
-            'activity_id' => 'required|exists:activities,idactivities',
+            'activity_id'    => 'nullable|exists:activities,idactivities',
+            'activity_ids'   => 'nullable|array|min:1',
+            'activity_ids.*' => 'integer|exists:activities,idactivities',
         ]);
 
-        $activity = Activity::findOrFail($request->activity_id);
-        $user     = $request->user();
-        $session  = $this->stripeService->createActivityCheckoutSession($user, $activity);
+        $user = $request->user();
+
+        if ($request->filled('activity_ids') && count($request->activity_ids) > 1) {
+            $activities = Activity::findMany($request->activity_ids)->all();
+            $session    = $this->stripeService->createMultiActivityCheckoutSession($user, $activities);
+        } else {
+            $activityId = $request->activity_id ?? $request->activity_ids[0];
+            $activity   = Activity::findOrFail($activityId);
+            $session    = $this->stripeService->createActivityCheckoutSession($user, $activity);
+        }
 
         return response()->json(['url' => $session->url]);
     }

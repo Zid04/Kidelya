@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import api from "@/api/axios"
+import { load } from "@/utils/storage"
 
 export function useFavorites() {
   const [favActivityIds, setFavActivityIds] = useState<Set<number>>(new Set())
   const [favPackIds,     setFavPackIds]     = useState<Set<number>>(new Set())
+  const navigate = useNavigate()
 
   useEffect(() => {
+    if (!load("token", null)) return
     api.get("/favorites")
       .then(res => {
         const data: Array<{ idactivity: number | null; idpack: number | null }> = res.data.data ?? []
@@ -18,6 +22,10 @@ export function useFavorites() {
   async function toggleActivity(id: number, e?: React.MouseEvent) {
     e?.stopPropagation()
     e?.preventDefault()
+    if (!load("token", null)) {
+      navigate("/login", { state: { redirectAfter: window.location.pathname } })
+      return
+    }
     const isFav = favActivityIds.has(id)
     setFavActivityIds(prev => { const n = new Set(prev); isFav ? n.delete(id) : n.add(id); return n })
     try {
@@ -31,6 +39,10 @@ export function useFavorites() {
   async function togglePack(id: number, e?: React.MouseEvent) {
     e?.stopPropagation()
     e?.preventDefault()
+    if (!load("token", null)) {
+      navigate("/login", { state: { redirectAfter: window.location.pathname } })
+      return
+    }
     const isFav = favPackIds.has(id)
     setFavPackIds(prev => { const n = new Set(prev); isFav ? n.delete(id) : n.add(id); return n })
     try {

@@ -23,9 +23,9 @@ export async function createActivity(data: FormData | object) {
   return res.data
 }
 
-// 🔹 Modifier une activité
+// 🔹 Modifier une activité (POST + _method=PUT pour supporter les fichiers multipart)
 export async function updateActivity(id: number, data: FormData | object) {
-  const res = await api.put(`/activities/${id}`, data)
+  const res = await api.post(`/activities/${id}`, data)
   return res.data
 }
 

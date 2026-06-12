@@ -21,10 +21,10 @@ type Pack = {
 
 const CARD_COLORS = [
   { badge: "#6F8D4C", button: "#6F8D4C", hover: "#5a7a3a" },
-  { badge: "#E98B2A", button: "#E98B2A", hover: "#c9751f" },
+  { badge: "#F4BB48", button: "#F4BB48", hover: "#d9a230" },
   { badge: "#E94E6F", button: "#E94E6F", hover: "#d63f5f" },
-  { badge: "#7C5CBF", button: "#7C5CBF", hover: "#6748a8" },
-  { badge: "#4A90C4", button: "#4A90C4", hover: "#357aad" },
+  { badge: "#7C67B2", button: "#7C67B2", hover: "#6a57a0" },
+  { badge: "#7BA7C0", button: "#7BA7C0", hover: "#6292ae" },
 ]
 
 export default function BibliothequeIndex() {
@@ -40,6 +40,11 @@ export default function BibliothequeIndex() {
 
   async function handleAddToCart(activity: Activity, e: React.MouseEvent) {
     e.stopPropagation()
+    const token = localStorage.getItem("token")
+    if (!token) {
+      navigate("/login", { state: { redirectAfter: "/library" } })
+      return
+    }
     setCartIds((prev) => ({ ...prev, [activity.idactivities]: "adding" }))
     try {
       await api.post("/cart/add", { idactivity: activity.idactivities })
@@ -264,9 +269,7 @@ export default function BibliothequeIndex() {
                     key={a.idactivities}
                     onClick={() => setFeaturedIndex(index)}
                     style={{ scrollSnapAlign: "start", minWidth: "220px", maxWidth: "220px" }}
-                    className={`flex cursor-pointer flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg ${
-                      isActive ? "border-[#E94E6F] ring-2 ring-[#E94E6F]/30" : "border-[#F1D9B5]"
-                    }`}
+                    className="flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-[#FFFEFA] shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
                   >
                     <div className="relative overflow-hidden">
                       {image ? (
@@ -367,7 +370,7 @@ export default function BibliothequeIndex() {
         {/* ── PACKS RECOMMANDÉS ── */}
         <section className="mt-16">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-black text-[#2F236D]">Packs recommandés 🎁</h2>
+            <h2 className="text-2xl font-black text-[#2F236D]">Packs recommandés</h2>
             <Link to="/packs" className="text-sm font-semibold text-[#E94E6F] hover:underline">
               Voir tous les packs →
             </Link>
@@ -384,14 +387,13 @@ export default function BibliothequeIndex() {
                   <Link
                     key={pack.idpack}
                     to={`/packs/${pack.idpack}`}
-                    className="relative flex flex-col overflow-hidden rounded-2xl border border-[#F1D9B5] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                    className="relative flex flex-col overflow-hidden rounded-2xl bg-[#FFFEFA] shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
                   >
                     {image ? (
                       <img src={image} alt={pack.title} className="h-40 w-full object-cover" />
                     ) : (
                       <div className="flex h-40 w-full items-center justify-center text-4xl"
                         style={{ backgroundColor: color.badge + "20" }}>
-                        🎁
                       </div>
                     )}
                     <button
