@@ -1,5 +1,6 @@
-# Stage 1: Composer dependencies
-FROM composer:2.7 AS vendor
+# Stage 1: Composer dependencies (PHP 8.4 requis par Symfony 8.x)
+FROM php:8.4-alpine AS vendor
+COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install \
