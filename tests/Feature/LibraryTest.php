@@ -25,8 +25,8 @@ it('GET /activities/library liste uniquement les activités publiées de l\'admi
                    ->not->toContain('Publiée User');
 });
 
-it('GET /activities/library retourne 401 sans token', function () {
-    $this->getJson('/api/activities/library')->assertUnauthorized();
+it('GET /activities/library est accessible sans token (route publique)', function () {
+    $this->getJson('/api/activities/library')->assertOk();
 });
 
 // ── Détail d'une activité en bibliothèque ─────────────────────────────────────
