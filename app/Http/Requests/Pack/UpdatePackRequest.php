@@ -20,6 +20,8 @@ class UpdatePackRequest extends FormRequest
             'duration'     => 'sometimes|integer|min:1',
             'is_published' => 'sometimes|boolean',
             'type'         => 'sometimes|string|in:subscription_monthly,subscription_yearly,credit_pack,premium,trial',
+            'illustration'     => 'nullable|image|mimes:jpeg,png,webp|max:2048',
+            'illustration_url' => 'nullable|string|max:500',
         ];
     }
 

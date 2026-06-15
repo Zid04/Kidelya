@@ -28,7 +28,7 @@ export default function Statistics() {
     queryKey: ['stats-summary'],
     queryFn: async () => {
       const res = await api.get('/stats/summary')
-      return res.data
+      return res.data.data
     }
   })
 

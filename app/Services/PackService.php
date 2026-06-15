@@ -3,10 +3,13 @@
 namespace App\Services;
 
 use App\Models\Pack;
+use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Storage;
 
 class PackService
 {
+    public function __construct(private CloudinaryService $cloudinary) {}
+
     /**
      * ADMIN → tous les packs
      */
@@ -61,10 +64,12 @@ class PackService
      */
     public function create(array $data, $user): Pack
     {
-        // Upload illustration si présente
         if (isset($data['illustration']) && $data['illustration'] instanceof \Illuminate\Http\UploadedFile) {
-            $data['illustration'] = $data['illustration']->store('packs', 'public');
+            $data['illustration'] = $this->cloudinary->upload($data['illustration'], 'kidelya/packs');
+        } elseif (!empty($data['illustration_url'])) {
+            $data['illustration'] = $data['illustration_url'];
         }
+        unset($data['illustration_url']);
 
         $data['createdby'] = $user->iduser;
 
@@ -78,14 +83,14 @@ class PackService
     {
         // Upload illustration si présente
         if (isset($data['illustration']) && $data['illustration'] instanceof \Illuminate\Http\UploadedFile) {
-
-            // Supprimer l'ancienne si elle existe
-            if ($pack->illustration && Storage::disk('public')->exists($pack->illustration)) {
-                Storage::disk('public')->delete($pack->illustration);
+            if ($pack->illustration) {
+                $this->cloudinary->delete($pack->illustration);
             }
-
-            $data['illustration'] = $data['illustration']->store('packs', 'public');
+            $data['illustration'] = $this->cloudinary->upload($data['illustration'], 'kidelya/packs');
+        } elseif (!empty($data['illustration_url'])) {
+            $data['illustration'] = $data['illustration_url'];
         }
+        unset($data['illustration_url']);
 
         $pack->update($data);
 

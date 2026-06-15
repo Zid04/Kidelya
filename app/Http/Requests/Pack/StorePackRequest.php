@@ -20,6 +20,8 @@ class StorePackRequest extends FormRequest
             'duration'     => 'required|integer|min:1',
             'is_published' => 'required|boolean',
             'type'         => 'required|string|in:subscription_monthly,subscription_yearly,credit_pack,premium,trial',
+            'illustration'     => 'nullable|image|mimes:jpeg,png,webp|max:2048',
+            'illustration_url' => 'nullable|string|max:500',
         ];
     }
 

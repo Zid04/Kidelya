@@ -14,27 +14,45 @@ export default function PackCreate() {
     tarification: '',
     duration: '',
     type: 'monthly',
-    illustration: '' 
   })
-
+  const [illustration, setIllustration] = useState<File | null>(null)
+  const [illustrationFile, setIllustrationFile] = useState<string | null>(null)
+  const [illustrationUrl, setIllustrationUrl] = useState('')
   const [loading, setLoading] = useState(false)
 
- const handleChange = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-) => {
-  setForm({ ...form, [e.target.name]: e.target.value })
-}
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
 
-const handleSubmit = async (
-  e: React.FormEvent<HTMLFormElement>
-) => {
-  e.preventDefault()
-  setLoading(true)
+  const handleFile = (file: File | null) => {
+    if (illustrationFile) URL.revokeObjectURL(illustrationFile)
+    setIllustration(file)
+    setIllustrationFile(file ? URL.createObjectURL(file) : null)
+    if (file) setIllustrationUrl('')
+  }
 
-  const res = await api.post('/packs', form)
-  const newPackId = res.data.data.idpack
-  navigate(`/packs/${newPackId}/edit`)
-}
+  const preview = illustrationFile || (illustrationUrl.startsWith('http') ? illustrationUrl : null)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
+
+    const data = new FormData()
+    data.append('title', form.title)
+    if (form.description) data.append('description', form.description)
+    data.append('tarification', form.tarification)
+    data.append('duration', form.duration)
+    data.append('type', form.type)
+    data.append('is_published', '0')
+    if (illustration) data.append('illustration', illustration)
+    else if (illustrationUrl) data.append('illustration_url', illustrationUrl)
+
+    const res = await api.post('/packs', data)
+    const newPackId = res.data.data.idpack
+    navigate(`/packs/${newPackId}/edit`)
+  }
 
 
   return (
@@ -48,18 +66,32 @@ const handleSubmit = async (
       <Card>
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* Illustration (URL) */}
+          {/* Illustration */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Illustration (URL)
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Illustration de couverture
             </label>
             <input
-              name="illustration"
-              value={form.illustration}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-              placeholder="https://cdn.monsite.com/images/pack1.png"
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFile(e.target.files?.[0] || null)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
             />
+            <div className="flex items-center gap-3 my-2">
+              <hr className="flex-1 border-gray-200" />
+              <span className="text-xs text-gray-400">ou</span>
+              <hr className="flex-1 border-gray-200" />
+            </div>
+            <input
+              type="url"
+              placeholder="https://exemple.com/image.jpg"
+              value={illustrationUrl}
+              onChange={(e) => { setIllustrationUrl(e.target.value); if (e.target.value) handleFile(null) }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            />
+            {preview && (
+              <img src={preview} alt="Preview" className="mt-2 h-32 rounded-lg object-cover border" />
+            )}
           </div>
 
           {/* Titre */}

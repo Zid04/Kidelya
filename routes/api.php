@@ -48,6 +48,7 @@ Route::post('stripe/webhook', [StripeController::class, 'webhook'])->name('strip
 Route::get('public/packs', [PublicPackController::class, 'index'])->name('public.packs.index');
 Route::get('public/packs/{pack}', [PublicPackController::class, 'show'])->name('public.packs.show');
 Route::get('subscriptions/plans', [SubscriptionController::class, 'index'])->name('subscriptions.plans');
+Route::get('activities/library', [ActivityLibraryController::class, 'index'])->name('activities.library.public');
 
 /*
 |----------------------------------------------------------------------
@@ -85,13 +86,24 @@ Route::middleware('auth:sanctum')->group(function () {
     |----------------------------------------------------------------------
     */
     Route::get('activities/mine', [ActivityController::class, 'mine'])->name('activities.mine');
-    Route::get('activities/library', [ActivityLibraryController::class, 'index'])->name('activities.library');
     Route::get('activities/library/{activity}', [ActivityLibraryController::class, 'show'])->name('activities.library.show');
     Route::apiResource('activities', ActivityController::class);
     Route::patch('activities/{activity}/publish', [ActivityController::class, 'publish'])
         ->name('activities.publish');
     Route::patch('activities/{activity}/unpublish', [ActivityController::class, 'unpublish'])
         ->name('activities.unpublish');
+    Route::get('activities/{activity}/competences', [ActivityController::class, 'getCompetences'])
+        ->name('activities.competences.index');
+    Route::post('activities/{activity}/competences', [ActivityController::class, 'attachCompetence'])
+        ->name('activities.competences.attach');
+    Route::delete('activities/{activity}/competences/{competenceId}', [ActivityController::class, 'detachCompetence'])
+        ->name('activities.competences.detach');
+    Route::get('activities/{activity}/themes', [ActivityController::class, 'getThemes'])
+        ->name('activities.themes.index');
+    Route::post('activities/{activity}/themes', [ActivityController::class, 'attachTheme'])
+        ->name('activities.themes.attach');
+    Route::delete('activities/{activity}/themes/{themeId}', [ActivityController::class, 'detachTheme'])
+        ->name('activities.themes.detach');
 
     /*
     |----------------------------------------------------------------------

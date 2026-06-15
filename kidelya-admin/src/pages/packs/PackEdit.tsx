@@ -19,15 +19,17 @@ export default function PackEdit() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [availableActivities, setAvailableActivities] = useState<Activity[]>([])
 
-  // FORM
   const [form, setForm] = useState({
     title: '',
     description: '',
     tarification: '',
     duration: '',
     type: 'monthly',
-    illustration: '' 
   })
+  const [currentIllustration, setCurrentIllustration] = useState<string | null>(null)
+  const [illustration, setIllustration] = useState<File | null>(null)
+  const [illustrationFile, setIllustrationFile] = useState<string | null>(null)
+  const [illustrationUrl, setIllustrationUrl] = useState('')
 
   // LOAD PACK + ACTIVITIES
   useEffect(() => {
@@ -43,8 +45,8 @@ export default function PackEdit() {
         tarification: packData.tarification,
         duration: packData.duration,
         type: packData.type,
-        illustration: packData.illustration ?? '' 
       })
+      setCurrentIllustration(packData.illustration ?? null)
 
       setActivities(packData.activities ?? [])
 
@@ -65,17 +67,34 @@ export default function PackEdit() {
     load()
   }, [id])
 
-  // FORM CHANGE
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  // SAVE PACK
+  const handleFile = (file: File | null) => {
+    if (illustrationFile) URL.revokeObjectURL(illustrationFile)
+    setIllustration(file)
+    setIllustrationFile(file ? URL.createObjectURL(file) : null)
+    if (file) setIllustrationUrl('')
+  }
+
+  const preview = illustrationFile || (illustrationUrl.startsWith('http') ? illustrationUrl : null)
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await api.put(`/packs/${id}`, form)
+    const data = new FormData()
+    data.append('_method', 'PUT')
+    data.append('title', form.title)
+    if (form.description) data.append('description', form.description)
+    data.append('tarification', form.tarification)
+    data.append('duration', form.duration)
+    data.append('type', form.type)
+    if (illustration) data.append('illustration', illustration)
+    else if (illustrationUrl) data.append('illustration_url', illustrationUrl)
+
+    await api.post(`/packs/${id}`, data)
     navigate('/packs')
   }
 
@@ -119,24 +138,35 @@ export default function PackEdit() {
 
           {/* Illustration */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Illustration (URL)
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Illustration de couverture
             </label>
+            {currentIllustration && !illustration && !illustrationUrl && (
+              <div className="mb-2">
+                <img src={currentIllustration} alt="Actuelle" className="h-32 rounded-lg object-cover border mb-1" />
+                <p className="text-xs text-gray-400">Image actuelle — remplacez-la ci-dessous</p>
+              </div>
+            )}
             <input
-              name="illustration"
-              value={form.illustration}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-              placeholder="https://cdn.monsite.com/images/pack.png"
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFile(e.target.files?.[0] || null)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
             />
-
-            {/* Preview */}
-            {form.illustration && (
-              <img
-                src={form.illustration}
-                alt="Preview"
-                className="mt-3 h-32 rounded-lg object-cover border"
-              />
+            <div className="flex items-center gap-3 my-2">
+              <hr className="flex-1 border-gray-200" />
+              <span className="text-xs text-gray-400">ou</span>
+              <hr className="flex-1 border-gray-200" />
+            </div>
+            <input
+              type="url"
+              placeholder="https://exemple.com/image.jpg"
+              value={illustrationUrl}
+              onChange={(e) => { setIllustrationUrl(e.target.value); if (e.target.value) handleFile(null) }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            />
+            {preview && (
+              <img src={preview} alt="Preview" className="mt-2 h-32 rounded-lg object-cover border" />
             )}
           </div>
 

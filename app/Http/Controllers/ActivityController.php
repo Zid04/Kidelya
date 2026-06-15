@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateActivityRequest;
 use App\Models\Activity;
 use App\Models\ActivityPurchase;
 use App\Services\ActivityService;
+use App\Services\CloudinaryService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -17,7 +18,8 @@ class ActivityController extends Controller
 {
     use authorizesRequests;
     public function __construct(
-        private readonly ActivityService $activityService
+        private readonly ActivityService $activityService,
+        private readonly CloudinaryService $cloudinary
     ) {}
 
     /**
@@ -117,10 +119,11 @@ class ActivityController extends Controller
         $data = array_merge($request->validated(), ['iduser' => auth()->id()]);
 
         if ($request->hasFile('photo')) {
-            $path = $request->file('photo')->store('activities', 'public');
-            $data['photourl'] = Storage::url($path);
+            $data['photourl'] = $this->cloudinary->upload($request->file('photo'), 'kidelya/activities');
+        } elseif (!empty($data['photo_url'])) {
+            $data['photourl'] = $data['photo_url'];
         }
-        unset($data['photo']);
+        unset($data['photo'], $data['photo_url']);
 
         $rawSteps = $request->input('steps', []);
         if (!empty($rawSteps)) {
@@ -162,13 +165,13 @@ class ActivityController extends Controller
 
         if ($request->hasFile('photo')) {
             if ($activity->photourl) {
-                $old = str_replace('/storage/', '', $activity->photourl);
-                Storage::disk('public')->delete($old);
+                $this->cloudinary->delete($activity->photourl);
             }
-            $path = $request->file('photo')->store('activities', 'public');
-            $data['photourl'] = Storage::url($path);
+            $data['photourl'] = $this->cloudinary->upload($request->file('photo'), 'kidelya/activities');
+        } elseif (!empty($data['photo_url'])) {
+            $data['photourl'] = $data['photo_url'];
         }
-        unset($data['photo']);
+        unset($data['photo'], $data['photo_url']);
 
         $rawSteps = $request->input('steps', []);
         if (!empty($rawSteps)) {
@@ -241,5 +244,57 @@ class ActivityController extends Controller
             'message' => 'Activity unpublished successfully',
             'data'    => $updated
         ]);
+    }
+
+    public function getCompetences(Activity $activity): JsonResponse
+    {
+        $this->authorize('view', $activity);
+
+        return response()->json(['data' => $activity->competences]);
+    }
+
+    public function attachCompetence(Request $request, Activity $activity): JsonResponse
+    {
+        $this->authorize('update', $activity);
+        $request->validate(['competence_id' => 'required|integer|exists:competences,idcompetence']);
+
+        $activity->competences()->syncWithoutDetaching([$request->competence_id]);
+
+        return response()->json(['message' => 'Competence attached', 'data' => $activity->competences]);
+    }
+
+    public function detachCompetence(Activity $activity, int $competenceId): JsonResponse
+    {
+        $this->authorize('update', $activity);
+
+        $activity->competences()->detach($competenceId);
+
+        return response()->json(['message' => 'Competence detached']);
+    }
+
+    public function getThemes(Activity $activity): JsonResponse
+    {
+        $this->authorize('view', $activity);
+
+        return response()->json(['data' => $activity->themes]);
+    }
+
+    public function attachTheme(Request $request, Activity $activity): JsonResponse
+    {
+        $this->authorize('update', $activity);
+        $request->validate(['theme_id' => 'required|integer|exists:themes,idtheme']);
+
+        $activity->themes()->syncWithoutDetaching([$request->theme_id]);
+
+        return response()->json(['message' => 'Theme attached', 'data' => $activity->themes]);
+    }
+
+    public function detachTheme(Activity $activity, int $themeId): JsonResponse
+    {
+        $this->authorize('update', $activity);
+
+        $activity->themes()->detach($themeId);
+
+        return response()->json(['message' => 'Theme detached']);
     }
 }

@@ -22,6 +22,7 @@ class StoreActivityRequest extends FormRequest
             'season'         => 'nullable|string|max:50',
             'location'       => 'nullable|string|max:100',
             'photo'          => 'nullable|image|max:5120',
+            'photo_url'      => 'nullable|string|max:500',
             'steps'               => 'nullable|array',
             'steps.*.text'        => 'required|string|max:1000',
             'steps.*.image'       => 'nullable|image|max:5120',

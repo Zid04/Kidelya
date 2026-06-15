@@ -22,6 +22,7 @@ class UpdateActivityRequest extends FormRequest
             'season'         => 'nullable|string|max:50',
             'location'       => 'nullable|string|max:100',
             'photo'          => 'nullable|image|max:5120',
+            'photo_url'      => 'nullable|string|max:500',
             'category'       => 'nullable|string|max:50',
             'difficulty'     => 'nullable|in:facile,moyen,difficile',
             'steps'               => 'nullable|array',

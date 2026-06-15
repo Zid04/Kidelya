@@ -26,7 +26,8 @@ export default function ActivityCreate() {
 
   const [steps, setSteps] = useState<StepForm[]>([{ text: '', image: null, preview: null }])
   const [photo, setPhoto] = useState<File | null>(null)
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+  const [photoFile, setPhotoFile] = useState<string | null>(null)
+  const [photoUrl, setPhotoUrl] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const target = e.target as HTMLInputElement
@@ -61,10 +62,13 @@ export default function ActivityCreate() {
   }
 
   const handlePhoto = (file: File | null) => {
-    if (photoPreview) URL.revokeObjectURL(photoPreview)
+    if (photoFile) URL.revokeObjectURL(photoFile)
     setPhoto(file)
-    setPhotoPreview(file ? URL.createObjectURL(file) : null)
+    setPhotoFile(file ? URL.createObjectURL(file) : null)
+    if (file) setPhotoUrl('')
   }
+
+  const photoPreview = photoFile || (photoUrl.startsWith('http') ? photoUrl : null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -83,6 +87,7 @@ export default function ActivityCreate() {
     data.append('is_purchasable', form.is_purchasable ? '1' : '0')
 
     if (photo) data.append('photo', photo)
+    else if (photoUrl) data.append('photo_url', photoUrl)
 
     steps.filter((s) => s.text.trim()).forEach((step, i) => {
       data.append(`steps[${i}][text]`, step.text.trim())
@@ -168,10 +173,22 @@ export default function ActivityCreate() {
 
           {/* Illustration principale */}
           <div>
-            <label className="block text-sm font-medium mb-1">Illustration principale</label>
+            <label className="block text-sm font-medium mb-2">Illustration principale</label>
             <input type="file" accept="image/*"
               onChange={(e) => handlePhoto(e.target.files?.[0] || null)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white" />
+            <div className="flex items-center gap-3 my-2">
+              <hr className="flex-1 border-gray-200" />
+              <span className="text-xs text-gray-400">ou</span>
+              <hr className="flex-1 border-gray-200" />
+            </div>
+            <input
+              type="url"
+              placeholder="https://exemple.com/image.jpg"
+              value={photoUrl}
+              onChange={(e) => { setPhotoUrl(e.target.value); if (e.target.value) handlePhoto(null) }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            />
             {photoPreview && (
               <img src={photoPreview} alt="" className="mt-2 h-32 rounded-lg object-cover" />
             )}

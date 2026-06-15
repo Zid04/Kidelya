@@ -29,7 +29,8 @@ export default function ActivityEdit() {
   const [steps, setSteps] = useState<StepForm[]>([])
   const [photo, setPhoto] = useState<File | null>(null)
   const [currentPhotoUrl, setCurrentPhotoUrl] = useState<string | null>(null)
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+  const [photoFile, setPhotoFile] = useState<string | null>(null)
+  const [photoUrl, setPhotoUrl] = useState('')
 
   useEffect(() => {
     api.get(`/activities/${id}`).then((res) => {
@@ -111,10 +112,13 @@ export default function ActivityEdit() {
   }
 
   const handlePhoto = (file: File | null) => {
-    if (photoPreview) URL.revokeObjectURL(photoPreview)
+    if (photoFile) URL.revokeObjectURL(photoFile)
     setPhoto(file)
-    setPhotoPreview(file ? URL.createObjectURL(file) : null)
+    setPhotoFile(file ? URL.createObjectURL(file) : null)
+    if (file) setPhotoUrl('')
   }
+
+  const photoPreview = photoFile || (photoUrl.startsWith('http') ? photoUrl : null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -134,6 +138,7 @@ export default function ActivityEdit() {
     data.append('is_purchasable', form.is_purchasable ? '1' : '0')
 
     if (photo) data.append('photo', photo)
+    else if (photoUrl) data.append('photo_url', photoUrl)
 
     steps.filter((s) => s.text.trim()).forEach((step, i) => {
       data.append(`steps[${i}][text]`, step.text.trim())
@@ -231,16 +236,28 @@ export default function ActivityEdit() {
 
           {/* Illustration principale */}
           <div>
-            <label className="block text-sm font-medium mb-1">Illustration principale</label>
-            {currentPhotoUrl && !photo && (
+            <label className="block text-sm font-medium mb-2">Illustration principale</label>
+            {currentPhotoUrl && !photo && !photoUrl && (
               <div className="mb-2">
                 <img src={currentPhotoUrl} alt="" className="h-32 rounded-lg object-cover mb-1" />
-                <p className="text-xs text-gray-400">Image actuelle — uploadez-en une nouvelle pour la remplacer</p>
+                <p className="text-xs text-gray-400">Image actuelle — remplacez-la ci-dessous</p>
               </div>
             )}
             <input type="file" accept="image/*"
               onChange={(e) => handlePhoto(e.target.files?.[0] || null)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white" />
+            <div className="flex items-center gap-3 my-2">
+              <hr className="flex-1 border-gray-200" />
+              <span className="text-xs text-gray-400">ou</span>
+              <hr className="flex-1 border-gray-200" />
+            </div>
+            <input
+              type="url"
+              placeholder="https://exemple.com/image.jpg"
+              value={photoUrl}
+              onChange={(e) => { setPhotoUrl(e.target.value); if (e.target.value) handlePhoto(null) }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            />
             {photoPreview && (
               <img src={photoPreview} alt="" className="mt-2 h-32 rounded-lg object-cover" />
             )}
