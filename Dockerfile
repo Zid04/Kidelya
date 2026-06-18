@@ -16,6 +16,7 @@ FROM php:8.4-fpm-alpine
 RUN apk add --no-cache \
     nginx \
     supervisor \
+    mysql-client \
     libpng-dev \
     libjpeg-turbo-dev \
     libwebp-dev \
