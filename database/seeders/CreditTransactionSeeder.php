@@ -24,6 +24,11 @@ class CreditTransactionSeeder extends Seeder
 
         foreach ($users as $user) {
 
+            // Ne pas re-seeder un user qui a déjà des transactions
+            if (CreditTransaction::where('user_id', $user->iduser)->exists()) {
+                continue;
+            }
+
             // Bonus crédits
             CreditTransaction::create([
                 'user_id'     => $user->iduser,
@@ -46,7 +51,6 @@ class CreditTransactionSeeder extends Seeder
                     'ref_stripe'  => null,
                 ]);
 
-                // Historique achat
                 ActivityPurchase::firstOrCreate(
                     [
                         'user_id'     => $user->iduser,

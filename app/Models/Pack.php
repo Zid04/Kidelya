@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\PackFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,6 +41,15 @@ class Pack extends Model
     public function getRouteKeyName(): string
     {
         return 'idpack';
+    }
+
+    // ─── Accessors ────────────────────────────────────────────
+
+    protected function illustration(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ?? asset('PackDefault.avif'),
+        );
     }
 
     // ─── Relations ────────────────────────────────────────────

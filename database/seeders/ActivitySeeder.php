@@ -395,6 +395,8 @@ class ActivitySeeder extends Seeder
         // ───────────────────────────────────────────────
         foreach ($activities as $data) {
 
+            $data['photourl'] = null;
+
             $activity = Activity::firstOrCreate(
                 ['title' => $data['title'], 'iduser' => $data['iduser']],
                 $data
