@@ -112,13 +112,13 @@ jobs:
           echo "FRONTEND_USER_IMAGE_NAME=ghcr.io/${REPO}-frontend-user" >> $GITHUB_ENV
           echo "FRONTEND_ADMIN_IMAGE_NAME=ghcr.io/${REPO}-frontend-admin" >> $GITHUB_ENV
 
-      - name: Copy docker-compose.prod.yml to VPS
+      - name: Copy files to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          source: docker-compose.prod.yml
+          source: "docker-compose.prod.yml,docker/nginx-proxy/default.conf"
           target: /opt/kidelya
 
       - name: Deploy on VPS

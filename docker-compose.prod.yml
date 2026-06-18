@@ -1,9 +1,19 @@
 services:
-  app:
-    image: ${DOCKER_IMAGE}
+  nginx-proxy:
+    image: nginx:alpine
     restart: unless-stopped
     ports:
       - "80:80"
+    volumes:
+      - ./docker/nginx-proxy/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+      - frontend-user
+      - frontend-admin
+
+  app:
+    image: ${DOCKER_IMAGE}
+    restart: unless-stopped
     environment:
       APP_ENV: production
       APP_DEBUG: "false"
@@ -45,14 +55,10 @@ services:
   frontend-user:
     image: ${FRONTEND_USER_IMAGE}
     restart: unless-stopped
-    ports:
-      - "3000:80"
 
   frontend-admin:
     image: ${FRONTEND_ADMIN_IMAGE}
     restart: unless-stopped
-    ports:
-      - "3001:80"
 
   mysql:
     image: mysql:8.0
