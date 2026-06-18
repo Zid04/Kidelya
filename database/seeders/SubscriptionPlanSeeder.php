@@ -9,7 +9,7 @@ class SubscriptionPlanSeeder extends Seeder
 {
     public function run(): void
     {
-        SubscriptionPlan::insert([
+        SubscriptionPlan::upsert([
             [
                 'name' => 'Free',
                 'price' => 0,
@@ -37,6 +37,6 @@ class SubscriptionPlanSeeder extends Seeder
                 'has_planning' => true,
                 'is_active' => true,
             ],
-        ]);
+        ], ['name'], ['price', 'interval', 'interval_count', 'has_all_packs', 'has_planning', 'is_active']);
     }
 }
