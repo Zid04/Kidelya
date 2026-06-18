@@ -42,7 +42,9 @@ RUN docker-php-ext-configure gd \
         gd \
         opcache \
         pcntl \
-        zip
+        zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 WORKDIR /var/www
 
