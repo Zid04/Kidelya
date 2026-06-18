@@ -42,11 +42,17 @@ services:
       redis:
         condition: service_started
 
-  frontend:
-    image: ${FRONTEND_IMAGE}
+  frontend-user:
+    image: ${FRONTEND_USER_IMAGE}
     restart: unless-stopped
     ports:
       - "3000:80"
+
+  frontend-admin:
+    image: ${FRONTEND_ADMIN_IMAGE}
+    restart: unless-stopped
+    ports:
+      - "3001:80"
 
   mysql:
     image: mysql:8.0

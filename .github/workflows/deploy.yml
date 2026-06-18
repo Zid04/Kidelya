@@ -7,7 +7,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  FRONTEND_IMAGE_NAME: ${{ github.repository }}-frontend
+  FRONTEND_USER_IMAGE_NAME: ${{ github.repository }}-frontend-user
+  FRONTEND_ADMIN_IMAGE_NAME: ${{ github.repository }}-frontend-admin
 
 jobs:
   test:
@@ -68,14 +69,27 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Build and push frontend image
+      - name: Build and push frontend-user image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./kidelya-user
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.FRONTEND_USER_IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.FRONTEND_USER_IMAGE_NAME }}:sha-${{ github.sha }}
+          build-args: |
+            VITE_API_URL=http://${{ secrets.VPS_HOST }}/api
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push frontend-admin image
         uses: docker/build-push-action@v5
         with:
           context: ./kidelya-admin
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:sha-${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.FRONTEND_ADMIN_IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.FRONTEND_ADMIN_IMAGE_NAME }}:sha-${{ github.sha }}
           build-args: |
             VITE_API_URL=http://${{ secrets.VPS_HOST }}/api
           cache-from: type=gha
@@ -100,17 +114,18 @@ jobs:
         uses: appleboy/ssh-action@v1
         env:
           DOCKER_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          FRONTEND_IMAGE: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
+          FRONTEND_USER_IMAGE: ${{ env.REGISTRY }}/${{ env.FRONTEND_USER_IMAGE_NAME }}:latest
+          FRONTEND_ADMIN_IMAGE: ${{ env.REGISTRY }}/${{ env.FRONTEND_ADMIN_IMAGE_NAME }}:latest
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          envs: DOCKER_IMAGE,FRONTEND_IMAGE,GITHUB_TOKEN,GITHUB_ACTOR
+          envs: DOCKER_IMAGE,FRONTEND_USER_IMAGE,FRONTEND_ADMIN_IMAGE,GITHUB_TOKEN,GITHUB_ACTOR
           script: |
             echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
             cd /opt/kidelya
-            DOCKER_IMAGE=$DOCKER_IMAGE FRONTEND_IMAGE=$FRONTEND_IMAGE docker compose -f docker-compose.prod.yml pull
-            DOCKER_IMAGE=$DOCKER_IMAGE FRONTEND_IMAGE=$FRONTEND_IMAGE docker compose -f docker-compose.prod.yml up -d --remove-orphans --force-recreate
+            DOCKER_IMAGE=$DOCKER_IMAGE FRONTEND_USER_IMAGE=$FRONTEND_USER_IMAGE FRONTEND_ADMIN_IMAGE=$FRONTEND_ADMIN_IMAGE docker compose -f docker-compose.prod.yml pull
+            DOCKER_IMAGE=$DOCKER_IMAGE FRONTEND_USER_IMAGE=$FRONTEND_USER_IMAGE FRONTEND_ADMIN_IMAGE=$FRONTEND_ADMIN_IMAGE docker compose -f docker-compose.prod.yml up -d --remove-orphans --force-recreate
             docker image prune -f
