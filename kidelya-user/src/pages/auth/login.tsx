@@ -173,7 +173,10 @@ export default function Login({ status, canResetPassword, canRegister }: Props) 
 
             <button
               type="button"
-              onClick={() => { window.location.href = "http://localhost:8000/auth/google" }}
+              onClick={() => {
+                const apiBase = import.meta.env.VITE_API_URL ?? "/api"
+                window.location.href = apiBase.replace(/\/api$/, "") + "/auth/google"
+              }}
               className="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#D5CDE2] text-sm font-semibold text-[#273068] hover:bg-[#c5bbd2]"
             >
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import InputError from "@/components/InputError"
 import PasswordInput from "@/components/password-input"
 import TextLink from "@/components/text-link"
@@ -13,7 +13,13 @@ import fontLogin from "@/assets/font-login.png"
 
 export default function Register() {
   const navigate = useNavigate()
-  const { login } = useAuth()
+  const { login, user, loading: authLoading } = useAuth()
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate("/dashboard", { replace: true })
+    }
+  }, [user, authLoading, navigate])
   const [form, setForm] = useState({
     firstname: "",
     lastname: "",
@@ -182,7 +188,10 @@ export default function Register() {
 
             <button
               type="button"
-              onClick={() => { window.location.href = "http://localhost:8000/auth/google" }}
+              onClick={() => {
+                const apiBase = import.meta.env.VITE_API_URL ?? "/api"
+                window.location.href = apiBase.replace(/\/api$/, "") + "/auth/google"
+              }}
               className="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#D5CDE2] text-sm font-semibold text-[#273068] hover:bg-[#c5bbd2]"
             >
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
