@@ -12,15 +12,39 @@ const navItems = [
   { path: '/settings', label: 'Paramètres', icon: '⚙️' },
 ]
 
-export default function Sidebar({ user, onLogout }: { user: any; onLogout: () => void }) {
+interface SidebarProps {
+  user: any
+  onLogout: () => void
+  isOpen: boolean
+  onClose: () => void
+}
+
+export default function Sidebar({ user, onLogout, isOpen, onClose }: SidebarProps) {
   return (
-    <aside className="w-60 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex flex-col">
-      <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-        <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Kidelya</h1>
-        <p className="text-xs text-gray-500 dark:text-gray-400">Backoffice admin</p>
+    <aside className={`
+      fixed inset-y-0 left-0 z-30 w-60 bg-white dark:bg-gray-900
+      border-r border-gray-200 dark:border-gray-700 flex flex-col
+      transition-transform duration-200
+      ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+      md:relative md:translate-x-0 md:z-auto
+    `}>
+      <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Kidelya</h1>
+          <p className="text-xs text-gray-500 dark:text-gray-400">Backoffice admin</p>
+        </div>
+        <button
+          onClick={onClose}
+          className="md:hidden p-1 rounded text-gray-400 hover:text-gray-600"
+          aria-label="Fermer"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto" onClick={onClose}>
         {navItems.map(item => (
           <SidebarItem key={item.path} {...item} />
         ))}
