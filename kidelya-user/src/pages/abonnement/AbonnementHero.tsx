@@ -22,17 +22,17 @@ export default function AbonnementHero() {
           </p>
           <div className="mt-6 flex flex-wrap gap-5 text-left">
             <div className="flex items-center gap-2 text-xs">
-              <ShieldIcon className="text-[#273068]"/>
+              <ShieldIcon className="h-5 w-5 text-[#273068]"/>
               <span>Sécurisé et privé</span>
             </div>
             <div className="flex items-center gap-2 text-xs">
-              <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#7C67B2]" fill="none">
+              <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#273068]" fill="none">
                 <path d="M12 3l1.8 4.5L18 9.3l-4.2 1.7L12 15.5 10.2 11 6 9.3l4.2-1.8L12 3z" stroke="currentColor" strokeWidth="1.6"/>
               </svg>
               <span>Sans engagement</span>
             </div>
             <div className="flex items-center gap-2 text-xs">
-              <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#7C67B2]" fill="none">
+              <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#273068]" fill="none">
                 <path d="M12 20s-7-4.4-7-9.2A4.3 4.3 0 019.3 6c1.2 0 2.2.5 2.7 1.4.5-.9 1.5-1.4 2.7-1.4A4.3 4.3 0 0119 10.8C19 15.6 12 20 12 20z" stroke="currentColor" strokeWidth="1.8"/>
               </svg>
               <span>Contenus mis à jour</span>

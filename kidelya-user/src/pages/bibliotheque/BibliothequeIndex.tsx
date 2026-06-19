@@ -152,11 +152,8 @@ export default function BibliothequeIndex() {
         <div className="absolute right-0 top-0 hidden h-full w-[48%] lg:block">
           <img src={illuHero} alt="" aria-hidden="true" className="h-full w-full object-contain object-right-top" />
         </div>
-        <div className="absolute inset-0 z-0 opacity-100 lg:hidden">
-          <img src={illuHero} alt="" aria-hidden="true" className="h-full w-full object-contain object-right" />
-        </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl pl-6 pb-0 pt-20 md:pt-28">
+<div className="relative z-10 mx-auto max-w-7xl pl-6 pb-0 pt-20 md:pt-28">
           <div className="max-w-[540px]">
             <h1 className="text-[32px] font-black leading-[1.12] text-[#2F236D] md:text-[44px]">
               Nos activités éducatives

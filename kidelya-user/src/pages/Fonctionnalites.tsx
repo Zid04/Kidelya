@@ -200,12 +200,8 @@ export default function FonctionnalitesPage() {
           />
         </div>
 
-        {/* Image mobile — fond */}
-        <div className="absolute inset-0 z-0 opacity-100 lg:hidden">
-          <img src={heroFonctionnalites} alt="" aria-hidden="true" className="h-full w-full object-cover" />
-        </div>
 
-        {/* Texte */}
+{/* Texte */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:py-20">
           <p className="mb-3 text-sm font-bold uppercase tracking-[3px] text-[#E94E6F]">
             Fonctionnalités
