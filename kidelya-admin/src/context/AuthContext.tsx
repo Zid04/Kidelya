@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     api.get('/users/me')
       .then(res => {
-        if (isMounted.current) setUser(res.data)
+        if (isMounted.current) setUser(res.data.data)
       })
       .catch(() => {
         if (isMounted.current) logout()
