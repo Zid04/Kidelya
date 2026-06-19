@@ -54,7 +54,7 @@ export default function NavFooter() {
           </div>
 
           <div>
-            <h3 className="mb-2 text-[12px] font-extrabold text-black">
+            <h3 className="mb-2 text-[12px] font-bold text-black">
               Navigation
             </h3>
             <ul className="space-y-1.5">
@@ -72,7 +72,7 @@ export default function NavFooter() {
           </div>
 
           <div>
-            <h3 className="mb-2 text-[12px] font-extrabold text-black">
+            <h3 className="mb-2 text-[12px] font-bold text-black">
               Aide
             </h3>
             <ul className="space-y-1.5">
@@ -90,7 +90,7 @@ export default function NavFooter() {
           </div>
 
           <div>
-            <h3 className="mb-2 text-[12px] font-extrabold text-black">
+            <h3 className="mb-2 text-[12px] font-bold text-black">
               Newsletter
             </h3>
 

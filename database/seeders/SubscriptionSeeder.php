@@ -14,7 +14,7 @@ class SubscriptionSeeder extends Seeder
 {
     public function run(): void
     {
-        $users = User::whereHas('role', fn($q) => $q->where('type', 'User'))->get();
+        $users = User::whereIn('email', ['user@kidelya.com', 'user2@kidelya.com'])->get();
         $packs = Pack::where('is_published', true)->get();
 
         if ($users->count() === 0 || $packs->count() === 0) {
