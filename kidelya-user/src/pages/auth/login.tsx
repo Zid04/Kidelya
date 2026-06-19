@@ -75,7 +75,7 @@ export default function Login({ status, canResetPassword, canRegister }: Props) 
       <div className="flex w-full max-w-[860px] overflow-hidden rounded-[20px] shadow-lg">
 
         {/* ── Colonne gauche ── */}
-        <div className="flex w-[38%] shrink-0 flex-col bg-[#D5CDE2]">
+        <div className="hidden w-[38%] shrink-0 flex-col bg-[#D5CDE2] sm:flex">
           <div className="flex flex-col p-6 pb-0">
             <h2 className="text-xl font-black leading-snug text-[#7C67B2]">
               Bon retour sur{" "}

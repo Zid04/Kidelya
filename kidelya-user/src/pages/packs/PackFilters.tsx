@@ -21,7 +21,7 @@ export default function PackFilters({
 }: Props) {
   return (
     <div className="mx-auto my-5 flex w-full max-w-4xl flex-col items-center">
-      <div className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E8DDD0] bg-white px-16 py-5 shadow-md">
+      <div className="flex w-full flex-wrap items-center justify-center gap-2 rounded-2xl border border-[#E8DDD0] bg-white px-4 py-5 shadow-md sm:px-16">
         <div className="rounded-xl border border-[#E8DDD0]">
           <select
             value={selectedAge}
