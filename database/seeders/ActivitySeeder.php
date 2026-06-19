@@ -40,7 +40,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/plantation.jpg',
                 'steps' => json_encode(['Préparer le pot', 'Mettre la terre', 'Planter les graines', 'Arroser']),
                 'category' => 'Nature', 'difficulty' => 'Facile',
-                'credit_price' => 8, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.50, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -51,20 +51,20 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/insectes.jpg',
                 'steps' => json_encode(['Observer', 'Identifier', 'Noter les découvertes']),
                 'category' => 'Nature', 'difficulty' => 'Moyen',
-                'credit_price' => 10, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
             // 🐰 Pâques & Créations
             [
-                'title' => 'Peinture d’œufs de Pâques',
-                'description' => 'Décoration d’œufs avec peinture, paillettes et autocollants.',
+                'title' => 'Peinture d\'œufs de Pâques',
+                'description' => 'Décoration d\'œufs avec peinture, paillettes et autocollants.',
                 'agemin' => 3, 'agemax' => 12, 'duration' => 40,
                 'season' => 'Spring', 'location' => 'Salle d\'art',
                 'photourl' => '/assets/activities/oeufs.jpg',
                 'steps' => json_encode(['Préparer les œufs', 'Peindre', 'Décorer']),
                 'category' => 'Pâques', 'difficulty' => 'Facile',
-                'credit_price' => 6, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 2.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -75,20 +75,20 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/chasse.jpg',
                 'steps' => json_encode(['Lire les indices', 'Chercher', 'Valider']),
                 'category' => 'Pâques', 'difficulty' => 'Moyen',
-                'credit_price' => 5, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 2.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
             // 🎨 Arts & Couleurs
             [
                 'title' => 'Peinture arc‑en‑ciel',
-                'description' => 'Création d’un arc‑en‑ciel avec peinture et éponges.',
+                'description' => 'Création d\'un arc‑en‑ciel avec peinture et éponges.',
                 'agemin' => 3, 'agemax' => 10, 'duration' => 30,
                 'season' => 'All', 'location' => 'Salle d\'art',
                 'photourl' => '/assets/activities/arcenciel.jpg',
                 'steps' => json_encode(['Préparer les couleurs', 'Peindre', 'Sécher']),
                 'category' => 'Art', 'difficulty' => 'Facile',
-                'credit_price' => 7, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.20, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -99,20 +99,20 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/patesel.jpg',
                 'steps' => json_encode(['Préparer la pâte', 'Modeler', 'Sécher']),
                 'category' => 'Art', 'difficulty' => 'Moyen',
-                'credit_price' => 6, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.20, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
             // 🪁 Plein air
             [
                 'title' => 'Atelier cerf‑volant',
-                'description' => 'Fabrication et décoration d’un cerf‑volant.',
+                'description' => 'Fabrication et Décoration d\'un cerf‑volant.',
                 'agemin' => 6, 'agemax' => 15, 'duration' => 90,
                 'season' => 'Summer', 'location' => 'Terrain de sport',
                 'photourl' => '/assets/activities/cerfvolant.jpg',
                 'steps' => json_encode(['Assembler', 'Décorer', 'Tester']),
                 'category' => 'Plein air', 'difficulty' => 'Difficile',
-                'credit_price' => 12, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -125,7 +125,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/semis.jpg',
                 'steps' => json_encode(['Mettre la terre', 'Planter', 'Arroser']),
                 'category' => 'Nature', 'difficulty' => 'Facile',
-                'credit_price' => 5, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 2.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -138,7 +138,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/musique.jpg',
                 'steps' => json_encode(['Découvrir les sons', 'Essayer les instruments', 'Créer un rythme']),
                 'category' => 'Musique', 'difficulty' => 'Facile',
-                'credit_price' => 8, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.50, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -151,7 +151,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/cuisine.jpg',
                 'steps' => json_encode(['Préparer', 'Mélanger', 'Cuire']),
                 'category' => 'Cuisine', 'difficulty' => 'Moyen',
-                'credit_price' => 10, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -164,7 +164,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/volcan.jpg',
                 'steps' => json_encode(['Façonner le volcan', 'Mettre le bicarbonate', 'Verser le vinaigre', 'Observer l\'éruption']),
                 'category' => 'Sciences', 'difficulty' => 'Facile',
-                'credit_price' => 7, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.20, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -175,7 +175,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/slime.jpg',
                 'steps' => json_encode(['Mélanger la colle et le colorant', 'Ajouter l\'activateur', 'Malaxer', 'Tester la texture']),
                 'category' => 'Sciences', 'difficulty' => 'Facile',
-                'credit_price' => 6, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 2.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -186,7 +186,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/cristaux.jpg',
                 'steps' => json_encode(['Préparer la solution', 'Immerger un support', 'Attendre et observer', 'Récolter les cristaux']),
                 'category' => 'Sciences', 'difficulty' => 'Moyen',
-                'credit_price' => 9, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.50, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -199,7 +199,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/marionnettes.jpg',
                 'steps' => json_encode(['Fabriquer la marionnette', 'Lui inventer un nom', 'Écrire une courte histoire', 'Jouer la scène']),
                 'category' => 'Théâtre', 'difficulty' => 'Moyen',
-                'credit_price' => 11, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -210,7 +210,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/mime.jpg',
                 'steps' => json_encode(['Échauffement', 'Exercices de mimique', 'Saynètes en binôme', 'Présentation au groupe']),
                 'category' => 'Théâtre', 'difficulty' => 'Facile',
-                'credit_price' => 8, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.20, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -223,7 +223,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/danse-africaine.jpg',
                 'steps' => json_encode(['Échauffement', 'Apprentissage des rythmes de base', 'Enchaînement de pas', 'Improvisation libre']),
                 'category' => 'Danse', 'difficulty' => 'Moyen',
-                'credit_price' => 12, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -234,7 +234,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/danse-libre.jpg',
                 'steps' => json_encode(['Écouter la musique', 'Bouger librement', 'Créer une chorégraphie', 'Partager avec les autres']),
                 'category' => 'Danse', 'difficulty' => 'Facile',
-                'credit_price' => 7, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.20, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -247,7 +247,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/recyclage.jpg',
                 'steps' => json_encode(['Trier les matériaux', 'Imaginer une création', 'Assembler et coller', 'Décorer']),
                 'category' => 'Écologie', 'difficulty' => 'Facile',
-                'credit_price' => 5, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 2.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -258,7 +258,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/compost.jpg',
                 'steps' => json_encode(['Comprendre le cycle naturel', 'Séparer les déchets organiques', 'Remplir le composteur', 'Observer la transformation']),
                 'category' => 'Écologie', 'difficulty' => 'Moyen',
-                'credit_price' => 9, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.50, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -271,7 +271,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/yoga.jpg',
                 'steps' => json_encode(['Respiration consciente', 'Postures animales', 'Équilibre', 'Relaxation finale']),
                 'category' => 'Bien-être', 'difficulty' => 'Facile',
-                'credit_price' => 8, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.50, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -282,7 +282,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/meditation.jpg',
                 'steps' => json_encode(['S\'installer confortablement', 'Respirer lentement', 'Écouter la visualisation', 'Partager ses ressentis']),
                 'category' => 'Bien-être', 'difficulty' => 'Facile',
-                'credit_price' => 6, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 2.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -295,7 +295,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/bois.jpg',
                 'steps' => json_encode(['Choisir le modèle', 'Découper les pièces', 'Assembler', 'Peindre et décorer']),
                 'category' => 'Bricolage', 'difficulty' => 'Difficile',
-                'credit_price' => 15, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -306,7 +306,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/mobile.jpg',
                 'steps' => json_encode(['Plier les formes en origami', 'Colorier', 'Accrocher sur le fil', 'Équilibrer le mobile']),
                 'category' => 'Bricolage', 'difficulty' => 'Moyen',
-                'credit_price' => 8, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.20, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -319,7 +319,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/jonglage.jpg',
                 'steps' => json_encode(['Exercice foulard', 'Jonglage à 1 balle', 'Jonglage à 2 balles', 'Enchaînement']),
                 'category' => 'Sport', 'difficulty' => 'Difficile',
-                'credit_price' => 10, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.90, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -330,7 +330,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/obstacles.jpg',
                 'steps' => json_encode(['Échauffement', 'Présentation du parcours', 'Essai individuel', 'Course chronométrée']),
                 'category' => 'Sport', 'difficulty' => 'Moyen',
-                'credit_price' => 7, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.20, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
 
@@ -343,7 +343,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/contes.jpg',
                 'steps' => json_encode(['Choisir les personnages', 'Inventer une situation', 'Construire l\'histoire', 'Raconter au groupe']),
                 'category' => 'Lecture', 'difficulty' => 'Moyen',
-                'credit_price' => 9, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.50, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
             [
@@ -354,7 +354,7 @@ class ActivitySeeder extends Seeder
                 'photourl' => '/assets/activities/calligraphie.jpg',
                 'steps' => json_encode(['Découvrir les outils', 'S\'exercer sur des lettres', 'Écrire son prénom', 'Décorer la feuille']),
                 'category' => 'Art', 'difficulty' => 'Moyen',
-                'credit_price' => 8, 'is_purchasable' => true, 'is_published' => true,
+                'credit_price' => 3.20, 'is_purchasable' => true, 'is_published' => true,
                 'iduser' => $admin->iduser,
             ],
         ];
@@ -397,7 +397,7 @@ class ActivitySeeder extends Seeder
 
             $data['photourl'] = null;
 
-            $activity = Activity::firstOrCreate(
+            $activity = Activity::updateOrCreate(
                 ['title' => $data['title'], 'iduser' => $data['iduser']],
                 $data
             );
