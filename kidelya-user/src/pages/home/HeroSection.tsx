@@ -69,16 +69,6 @@ export default function HeroSection() {
         />
       </div>
 
-      {/* Image mobile — fond plein écran */}
-      <div className="absolute inset-0 z-0 lg:hidden">
-        <img
-          src={heroImage}
-          alt=""
-          aria-hidden="true"
-          className="h-full w-full object-cover"
-        />
-      </div>
-
       {/* Texte */}
       <div className="relative z-10 mx-auto max-w-7xl pl-6 pb-20 pt-28 md:pb-24 md:pt-36">
         <div className="max-w-[540px]">

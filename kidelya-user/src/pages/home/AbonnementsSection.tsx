@@ -124,7 +124,7 @@ export default function AbonnementsSection() {
         src={fleurs03}
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 left-0 w-[180px] object-contain lg:w-[240px]"
+        className="pointer-events-none absolute bottom-0 left-0 w-[80px] object-contain sm:w-[120px] lg:w-[200px]"
       />
 
       {/* Fleur droite */}
@@ -132,7 +132,7 @@ export default function AbonnementsSection() {
         src={fleurs04}
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 right-0 w-[180px] object-contain lg:w-[240px]"
+        className="pointer-events-none absolute bottom-0 right-0 w-[80px] object-contain sm:w-[120px] lg:w-[200px]"
       />
 
       <div className="relative mx-auto max-w-7xl px-6">
