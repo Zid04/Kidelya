@@ -14,12 +14,13 @@ class UserSeeder extends Seeder
         // ─────────────────────────────────────────────
         // 1. Récupération des rôles
         // ─────────────────────────────────────────────
-        $adminRole   = Role::where('type', 'Admin')->first();
-        $userRole    = Role::where('type', 'User')->first();
+        $adminRole = Role::where('type', 'Admin')->first();
+        $userRole = Role::where('type', 'User')->first();
         $partnerRole = Role::where('type', 'Partner')->first();
 
-        if (!$adminRole || !$userRole || !$partnerRole) {
-            $this->command->warn("⚠️ UserSeeder skipped: missing roles.");
+        if (! $adminRole || ! $userRole || ! $partnerRole) {
+            $this->command->warn('⚠️ UserSeeder skipped: missing roles.');
+
             return;
         }
 
@@ -29,12 +30,12 @@ class UserSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'admin@kidelya.com'],
             [
-                'firstname'      => 'First',
-                'lastname'       => 'Admin',
-                'password'       => Hash::make('password'),
-                'is_active'      => true,
+                'firstname' => 'First',
+                'lastname' => 'Admin',
+                'password' => Hash::make('password'),
+                'is_active' => true,
                 'credit_balance' => 0,
-                'idrole'         => $adminRole->idrole,
+                'idrole' => $adminRole->idrole,
             ]
         );
 
@@ -44,12 +45,12 @@ class UserSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'user@kidelya.com'],
             [
-                'firstname'      => 'John',
-                'lastname'       => 'Smith',
-                'password'       => Hash::make('password'),
-                'is_active'      => true,
+                'firstname' => 'John',
+                'lastname' => 'Smith',
+                'password' => Hash::make('password'),
+                'is_active' => true,
                 'credit_balance' => 50, // utile pour tester achats
-                'idrole'         => $userRole->idrole,
+                'idrole' => $userRole->idrole,
             ]
         );
 
@@ -59,12 +60,12 @@ class UserSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'user2@kidelya.com'],
             [
-                'firstname'      => 'Alice',
-                'lastname'       => 'Brown',
-                'password'       => Hash::make('password'),
-                'is_active'      => true,
+                'firstname' => 'Alice',
+                'lastname' => 'Brown',
+                'password' => Hash::make('password'),
+                'is_active' => true,
                 'credit_balance' => 30,
-                'idrole'         => $userRole->idrole,
+                'idrole' => $userRole->idrole,
             ]
         );
 
@@ -74,12 +75,12 @@ class UserSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'partner@kidelya.com'],
             [
-                'firstname'      => 'Jane',
-                'lastname'       => 'Wilson',
-                'password'       => Hash::make('password'),
-                'is_active'      => true,
+                'firstname' => 'Jane',
+                'lastname' => 'Wilson',
+                'password' => Hash::make('password'),
+                'is_active' => true,
                 'credit_balance' => 0,
-                'idrole'         => $partnerRole->idrole,
+                'idrole' => $partnerRole->idrole,
             ]
         );
     }

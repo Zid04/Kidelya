@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Group;
-use App\Services\GroupService;
 use App\Http\Requests\Group\StoreGroupRequest;
 use App\Http\Requests\Group\UpdateGroupRequest;
+use App\Models\Group;
+use App\Services\GroupService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GroupController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function __construct(
         private GroupService $groupService
     ) {}
@@ -23,7 +23,7 @@ class GroupController extends Controller
         $this->authorize('viewAny', Group::class);
 
         return response()->json([
-            'data' => $this->groupService->getAllForUser(auth()->user())
+            'data' => $this->groupService->getAllForUser(auth()->user()),
         ]);
     }
 
@@ -38,7 +38,7 @@ class GroupController extends Controller
 
         return response()->json([
             'message' => 'Group created successfully',
-            'data' => $group
+            'data' => $group,
         ], 201);
     }
 
@@ -63,7 +63,7 @@ class GroupController extends Controller
 
         return response()->json([
             'message' => 'Group updated successfully',
-            'data' => $this->groupService->update($group, $request->validated())
+            'data' => $this->groupService->update($group, $request->validated()),
         ]);
     }
 
@@ -74,7 +74,7 @@ class GroupController extends Controller
         $this->groupService->delete($group);
 
         return response()->json([
-            'message' => 'Group deleted successfully'
+            'message' => 'Group deleted successfully',
         ]);
     }
 
@@ -89,7 +89,7 @@ class GroupController extends Controller
         $this->groupService->addChild($group, $request->child_id);
 
         return response()->json([
-            'message' => 'Child added to group successfully'
+            'message' => 'Child added to group successfully',
         ]);
     }
 
@@ -104,7 +104,7 @@ class GroupController extends Controller
         $this->groupService->removeChild($group, $request->child_id);
 
         return response()->json([
-            'message' => 'Child removed from group successfully'
+            'message' => 'Child removed from group successfully',
         ]);
     }
 
@@ -119,7 +119,7 @@ class GroupController extends Controller
         $this->groupService->addActivity($group, $request->activity_id);
 
         return response()->json([
-            'message' => 'Activity added to group successfully'
+            'message' => 'Activity added to group successfully',
         ]);
     }
 
@@ -134,7 +134,7 @@ class GroupController extends Controller
         $this->groupService->removeActivity($group, $request->activity_id);
 
         return response()->json([
-            'message' => 'Activity removed from group successfully'
+            'message' => 'Activity removed from group successfully',
         ]);
     }
 }

@@ -17,21 +17,21 @@ it('GET /public/packs ne retourne que les packs publiés', function () {
 
     $titles = collect($response->json('data'))->pluck('title')->all();
     expect($titles)->toContain('Pack visible')
-                   ->not->toContain('Pack caché');
+        ->not->toContain('Pack caché');
 });
 
 it('GET /public/packs retourne une structure paginée avec meta', function () {
     $this->getJson('/api/public/packs')
-         ->assertOk()
-         ->assertJsonStructure(['data', 'meta' => ['current_page', 'last_page', 'total']]);
+        ->assertOk()
+        ->assertJsonStructure(['data', 'meta' => ['current_page', 'last_page', 'total']]);
 });
 
 it('GET /public/packs/{id} retourne un pack publié', function () {
     $pack = Pack::factory()->create(['is_published' => true]);
 
     $this->getJson("/api/public/packs/{$pack->idpack}")
-         ->assertOk()
-         ->assertJsonPath('data.idpack', $pack->idpack);
+        ->assertOk()
+        ->assertJsonPath('data.idpack', $pack->idpack);
 });
 
 it('GET /public/packs/{id} retourne 404 pour un pack non publié', function () {
@@ -48,7 +48,7 @@ it('GET /public/packs filtre par recherche textuelle', function () {
 
     $titles = collect($response->json('data'))->pluck('title')->all();
     expect($titles)->toContain('Peinture et couleurs')
-                   ->not->toContain('Jardinage créatif');
+        ->not->toContain('Jardinage créatif');
 });
 
 // ── Plans d'abonnement ────────────────────────────────────────────────────────
@@ -73,5 +73,5 @@ it('GET /subscriptions/plans ne retourne que les plans actifs', function () {
 
     $names = collect($response->json())->pluck('name')->all();
     expect($names)->toContain('Monthly')
-                  ->not->toContain('Free');
+        ->not->toContain('Free');
 });

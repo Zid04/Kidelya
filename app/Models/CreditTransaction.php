@@ -11,6 +11,7 @@ class CreditTransaction extends Model
     use HasFactory;
 
     protected $table = 'credit_transactions';
+
     protected $primaryKey = 'idcredittransaction';
 
     protected $fillable = [

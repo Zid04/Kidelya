@@ -5,8 +5,8 @@ namespace App\Providers;
 use App\Models\Activity;
 use App\Models\CartItem;
 use App\Models\Child;
-use App\Models\Favorite;
 use App\Models\Competence;
+use App\Models\Favorite;
 use App\Models\Group;
 use App\Models\Guardian;
 use App\Models\Idea;
@@ -18,8 +18,8 @@ use App\Models\User;
 use App\Policies\ActivityPolicy;
 use App\Policies\CartItemPolicy;
 use App\Policies\ChildPolicy;
-use App\Policies\FavoritePolicy;
 use App\Policies\CompetencePolicy;
+use App\Policies\FavoritePolicy;
 use App\Policies\GroupPolicy;
 use App\Policies\GuardianPolicy;
 use App\Policies\IdeaPolicy;
@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Telescope\TelescopeApplicationServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,8 +44,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if ($this->app->environment('local') && class_exists(\Laravel\Telescope\TelescopeApplicationServiceProvider::class)) {
-            $this->app->register(\App\Providers\TelescopeServiceProvider::class);
+        if ($this->app->environment('local') && class_exists(TelescopeApplicationServiceProvider::class)) {
+            $this->app->register(TelescopeServiceProvider::class);
         }
     }
 
@@ -85,21 +86,20 @@ class AppServiceProvider extends ServiceProvider
         );
     }
 
-    
     protected function configurePolicies(): void
     {
-        Gate::policy(Activity::class,       ActivityPolicy::class);
-        Gate::policy(CartItem::class,       CartItemPolicy::class);
-        Gate::policy(Favorite::class,       FavoritePolicy::class);
-        Gate::policy(Child::class,          ChildPolicy::class);
-        Gate::policy(Competence::class,     CompetencePolicy::class);
-        Gate::policy(Group::class,          GroupPolicy::class);
-        Gate::policy(Guardian::class,       GuardianPolicy::class);
-        Gate::policy(Idea::class,           IdeaPolicy::class);
-        Gate::policy(Pack::class,           PackPolicy::class);
-        Gate::policy(Planning::class,       PlanningPolicy::class);
+        Gate::policy(Activity::class, ActivityPolicy::class);
+        Gate::policy(CartItem::class, CartItemPolicy::class);
+        Gate::policy(Favorite::class, FavoritePolicy::class);
+        Gate::policy(Child::class, ChildPolicy::class);
+        Gate::policy(Competence::class, CompetencePolicy::class);
+        Gate::policy(Group::class, GroupPolicy::class);
+        Gate::policy(Guardian::class, GuardianPolicy::class);
+        Gate::policy(Idea::class, IdeaPolicy::class);
+        Gate::policy(Pack::class, PackPolicy::class);
+        Gate::policy(Planning::class, PlanningPolicy::class);
         Gate::policy(ReportActivity::class, ReportActivityPolicy::class);
-        Gate::policy(Theme::class,          ThemePolicy::class);
-        Gate::policy(User::class,           UserPolicy::class);
+        Gate::policy(Theme::class, ThemePolicy::class);
+        Gate::policy(User::class, UserPolicy::class);
     }
 }

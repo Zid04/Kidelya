@@ -16,9 +16,9 @@ class UpdateGuardianRequest extends FormRequest
         $id = $this->route('guardian')->idparent;
 
         return [
-            'names'   => 'sometimes|string|max:100',
-            'email'   => "sometimes|email|unique:parents,email,{$id},idparent",
-            'phone'   => 'nullable|string|max:30',
+            'names' => 'sometimes|string|max:100',
+            'email' => "sometimes|email|unique:parents,email,{$id},idparent",
+            'phone' => 'nullable|string|max:30',
             'address' => 'nullable|string|max:255',
         ];
     }
@@ -26,7 +26,7 @@ class UpdateGuardianRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.email'  => 'Please provide a valid email address.',
+            'email.email' => 'Please provide a valid email address.',
             'email.unique' => 'This email is already used.',
         ];
     }

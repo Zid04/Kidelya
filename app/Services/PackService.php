@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Pack;
-use App\Services\CloudinaryService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class PackService
@@ -39,9 +39,9 @@ class PackService
         return Pack::whereHas('subscriptions', function ($q) use ($user) {
             $q->where('iduser', $user->iduser);
         })
-        ->with(['activities'])
-        ->latest()
-        ->get();
+            ->with(['activities'])
+            ->latest()
+            ->get();
     }
 
     /**
@@ -51,11 +51,11 @@ class PackService
     {
         return match ($user->role->type) {
 
-            'Admin'   => $this->getAllForAdmin(),
+            'Admin' => $this->getAllForAdmin(),
             'Partner' => $this->getOwnedPacks($user),
-            'User'    => $this->getSubscribedPacks($user),
+            'User' => $this->getSubscribedPacks($user),
 
-            default   => collect(),
+            default => collect(),
         };
     }
 
@@ -64,9 +64,9 @@ class PackService
      */
     public function create(array $data, $user): Pack
     {
-        if (isset($data['illustration']) && $data['illustration'] instanceof \Illuminate\Http\UploadedFile) {
+        if (isset($data['illustration']) && $data['illustration'] instanceof UploadedFile) {
             $data['illustration'] = $this->cloudinary->upload($data['illustration'], 'kidelya/packs');
-        } elseif (!empty($data['illustration_url'])) {
+        } elseif (! empty($data['illustration_url'])) {
             $data['illustration'] = $data['illustration_url'];
         }
         unset($data['illustration_url']);
@@ -82,12 +82,12 @@ class PackService
     public function update(Pack $pack, array $data): Pack
     {
         // Upload illustration si présente
-        if (isset($data['illustration']) && $data['illustration'] instanceof \Illuminate\Http\UploadedFile) {
+        if (isset($data['illustration']) && $data['illustration'] instanceof UploadedFile) {
             if ($pack->illustration) {
                 $this->cloudinary->delete($pack->illustration);
             }
             $data['illustration'] = $this->cloudinary->upload($data['illustration'], 'kidelya/packs');
-        } elseif (!empty($data['illustration_url'])) {
+        } elseif (! empty($data['illustration_url'])) {
             $data['illustration'] = $data['illustration_url'];
         }
         unset($data['illustration_url']);
@@ -116,6 +116,7 @@ class PackService
     public function publish(Pack $pack): Pack
     {
         $pack->update(['is_published' => true]);
+
         return $pack->fresh();
     }
 
@@ -125,6 +126,7 @@ class PackService
     public function unpublish(Pack $pack): Pack
     {
         $pack->update(['is_published' => false]);
+
         return $pack->fresh();
     }
 
@@ -133,7 +135,7 @@ class PackService
      */
     public function attachActivity(Pack $pack, int $activityId): void
     {
-        if (!$pack->activities()->where('activities.idactivities', $activityId)->exists()) {
+        if (! $pack->activities()->where('activities.idactivities', $activityId)->exists()) {
             $pack->activities()->attach($activityId);
         }
     }

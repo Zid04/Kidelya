@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Idea;
-use App\Services\IdeaService;
 use App\Http\Requests\Idea\StoreIdeaRequest;
 use App\Http\Requests\Idea\UpdateIdeaRequest;
-use Illuminate\Http\JsonResponse;
+use App\Models\Idea;
+use App\Services\IdeaService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
 
 class IdeaController extends Controller
 {
@@ -22,7 +22,7 @@ class IdeaController extends Controller
         $this->authorize('viewAny', Idea::class);
 
         return response()->json([
-            'data' => $this->ideaService->getAllForUser(auth()->user())
+            'data' => $this->ideaService->getAllForUser(auth()->user()),
         ]);
     }
 
@@ -35,7 +35,7 @@ class IdeaController extends Controller
             'data' => $this->ideaService->create(
                 $request->validated(),
                 auth()->user()
-            )
+            ),
         ], 201);
     }
 
@@ -44,7 +44,7 @@ class IdeaController extends Controller
         $this->authorize('view', $idea);
 
         return response()->json([
-            'data' => $idea
+            'data' => $idea,
         ]);
     }
 
@@ -54,7 +54,7 @@ class IdeaController extends Controller
 
         return response()->json([
             'message' => 'Idée mise à jour',
-            'data' => $this->ideaService->update($idea, $request->validated())
+            'data' => $this->ideaService->update($idea, $request->validated()),
         ]);
     }
 
@@ -65,7 +65,7 @@ class IdeaController extends Controller
         $this->ideaService->delete($idea);
 
         return response()->json([
-            'message' => 'Idée supprimée'
+            'message' => 'Idée supprimée',
         ]);
     }
 
@@ -80,7 +80,7 @@ class IdeaController extends Controller
 
         return response()->json([
             'message' => 'Idée convertie en activité brouillon',
-            'data'    => $activity,
+            'data' => $activity,
         ], 201);
     }
 }

@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Database\Factories\GuardianFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Models\User;
 
 class Guardian extends Model
 {
     use HasFactory;
 
-    protected $table      = 'parents';
+    protected $table = 'parents';
+
     protected $primaryKey = 'idparent';
 
     protected $fillable = [
@@ -28,7 +28,7 @@ class Guardian extends Model
         return 'idparent';
     }
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'iduser');
     }

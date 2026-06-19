@@ -2,6 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Activity;
+use App\Models\Group;
+use App\Models\Pack;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -15,50 +19,48 @@ class HandleInertiaRequests extends Middleware
     }
 
     public function share(Request $request): array
-{
-    $user = $request->user();
+    {
+        $user = $request->user();
 
-    return [
-        ...parent::share($request),
+        return [
+            ...parent::share($request),
 
-        // Nom de l'application
-        'appName' => config('app.name'),
+            // Nom de l'application
+            'appName' => config('app.name'),
 
-        // Utilisateur connecté + rôle + plan actif
-        'auth' => [
-            'user' => $user,
-            'role' => $user?->role?->type,
+            // Utilisateur connecté + rôle + plan actif
+            'auth' => [
+                'user' => $user,
+                'role' => $user?->role?->type,
 
-            // Le plan actif envoyé au frontend
-            'plan' => $user
-                ? $user->activeSubscription?->plan
-                : null,
-        ],
+                // Le plan actif envoyé au frontend
+                'plan' => $user
+                    ? $user->activeSubscription?->plan
+                    : null,
+            ],
 
-        // Permissions globales
-        'can' => [
-            'manageUsers'   => fn () => $user?->can('viewAny', \App\Models\User::class),
-            'createPack'    => fn () => $user?->can('create', \App\Models\Pack::class),
-            'createGroup'   => fn () => $user?->can('create', \App\Models\Group::class),
-            'createActivity'=> fn () => $user?->can('create', \App\Models\Activity::class),
-        ],
+            // Permissions globales
+            'can' => [
+                'manageUsers' => fn () => $user?->can('viewAny', User::class),
+                'createPack' => fn () => $user?->can('create', Pack::class),
+                'createGroup' => fn () => $user?->can('create', Group::class),
+                'createActivity' => fn () => $user?->can('create', Activity::class),
+            ],
 
-        // Messages flash
-        'flash' => [
-            'success' => fn () => $request->session()->get('success'),
-            'error'   => fn () => $request->session()->get('error'),
-        ],
+            // Messages flash
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+            ],
 
-        // Erreurs de validation
-        'errors' => fn () =>
-            $request->session()->get('errors')
-                ? $request->session()->get('errors')->getBag('default')->getMessages()
-                : (object) [],
+            // Erreurs de validation
+            'errors' => fn () => $request->session()->get('errors')
+                    ? $request->session()->get('errors')->getBag('default')->getMessages()
+                    : (object) [],
 
-        // État du sidebar
-        'sidebarOpen' => ! $request->hasCookie('sidebar_state')
-            || $request->cookie('sidebar_state') === 'true',
-    ];
-}
-
+            // État du sidebar
+            'sidebarOpen' => ! $request->hasCookie('sidebar_state')
+                || $request->cookie('sidebar_state') === 'true',
+        ];
+    }
 }

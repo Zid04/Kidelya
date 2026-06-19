@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\SubscriptionPlan;
-use App\Models\UserSubscription;
 use App\Models\User;
+use App\Models\UserSubscription;
 use Carbon\Carbon;
 
 class SubscriptionService
@@ -39,7 +39,7 @@ class SubscriptionService
     {
         $sub = $user->subscription;
 
-        if (!$sub || $sub->isExpired()) {
+        if (! $sub || $sub->isExpired()) {
             return false;
         }
 
@@ -50,7 +50,7 @@ class SubscriptionService
     {
         $sub = $user->subscription;
 
-        if (!$sub || $sub->isExpired()) {
+        if (! $sub || $sub->isExpired()) {
             return false;
         }
 

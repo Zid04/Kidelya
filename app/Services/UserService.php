@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Notifications\WelcomeNotification;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
-use App\Notifications\WelcomeNotification;
 
 class UserService
 {
@@ -24,14 +24,14 @@ class UserService
      */
     public function create(array $data): User
     {
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
 
         $data['is_active'] = true;
 
         $user = User::create($data);
-        $user->notify(new WelcomeNotification());
+        $user->notify(new WelcomeNotification);
 
         return $user;
     }
@@ -41,7 +41,7 @@ class UserService
      */
     public function update(User $user, array $data): User
     {
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
@@ -58,6 +58,7 @@ class UserService
     public function deactivate(User $user): User
     {
         $user->update(['is_active' => false]);
+
         return $user->fresh();
     }
 
@@ -67,6 +68,7 @@ class UserService
     public function activate(User $user): User
     {
         $user->update(['is_active' => true]);
+
         return $user->fresh();
     }
 

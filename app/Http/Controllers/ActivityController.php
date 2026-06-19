@@ -8,15 +8,16 @@ use App\Models\Activity;
 use App\Models\ActivityPurchase;
 use App\Services\ActivityService;
 use App\Services\CloudinaryService;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ActivityController extends Controller
 {
-    use authorizesRequests;
+    use AuthorizesRequests;
+
     public function __construct(
         private readonly ActivityService $activityService,
         private readonly CloudinaryService $cloudinary
@@ -37,10 +38,10 @@ class ActivityController extends Controller
         return response()->json([
             'data' => $activities->items(),
             'meta' => [
-                'total'        => $activities->total(),
-                'per_page'     => $activities->perPage(),
+                'total' => $activities->total(),
+                'per_page' => $activities->perPage(),
                 'current_page' => $activities->currentPage(),
-                'last_page'    => $activities->lastPage(),
+                'last_page' => $activities->lastPage(),
             ],
         ]);
     }
@@ -51,16 +52,16 @@ class ActivityController extends Controller
     public function index(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Activity::class);
-        
+
         $validated = $request->validate([
-            'age'           => 'nullable|integer|min:0',
-            'season'        => 'nullable|string|max:50',
-            'themes'        => 'nullable|array',
-            'themes.*'      => 'integer|exists:themes,idtheme',
-            'competences'   => 'nullable|array',
+            'age' => 'nullable|integer|min:0',
+            'season' => 'nullable|string|max:50',
+            'themes' => 'nullable|array',
+            'themes.*' => 'integer|exists:themes,idtheme',
+            'competences' => 'nullable|array',
             'competences.*' => 'integer|exists:competences,idcompetence',
-            'published'     => 'nullable|boolean',
-            'purchasable'   => 'nullable|boolean',
+            'published' => 'nullable|boolean',
+            'purchasable' => 'nullable|boolean',
         ]);
 
         return response()->json([
@@ -89,7 +90,7 @@ class ActivityController extends Controller
             ->pluck('idpack')
             ->toArray();
 
-        $hasPack = !empty($userPackIds) && DB::table('packs_activities')
+        $hasPack = ! empty($userPackIds) && DB::table('packs_activities')
             ->whereIn('idpack', $userPackIds)
             ->where('idactivities', $activity->idactivities)
             ->exists();
@@ -103,7 +104,7 @@ class ActivityController extends Controller
             ->exists();
 
         $data = $activity->toArray();
-        $data['is_owned']        = $isCreator || $hasPack || $hasPurchased;
+        $data['is_owned'] = $isCreator || $hasPack || $hasPurchased;
         $data['has_subscription'] = $hasActiveSubscription;
 
         return response()->json(['data' => $data]);
@@ -120,13 +121,13 @@ class ActivityController extends Controller
 
         if ($request->hasFile('photo')) {
             $data['photourl'] = $this->cloudinary->upload($request->file('photo'), 'kidelya/activities');
-        } elseif (!empty($data['photo_url'])) {
+        } elseif (! empty($data['photo_url'])) {
             $data['photourl'] = $data['photo_url'];
         }
         unset($data['photo'], $data['photo_url']);
 
         $rawSteps = $request->input('steps', []);
-        if (!empty($rawSteps)) {
+        if (! empty($rawSteps)) {
             $processedSteps = [];
             foreach ($rawSteps as $i => $step) {
                 if ($request->hasFile("steps.$i.image")) {
@@ -140,7 +141,7 @@ class ActivityController extends Controller
             $data['steps'] = $processedSteps;
         }
 
-        $themes      = $data['themes']      ?? [];
+        $themes = $data['themes'] ?? [];
         $competences = $data['competences'] ?? [];
         unset($data['themes'], $data['competences']);
 
@@ -150,7 +151,7 @@ class ActivityController extends Controller
 
         return response()->json([
             'message' => 'Activity created successfully',
-            'data'    => $activity->load(['themes', 'competences'])
+            'data' => $activity->load(['themes', 'competences']),
         ], 201);
     }
 
@@ -168,13 +169,13 @@ class ActivityController extends Controller
                 $this->cloudinary->delete($activity->photourl);
             }
             $data['photourl'] = $this->cloudinary->upload($request->file('photo'), 'kidelya/activities');
-        } elseif (!empty($data['photo_url'])) {
+        } elseif (! empty($data['photo_url'])) {
             $data['photourl'] = $data['photo_url'];
         }
         unset($data['photo'], $data['photo_url']);
 
         $rawSteps = $request->input('steps', []);
-        if (!empty($rawSteps)) {
+        if (! empty($rawSteps)) {
             $processedSteps = [];
             foreach ($rawSteps as $i => $step) {
                 if ($request->hasFile("steps.$i.image")) {
@@ -188,17 +189,21 @@ class ActivityController extends Controller
             $data['steps'] = $processedSteps;
         }
 
-        $themes      = $data['themes']      ?? null;
+        $themes = $data['themes'] ?? null;
         $competences = $data['competences'] ?? null;
         unset($data['themes'], $data['competences']);
 
         $updated = $this->activityService->update($activity, $data);
-        if ($themes !== null)      $updated->themes()->sync($themes);
-        if ($competences !== null) $updated->competences()->sync($competences);
+        if ($themes !== null) {
+            $updated->themes()->sync($themes);
+        }
+        if ($competences !== null) {
+            $updated->competences()->sync($competences);
+        }
 
         return response()->json([
             'message' => 'Activity updated successfully',
-            'data'    => $updated->load(['themes', 'competences'])
+            'data' => $updated->load(['themes', 'competences']),
         ]);
     }
 
@@ -212,7 +217,7 @@ class ActivityController extends Controller
         $this->activityService->delete($activity);
 
         return response()->json([
-            'message' => 'Activity deleted successfully'
+            'message' => 'Activity deleted successfully',
         ]);
     }
 
@@ -227,7 +232,7 @@ class ActivityController extends Controller
 
         return response()->json([
             'message' => 'Activity published successfully',
-            'data'    => $updated
+            'data' => $updated,
         ]);
     }
 
@@ -242,7 +247,7 @@ class ActivityController extends Controller
 
         return response()->json([
             'message' => 'Activity unpublished successfully',
-            'data'    => $updated
+            'data' => $updated,
         ]);
     }
 

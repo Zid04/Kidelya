@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\ChildFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +11,8 @@ class Child extends Model
 {
     use HasFactory;
 
-    protected $table      = 'children';
+    protected $table = 'children';
+
     protected $primaryKey = 'idchildren';
 
     protected $fillable = [

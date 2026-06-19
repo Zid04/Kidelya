@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use App\Services\UserService;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
@@ -18,14 +18,14 @@ class UserController extends Controller
     ) {}
 
     /**
-     * LIST USERS 
+     * LIST USERS
      */
     public function index(): JsonResponse
     {
         $this->authorize('viewAny', User::class);
 
         return response()->json([
-            'data' => $this->userService->getPaginated(10)
+            'data' => $this->userService->getPaginated(10),
         ]);
     }
 
@@ -43,8 +43,8 @@ class UserController extends Controller
                 'ideas',
                 'activities',
                 'groups',
-                'packSubscriptions'
-            ])
+                'packSubscriptions',
+            ]),
         ]);
     }
 
@@ -59,7 +59,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'User created successfully',
-            'data' => $user
+            'data' => $user,
         ], 201);
     }
 
@@ -72,12 +72,12 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'User updated successfully',
-            'data' => $this->userService->update($user, $request->validated())
+            'data' => $this->userService->update($user, $request->validated()),
         ]);
     }
 
     /**
-     * DEACTIVATE USER 
+     * DEACTIVATE USER
      */
     public function deactivate(User $user): JsonResponse
     {
@@ -85,7 +85,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'User deactivated successfully',
-            'data' => $this->userService->deactivate($user)
+            'data' => $this->userService->deactivate($user),
         ]);
     }
 
@@ -99,7 +99,7 @@ class UserController extends Controller
         $this->userService->delete($user);
 
         return response()->json([
-            'message' => 'User deleted successfully'
+            'message' => 'User deleted successfully',
         ]);
     }
 }

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pack;
-use App\Services\PackService;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Http\Requests\Pack\StorePackRequest;
 use App\Http\Requests\Pack\UpdatePackRequest;
+use App\Models\Pack;
+use App\Services\PackService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class PackController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function __construct(
         private PackService $packService
     ) {}
@@ -26,7 +26,7 @@ class PackController extends Controller
         $this->authorize('viewAny', Pack::class);
 
         return response()->json([
-            'data' => $this->packService->getDashboardPacks(auth()->user())
+            'data' => $this->packService->getDashboardPacks(auth()->user()),
         ]);
     }
 
@@ -39,7 +39,7 @@ class PackController extends Controller
 
         return response()->json([
             'message' => 'Pack created successfully',
-            'data' => $this->packService->create($request->validated(), auth()->user())
+            'data' => $this->packService->create($request->validated(), auth()->user()),
         ], 201);
     }
 
@@ -51,7 +51,7 @@ class PackController extends Controller
         $this->authorize('view', $pack);
 
         return response()->json([
-            'data' => $pack->load(['creator', 'activities'])
+            'data' => $pack->load(['creator', 'activities']),
         ]);
     }
 
@@ -64,7 +64,7 @@ class PackController extends Controller
 
         return response()->json([
             'message' => 'Pack updated successfully',
-            'data' => $this->packService->update($pack, $request->validated())
+            'data' => $this->packService->update($pack, $request->validated()),
         ]);
     }
 
@@ -78,7 +78,7 @@ class PackController extends Controller
         $this->packService->delete($pack);
 
         return response()->json([
-            'message' => 'Pack deleted successfully'
+            'message' => 'Pack deleted successfully',
         ]);
     }
 
@@ -90,13 +90,13 @@ class PackController extends Controller
         $this->authorize('update', $pack);
 
         $request->validate([
-            'activity_id' => 'required|exists:activities,idactivities'
+            'activity_id' => 'required|exists:activities,idactivities',
         ]);
 
         $this->packService->attachActivity($pack, $request->activity_id);
 
         return response()->json([
-            'message' => 'Activity added to pack'
+            'message' => 'Activity added to pack',
         ]);
     }
 
@@ -108,13 +108,13 @@ class PackController extends Controller
         $this->authorize('update', $pack);
 
         $request->validate([
-            'activity_id' => 'required|exists:activities,idactivities'
+            'activity_id' => 'required|exists:activities,idactivities',
         ]);
 
         $this->packService->detachActivity($pack, $request->activity_id);
 
         return response()->json([
-            'message' => 'Activity removed from pack'
+            'message' => 'Activity removed from pack',
         ]);
     }
 
@@ -129,7 +129,7 @@ class PackController extends Controller
 
         return response()->json([
             'message' => 'Pack published successfully',
-            'data'    => $updated
+            'data' => $updated,
         ]);
     }
 
@@ -144,7 +144,7 @@ class PackController extends Controller
 
         return response()->json([
             'message' => 'Pack unpublished successfully',
-            'data'    => $updated
+            'data' => $updated,
         ]);
     }
 }

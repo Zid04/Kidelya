@@ -12,21 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plannings', function (Blueprint $table) {
-    $table->id('idplanning'); 
-    $table->string('title', 50); 
-    $table->text('description')->nullable(); 
-    $table->string('location', 100);
+            $table->id('idplanning');
+            $table->string('title', 50);
+            $table->text('description')->nullable();
+            $table->string('location', 100);
 
-    $table->foreignId('iduser')
-          ->constrained('users', 'iduser')
-          ->onDelete('cascade');
+            $table->foreignId('iduser')
+                ->constrained('users', 'iduser')
+                ->onDelete('cascade');
 
-    $table->foreignId('idreport')
-          ->constrained('report_activities', 'idreport')
-          ->onDelete('cascade');
+            $table->foreignId('idreport')
+                ->constrained('report_activities', 'idreport')
+                ->onDelete('cascade');
 
-    $table->timestamps();
-});
+            $table->timestamps();
+        });
 
     }
 

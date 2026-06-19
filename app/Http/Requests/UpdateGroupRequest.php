@@ -14,7 +14,7 @@ class UpdateGroupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => 'sometimes|string|max:100',
+            'name' => 'sometimes|string|max:100',
             'description' => 'nullable|string|max:255',
         ];
     }
@@ -23,7 +23,7 @@ class UpdateGroupRequest extends FormRequest
     {
         return [
             'name.string' => 'Group name must be a valid text.',
-            'name.max'    => 'Group name must not exceed 100 characters.',
+            'name.max' => 'Group name must not exceed 100 characters.',
         ];
     }
 }

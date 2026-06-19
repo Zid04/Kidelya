@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +21,7 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
@@ -39,6 +41,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
+
         return response()->json(['message' => 'Déconnexion réussie.']);
     }
 
@@ -49,19 +52,19 @@ class AuthController extends Controller
     {
         $data = $request->validate([
             'firstname' => ['required', 'string', 'max:255'],
-            'lastname'  => ['required', 'string', 'max:255'],
-            'email'     => ['required', 'email', 'unique:users,email'],
-            'password'  => ['required', 'min:6'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'min:6'],
         ]);
 
-        $userRole = \App\Models\Role::where('type', 'User')->value('idrole');
+        $userRole = Role::where('type', 'User')->value('idrole');
 
         $user = User::create([
             'firstname' => $data['firstname'],
-            'lastname'  => $data['lastname'],
-            'email'     => $data['email'],
-            'password'  => Hash::make($data['password']),
-            'idrole'    => $userRole,
+            'lastname' => $data['lastname'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'idrole' => $userRole,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;

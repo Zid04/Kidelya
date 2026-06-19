@@ -12,18 +12,19 @@ class ActivitySeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = User::whereHas('role', fn($q) => $q->where('type', 'Admin'))->first();
-        $users = User::whereHas('role', fn($q) => $q->where('type', 'User'))->take(2)->get();
+        $admin = User::whereHas('role', fn ($q) => $q->where('type', 'Admin'))->first();
+        $users = User::whereHas('role', fn ($q) => $q->where('type', 'User'))->take(2)->get();
 
-        if (!$admin || $users->count() < 2) {
-            $this->command->warn(" ActivitySeeder skipped: missing admin or users.");
+        if (! $admin || $users->count() < 2) {
+            $this->command->warn(' ActivitySeeder skipped: missing admin or users.');
+
             return;
         }
 
         $user1 = $users[0];
         $user2 = $users[1];
 
-        $themes      = Theme::all();
+        $themes = Theme::all();
         $competences = Competence::all();
 
         // ───────────────────────────────────────────────

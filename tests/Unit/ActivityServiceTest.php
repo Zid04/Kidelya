@@ -6,11 +6,11 @@ use App\Services\ActivityService;
 // ── Création ──────────────────────────────────────────────────────────────────
 
 it('crée une activité avec les données fournies', function () {
-    $user    = userWithRole('User');
-    $service = new ActivityService();
+    $user = userWithRole('User');
+    $service = new ActivityService;
 
     $activity = $service->create([
-        'title'  => 'Activité test',
+        'title' => 'Activité test',
         'iduser' => $user->iduser,
     ]);
 
@@ -22,8 +22,8 @@ it('crée une activité avec les données fournies', function () {
 // ── Mise à jour ───────────────────────────────────────────────────────────────
 
 it('met à jour les champs d\'une activité', function () {
-    $user     = userWithRole('User');
-    $service  = new ActivityService();
+    $user = userWithRole('User');
+    $service = new ActivityService;
     $activity = Activity::factory()->create(['iduser' => $user->iduser, 'title' => 'Ancien titre']);
 
     $updated = $service->update($activity, ['title' => 'Nouveau titre']);
@@ -32,8 +32,8 @@ it('met à jour les champs d\'une activité', function () {
 });
 
 it('retourne une instance fraîche après mise à jour', function () {
-    $user     = userWithRole('User');
-    $service  = new ActivityService();
+    $user = userWithRole('User');
+    $service = new ActivityService;
     $activity = Activity::factory()->create(['iduser' => $user->iduser]);
 
     $result = $service->update($activity, ['title' => 'Titre frais']);
@@ -45,8 +45,8 @@ it('retourne une instance fraîche après mise à jour', function () {
 // ── Suppression ───────────────────────────────────────────────────────────────
 
 it('supprime (soft delete) une activité', function () {
-    $user     = userWithRole('User');
-    $service  = new ActivityService();
+    $user = userWithRole('User');
+    $service = new ActivityService;
     $activity = Activity::factory()->create(['iduser' => $user->iduser]);
 
     $service->delete($activity);
@@ -58,8 +58,8 @@ it('supprime (soft delete) une activité', function () {
 // ── Publication ───────────────────────────────────────────────────────────────
 
 it('publie une activité', function () {
-    $user     = userWithRole('User');
-    $service  = new ActivityService();
+    $user = userWithRole('User');
+    $service = new ActivityService;
     $activity = Activity::factory()->create(['iduser' => $user->iduser, 'is_published' => false]);
 
     $result = $service->publish($activity);
@@ -68,8 +68,8 @@ it('publie une activité', function () {
 });
 
 it('dépublie une activité', function () {
-    $user     = userWithRole('User');
-    $service  = new ActivityService();
+    $user = userWithRole('User');
+    $service = new ActivityService;
     $activity = Activity::factory()->create(['iduser' => $user->iduser, 'is_published' => true]);
 
     $result = $service->unpublish($activity);
@@ -80,8 +80,8 @@ it('dépublie une activité', function () {
 // ── Pagination ────────────────────────────────────────────────────────────────
 
 it('retourne une pagination d\'activités', function () {
-    $user    = userWithRole('User');
-    $service = new ActivityService();
+    $user = userWithRole('User');
+    $service = new ActivityService;
 
     Activity::factory()->count(3)->create(['iduser' => $user->iduser]);
 
@@ -92,8 +92,8 @@ it('retourne une pagination d\'activités', function () {
 });
 
 it('filtre les activités par âge', function () {
-    $user    = userWithRole('User');
-    $service = new ActivityService();
+    $user = userWithRole('User');
+    $service = new ActivityService;
 
     Activity::factory()->create(['iduser' => $user->iduser, 'agemin' => 3, 'agemax' => 6]);
     Activity::factory()->create(['iduser' => $user->iduser, 'agemin' => 8, 'agemax' => 12]);

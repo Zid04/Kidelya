@@ -29,7 +29,7 @@ class FavoriteController extends Controller
             'idpack' => 'nullable|exists:packs,idpack',
         ]);
 
-        if (!($validated['idactivity'] ?? null) && !($validated['idpack'] ?? null)) {
+        if (! ($validated['idactivity'] ?? null) && ! ($validated['idpack'] ?? null)) {
             return response()->json(['message' => 'Aucun élément fourni'], 422);
         }
 
@@ -53,8 +53,8 @@ class FavoriteController extends Controller
         ]);
 
         Favorite::where('iduser', auth()->id())
-            ->when($validated['idactivity'] ?? null, fn($q, $id) => $q->where('idactivity', $id))
-            ->when($validated['idpack'] ?? null, fn($q, $id) => $q->where('idpack', $id))
+            ->when($validated['idactivity'] ?? null, fn ($q, $id) => $q->where('idactivity', $id))
+            ->when($validated['idpack'] ?? null, fn ($q, $id) => $q->where('idpack', $id))
             ->delete();
 
         return response()->json(['message' => 'Retiré des favoris']);

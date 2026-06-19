@@ -14,10 +14,10 @@ class UpdateReportActivityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'comments'     => 'sometimes|string',
-            'photourl'     => 'nullable|url',
+            'comments' => 'sometimes|string',
+            'photourl' => 'nullable|url',
             'improvements' => 'nullable|string',
-            'positive'     => 'nullable|string',
+            'positive' => 'nullable|string',
             'difficulties' => 'nullable|string',
         ];
     }

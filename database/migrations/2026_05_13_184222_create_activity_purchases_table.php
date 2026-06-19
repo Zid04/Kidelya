@@ -12,14 +12,14 @@ return new class extends Migration
             $table->id('idactivitypurchase');
 
             $table->foreignId('user_id')
-                  ->constrained('users', 'iduser')
-                  ->onDelete('cascade');
+                ->constrained('users', 'iduser')
+                ->onDelete('cascade');
 
             $table->foreignId('activity_id')
-                  ->constrained('activities', 'idactivities')
-                  ->onDelete('cascade');
+                ->constrained('activities', 'idactivities')
+                ->onDelete('cascade');
 
-            $table->integer('credits_spent'); 
+            $table->integer('credits_spent');
 
             $table->timestamp('purchased_at')->useCurrent();
 

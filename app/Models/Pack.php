@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\PackFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +13,8 @@ class Pack extends Model
 {
     use HasFactory;
 
-    protected $table      = 'packs';
+    protected $table = 'packs';
+
     protected $primaryKey = 'idpack';
 
     protected $fillable = [
@@ -23,19 +23,18 @@ class Pack extends Model
         'tarification',
         'duration',
         'createdby',
-'illustration',
-      
+        'illustration',
+
         'is_published',
         'type',
     ];
 
     protected $casts = [
         'tarification' => 'decimal:2',
-        'duration'     => 'integer',
+        'duration' => 'integer',
 
-       
         'is_published' => 'boolean',
-        'type'         => 'string',
+        'type' => 'string',
     ];
 
     public function getRouteKeyName(): string

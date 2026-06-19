@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ReportActivity extends Model
 {
     use HasFactory;
-    protected $table      = 'report_activities';
+
+    protected $table = 'report_activities';
+
     protected $primaryKey = 'idreport';
 
     protected $fillable = [

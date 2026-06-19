@@ -24,4 +24,3 @@ class SettingsSeeder extends Seeder
         }
     }
 }
-

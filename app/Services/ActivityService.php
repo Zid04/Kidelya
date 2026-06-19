@@ -17,12 +17,12 @@ class ActivityService
             // Filtre : âge
             ->when(isset($filters['age']), function ($query) use ($filters) {
                 $query->where('agemin', '<=', $filters['age'])
-                      ->where('agemax', '>=', $filters['age']);
+                    ->where('agemax', '>=', $filters['age']);
             })
 
             // Filtre : saison
             ->when(isset($filters['season']), function ($query) use ($filters) {
-                $query->where('season', 'LIKE', '%' . $filters['season'] . '%');
+                $query->where('season', 'LIKE', '%'.$filters['season'].'%');
             })
 
             // Filtre : thèmes
@@ -68,6 +68,7 @@ class ActivityService
     public function update(Activity $activity, array $data): Activity
     {
         $activity->update($data);
+
         return $activity->fresh();
     }
 
@@ -85,6 +86,7 @@ class ActivityService
     public function publish(Activity $activity): Activity
     {
         $activity->update(['is_published' => true]);
+
         return $activity->fresh();
     }
 
@@ -94,6 +96,7 @@ class ActivityService
     public function unpublish(Activity $activity): Activity
     {
         $activity->update(['is_published' => false]);
+
         return $activity->fresh();
     }
 }

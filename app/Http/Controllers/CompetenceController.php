@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Competence;
-use App\Services\CompetenceService;
 use App\Http\Requests\Competence\StoreCompetenceRequest;
 use App\Http\Requests\Competence\UpdateCompetenceRequest;
-use Illuminate\Http\JsonResponse;
+use App\Models\Competence;
+use App\Services\CompetenceService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
 
 class CompetenceController extends Controller
 {
-        use AuthorizesRequests;
-        
+    use AuthorizesRequests;
+
     public function __construct(
         private CompetenceService $competenceService
     ) {}
@@ -22,7 +22,7 @@ class CompetenceController extends Controller
         $this->authorize('viewAny', Competence::class);
 
         return response()->json([
-            'data' => $this->competenceService->getAll()
+            'data' => $this->competenceService->getAll(),
         ]);
     }
 
@@ -32,7 +32,7 @@ class CompetenceController extends Controller
 
         return response()->json([
             'message' => 'Competence created successfully',
-            'data'    => $this->competenceService->create($request->validated())
+            'data' => $this->competenceService->create($request->validated()),
         ], 201);
     }
 
@@ -41,7 +41,7 @@ class CompetenceController extends Controller
         $this->authorize('view', $competence);
 
         return response()->json([
-            'data' => $competence->load('activities')
+            'data' => $competence->load('activities'),
         ]);
     }
 
@@ -51,7 +51,7 @@ class CompetenceController extends Controller
 
         return response()->json([
             'message' => 'Competence updated successfully',
-            'data'    => $this->competenceService->update($competence, $request->validated())
+            'data' => $this->competenceService->update($competence, $request->validated()),
         ]);
     }
 
@@ -62,7 +62,7 @@ class CompetenceController extends Controller
         $this->competenceService->delete($competence);
 
         return response()->json([
-            'message' => 'Competence deleted successfully'
+            'message' => 'Competence deleted successfully',
         ]);
     }
 }

@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('groups_children', function (Blueprint $table) {
-    $table->id('idgroupchildren');
+        Schema::create('groups_children', function (Blueprint $table) {
+            $table->id('idgroupchildren');
 
-    $table->foreignId('idgroup')
-          ->constrained('groups', 'idgroup')
-          ->onDelete('cascade');
+            $table->foreignId('idgroup')
+                ->constrained('groups', 'idgroup')
+                ->onDelete('cascade');
 
-    $table->foreignId('idchildren')
-          ->constrained('children', 'idchildren')
-          ->onDelete('cascade');
+            $table->foreignId('idchildren')
+                ->constrained('children', 'idchildren')
+                ->onDelete('cascade');
 
-    // Empêcher les doublons
-    $table->unique(['idgroup', 'idchildren']);
+            // Empêcher les doublons
+            $table->unique(['idgroup', 'idchildren']);
 
-    $table->timestamps();
-});
+            $table->timestamps();
+        });
 
     }
 

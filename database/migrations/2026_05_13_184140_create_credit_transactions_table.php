@@ -12,16 +12,16 @@ return new class extends Migration
             $table->id('idcredittransaction');
 
             $table->foreignId('user_id')
-                  ->constrained('users', 'iduser')
-                  ->onDelete('cascade');
+                ->constrained('users', 'iduser')
+                ->onDelete('cascade');
 
             $table->integer('amount');
-            $table->enum('type', ['achat', 'conso','remboursement', 'bonus']); 
+            $table->enum('type', ['achat', 'conso', 'remboursement', 'bonus']);
 
             $table->foreignId('activity_id')
-                  ->nullable()
-                  ->constrained('activities', 'idactivities')
-                  ->onDelete('set null');
+                ->nullable()
+                ->constrained('activities', 'idactivities')
+                ->onDelete('set null');
 
             $table->string('ref_stripe', 255)->nullable(); // référence Stripe
 

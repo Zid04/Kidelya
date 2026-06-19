@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Pack;
+use App\Models\User;
 
 class PackPolicy
 {
@@ -46,7 +46,6 @@ class PackPolicy
             || $user->role?->type === 'Admin';
     }
 
-    
     public function attachActivity(User $user, Pack $pack): bool
     {
         return $user->iduser === $pack->createdby

@@ -14,10 +14,10 @@ class UpdateGroupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => 'sometimes|string|max:100',
+            'name' => 'sometimes|string|max:100',
             'description' => 'nullable|string|max:255',
-            'children'    => 'nullable|array',
-            'children.*'  => 'integer|exists:children,idchildren',
+            'children' => 'nullable|array',
+            'children.*' => 'integer|exists:children,idchildren',
         ];
     }
 
@@ -25,7 +25,7 @@ class UpdateGroupRequest extends FormRequest
     {
         return [
             'name.string' => 'Le nom doit être une chaîne.',
-            'name.max'    => 'Le nom ne peut pas dépasser 100 caractères.',
+            'name.max' => 'Le nom ne peut pas dépasser 100 caractères.',
         ];
     }
 }

@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests\Competence;
 
+use App\Models\Competence;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCompetenceRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', \App\Models\Competence::class);
+        return $this->user()->can('create', Competence::class);
     }
 
     public function rules(): array
@@ -22,8 +23,8 @@ class StoreCompetenceRequest extends FormRequest
     {
         return [
             'name.required' => 'The competence name is required.',
-            'name.unique'   => 'This competence already exists.',
-            'name.max'      => 'The competence name must not exceed 100 characters.',
+            'name.unique' => 'This competence already exists.',
+            'name.max' => 'The competence name must not exceed 100 characters.',
         ];
     }
 }

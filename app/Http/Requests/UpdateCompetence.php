@@ -14,8 +14,8 @@ class UpdateCompetenceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:100|unique:competences,name,' 
-                      . $this->route('competence')->idcompetence . ',idcompetence',
+            'name' => 'sometimes|string|max:100|unique:competences,name,'
+                      .$this->route('competence')->idcompetence.',idcompetence',
         ];
     }
 
@@ -23,7 +23,7 @@ class UpdateCompetenceRequest extends FormRequest
     {
         return [
             'name.string' => 'The competence name must be a valid text.',
-            'name.max'    => 'The competence name must not exceed 100 characters.',
+            'name.max' => 'The competence name must not exceed 100 characters.',
             'name.unique' => 'This competence already exists.',
         ];
     }

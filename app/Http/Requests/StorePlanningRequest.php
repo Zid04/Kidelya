@@ -2,21 +2,22 @@
 
 namespace App\Http\Requests\Planning;
 
+use App\Models\Planning;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePlanningRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', \App\Models\Planning::class);
+        return $this->user()->can('create', Planning::class);
     }
 
     public function rules(): array
     {
         return [
-            'title'       => 'required|string|max:150',
+            'title' => 'required|string|max:150',
             'description' => 'nullable|string',
-            'location'    => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
         ];
     }
 
@@ -24,8 +25,8 @@ class StorePlanningRequest extends FormRequest
     {
         return [
             'title.required' => 'The title is required.',
-            'title.string'   => 'The title must be a string.',
-            'title.max'      => 'The title must not exceed 150 characters.',
+            'title.string' => 'The title must be a string.',
+            'title.max' => 'The title must not exceed 150 characters.',
         ];
     }
 }

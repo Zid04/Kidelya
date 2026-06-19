@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -32,7 +32,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'is_active'         => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public function role(): BelongsTo
@@ -64,46 +64,46 @@ class User extends Authenticatable
     {
         return $this->hasMany(CreditTransaction::class, 'iduser', 'iduser');
     }
+
     public function getKeyName(): string
-{
-    return 'iduser';
-}
+    {
+        return 'iduser';
+    }
 
-public function getKey(): mixed
-{
-    return $this->iduser;
-}
+    public function getKey(): mixed
+    {
+        return $this->iduser;
+    }
 
-public function subscription()
-{
-    return $this->hasOne(UserSubscription::class, 'iduser')->latestOfMany();
-}
+    public function subscription()
+    {
+        return $this->hasOne(UserSubscription::class, 'iduser')->latestOfMany();
+    }
 
-public function activeSubscription()
-{
-    return $this->hasOne(\App\Models\UserSubscription::class, 'iduser', 'iduser')
-        ->where('status', 'active')
-        ->latest('starts_at');
-}
+    public function activeSubscription()
+    {
+        return $this->hasOne(UserSubscription::class, 'iduser', 'iduser')
+            ->where('status', 'active')
+            ->latest('starts_at');
+    }
 
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class, 'iduser', 'iduser');
+    }
 
-public function favorites()
-{
-    return $this->hasMany(Favorite::class, 'iduser', 'iduser');
-}
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class, 'iduser', 'iduser');
+    }
 
-public function cartItems()
-{
-    return $this->hasMany(CartItem::class, 'iduser', 'iduser');
-}
-public function plannings()
-{
-    return $this->children()
-        ->with('plannings')
-        ->get()
-        ->pluck('plannings')
-        ->flatten()
-        ->unique('idplanning');
-}
-
+    public function plannings()
+    {
+        return $this->children()
+            ->with('plannings')
+            ->get()
+            ->pluck('plannings')
+            ->flatten()
+            ->unique('idplanning');
+    }
 }

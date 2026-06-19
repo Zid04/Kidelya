@@ -22,7 +22,7 @@ class AddGroupToPlanningRequest extends FormRequest
     {
         return [
             'group_id.required' => 'Group is required.',
-            'group_id.exists'   => 'Group not found.',
+            'group_id.exists' => 'Group not found.',
         ];
     }
 }

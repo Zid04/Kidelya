@@ -20,6 +20,7 @@ class ReportActivityService
     public function update(ReportActivity $report, array $data): ReportActivity
     {
         $report->update($data);
+
         return $report->fresh();
     }
 

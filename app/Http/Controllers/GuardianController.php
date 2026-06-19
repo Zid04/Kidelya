@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guardian;
-use App\Services\GuardianService;
 use App\Http\Requests\Guardian\StoreGuardianRequest;
 use App\Http\Requests\Guardian\UpdateGuardianRequest;
+use App\Models\Guardian;
+use App\Services\GuardianService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GuardianController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function __construct(
         private GuardianService $guardianService
     ) {}
@@ -23,7 +23,7 @@ class GuardianController extends Controller
         $this->authorize('viewAny', Guardian::class);
 
         return response()->json([
-            'data' => $this->guardianService->getAll()
+            'data' => $this->guardianService->getAll(),
         ]);
     }
 
@@ -39,7 +39,7 @@ class GuardianController extends Controller
 
         return response()->json([
             'message' => 'Guardian created successfully',
-            'data' => $guardian->load('children')
+            'data' => $guardian->load('children'),
         ], 201);
     }
 
@@ -48,7 +48,7 @@ class GuardianController extends Controller
         $this->authorize('view', $guardian);
 
         return response()->json([
-            'data' => $guardian->load('children')
+            'data' => $guardian->load('children'),
         ]);
     }
 
@@ -64,7 +64,7 @@ class GuardianController extends Controller
 
         return response()->json([
             'message' => 'Guardian updated successfully',
-            'data' => $updated->load('children')
+            'data' => $updated->load('children'),
         ]);
     }
 
@@ -75,7 +75,7 @@ class GuardianController extends Controller
         $this->guardianService->delete($guardian);
 
         return response()->json([
-            'message' => 'Guardian deleted successfully'
+            'message' => 'Guardian deleted successfully',
         ]);
     }
 
@@ -84,13 +84,13 @@ class GuardianController extends Controller
         $this->authorize('update', $guardian);
 
         $request->validate([
-            'child_id' => 'required|exists:children,idchildren'
+            'child_id' => 'required|exists:children,idchildren',
         ]);
 
         $this->guardianService->attachChild($guardian, $request->child_id);
 
         return response()->json([
-            'message' => 'Child added to guardian'
+            'message' => 'Child added to guardian',
         ]);
     }
 
@@ -99,13 +99,13 @@ class GuardianController extends Controller
         $this->authorize('update', $guardian);
 
         $request->validate([
-            'child_id' => 'required|exists:children,idchildren'
+            'child_id' => 'required|exists:children,idchildren',
         ]);
 
         $this->guardianService->detachChild($guardian, $request->child_id);
 
         return response()->json([
-            'message' => 'Child removed from guardian'
+            'message' => 'Child removed from guardian',
         ]);
     }
 }

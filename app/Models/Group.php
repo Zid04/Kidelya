@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use Database\Factories\GroupFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Activity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -13,7 +11,8 @@ class Group extends Model
 {
     use HasFactory;
 
-    protected $table      = 'groups';
+    protected $table = 'groups';
+
     protected $primaryKey = 'idgroup';
 
     protected $fillable = [

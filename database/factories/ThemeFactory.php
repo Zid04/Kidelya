@@ -11,7 +11,7 @@ class ThemeFactory extends Factory
         $themes = [
             'Nature', 'Sport', 'Art', 'Musique',
             'Science', 'Cuisine', 'Voyage', 'Technologie',
-            'Lecture', 'Cinéma', 'Théâtre', 'Danse'
+            'Lecture', 'Cinéma', 'Théâtre', 'Danse',
         ];
 
         return [

@@ -14,9 +14,9 @@ class UpdatePlanningRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => 'sometimes|string|max:150',
+            'title' => 'sometimes|string|max:150',
             'description' => 'nullable|string',
-            'location'    => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
         ];
     }
 
@@ -24,7 +24,7 @@ class UpdatePlanningRequest extends FormRequest
     {
         return [
             'title.string' => 'The title must be a string.',
-            'title.max'    => 'The title must not exceed 150 characters.',
+            'title.max' => 'The title must not exceed 150 characters.',
         ];
     }
 }

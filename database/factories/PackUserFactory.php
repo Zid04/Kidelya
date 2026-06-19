@@ -13,11 +13,11 @@ class PackUserFactory extends Factory
         $subscriptionDate = $this->faker->dateTimeBetween('-1 year', 'now');
 
         return [
-            'idpack'           => Pack::factory(),
-            'iduser'           => User::factory(),
+            'idpack' => Pack::factory(),
+            'iduser' => User::factory(),
             'subscriptiondate' => $subscriptionDate->format('Y-m-d'),
-            'expirationdate'   => $this->faker->dateTimeBetween($subscriptionDate, '+1 year')->format('Y-m-d'),
-            'status'           => $this->faker->randomElement(['active', 'inactive', 'canceled']),
+            'expirationdate' => $this->faker->dateTimeBetween($subscriptionDate, '+1 year')->format('Y-m-d'),
+            'status' => $this->faker->randomElement(['active', 'inactive', 'canceled']),
         ];
     }
 

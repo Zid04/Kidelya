@@ -14,7 +14,7 @@ class UpdateThemeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:100|unique:themes,name,' . $this->route('theme')->idtheme . ',idtheme',
+            'name' => 'sometimes|string|max:100|unique:themes,name,'.$this->route('theme')->idtheme.',idtheme',
         ];
     }
 

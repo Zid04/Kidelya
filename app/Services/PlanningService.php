@@ -13,11 +13,11 @@ class PlanningService
     public function getAllForUser(User $user)
     {
         return Planning::with([
-                'activities',
-                'groups',
-                'children',
-                'user',
-            ])
+            'activities',
+            'groups',
+            'children',
+            'user',
+        ])
             ->where('iduser', $user->iduser)
             ->latest()
             ->get();
@@ -36,7 +36,7 @@ class PlanningService
             'activities',
             'groups',
             'children',
-            'user'
+            'user',
         ]);
     }
 

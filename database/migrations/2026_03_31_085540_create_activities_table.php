@@ -9,33 +9,32 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    
     public function up(): void
     {
-       Schema::create('activities', function (Blueprint $table) {
-    $table->id('idactivities'); 
-    $table->string('title', 50);
-    $table->text('description')->nullable();
-    $table->integer('agemin')->nullable();
-    $table->integer('agemax')->nullable();
-    $table->integer('duration')->nullable(); 
-    $table->string('season', 50)->nullable();
-    $table->string('location', 100)->nullable();
-    $table->string('photourl', 255)->nullable();
-      $table->json('steps')->nullable();
-        $table->string('category')->nullable();
-        $table->enum('difficulty', ['facile', 'moyen', 'difficile'])->default('facile');
-         $table->json('materials')->nullable();
-  $table->integer('credit_price')->nullable();      
-    $table->boolean('is_purchasable')->default(false); 
-    $table->boolean('is_published')->default(true);    
-      $table->boolean('included_in_subscription')->default(false);
-    $table->foreignId('iduser')
-          ->constrained('users', 'iduser')
-          ->onDelete('cascade');
+        Schema::create('activities', function (Blueprint $table) {
+            $table->id('idactivities');
+            $table->string('title', 50);
+            $table->text('description')->nullable();
+            $table->integer('agemin')->nullable();
+            $table->integer('agemax')->nullable();
+            $table->integer('duration')->nullable();
+            $table->string('season', 50)->nullable();
+            $table->string('location', 100)->nullable();
+            $table->string('photourl', 255)->nullable();
+            $table->json('steps')->nullable();
+            $table->string('category')->nullable();
+            $table->enum('difficulty', ['facile', 'moyen', 'difficile'])->default('facile');
+            $table->json('materials')->nullable();
+            $table->integer('credit_price')->nullable();
+            $table->boolean('is_purchasable')->default(false);
+            $table->boolean('is_published')->default(true);
+            $table->boolean('included_in_subscription')->default(false);
+            $table->foreignId('iduser')
+                ->constrained('users', 'iduser')
+                ->onDelete('cascade');
 
-    $table->timestamps();
-});
+            $table->timestamps();
+        });
 
     }
 

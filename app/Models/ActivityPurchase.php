@@ -11,6 +11,7 @@ class ActivityPurchase extends Model
     use HasFactory;
 
     protected $table = 'activity_purchases';
+
     protected $primaryKey = 'idactivitypurchase';
 
     protected $fillable = [
@@ -22,7 +23,7 @@ class ActivityPurchase extends Model
 
     protected $casts = [
         'credits_spent' => 'integer',
-        'purchased_at'  => 'datetime',
+        'purchased_at' => 'datetime',
     ];
 
     // ─── Relations ────────────────────────────────────────────

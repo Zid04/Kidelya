@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\RoleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,11 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Role extends Model
 {
     use HasFactory;
- protected $table = 'user_roles'; 
+
+    protected $table = 'user_roles';
+
     protected $primaryKey = 'idrole';
 
     protected $fillable = [
-        'type', 
+        'type',
     ];
 
     public function getRouteKeyName(): string

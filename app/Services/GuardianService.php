@@ -20,6 +20,7 @@ class GuardianService
     public function create(array $data): Guardian
     {
         $data['user_id'] = Auth::id();
+
         return Guardian::create($data);
     }
 
@@ -29,6 +30,7 @@ class GuardianService
     public function update(Guardian $guardian, array $data): Guardian
     {
         $guardian->update($data);
+
         return $guardian->fresh();
     }
 

@@ -1,34 +1,33 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\ActivityLibraryController;
+use App\Http\Controllers\Auth\AdminLoginController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\CompetenceController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CreditTransactionController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\IdeaController;
+use App\Http\Controllers\MeController;
 use App\Http\Controllers\PackController;
 use App\Http\Controllers\PackUserController;
 use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\PublicPackController;
 use App\Http\Controllers\ReportActivityController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\StripeSubscriptionController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SettingController;
-use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\StripeSubscriptionController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ActivityLibraryController;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\MeController;
-
-
+use Illuminate\Support\Facades\Route;
 
 /*
 |----------------------------------------------------------------------
@@ -40,7 +39,7 @@ Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('auth.logout');
 Route::post('contact', [ContactController::class, 'send'])->name('contact.send');
 Route::post('newsletter', [ContactController::class, 'newsletter'])->name('newsletter.subscribe');
-Route::post('admin/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login'])->name('admin.login');
+Route::post('admin/login', [AdminLoginController::class, 'login'])->name('admin.login');
 
 // Webhook Stripe — DOIT être hors du middleware auth
 Route::post('stripe/webhook', [StripeController::class, 'webhook'])->name('stripe.webhook');
@@ -64,8 +63,6 @@ Route::middleware('auth:sanctum')->group(function () {
     */
     Route::get('users/me', [MeController::class, 'me'])->name('users.me');
 
-
-
     Route::apiResource('users', UserController::class);
     Route::patch('users/{user}/deactivate', [UserController::class, 'deactivate'])
         ->name('users.deactivate');
@@ -77,7 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
     | Admin Management
     |----------------------------------------------------------------------
     */
-    Route::post('admin/register', [App\Http\Controllers\Auth\AdminLoginController::class, 'register'])
+    Route::post('admin/register', [AdminLoginController::class, 'register'])
         ->name('admin.register');
 
     /*

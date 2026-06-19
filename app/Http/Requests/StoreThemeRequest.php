@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests\Theme;
 
+use App\Models\Theme;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreThemeRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', \App\Models\Theme::class);
+        return $this->user()->can('create', Theme::class);
     }
 
     public function rules(): array
@@ -22,7 +23,7 @@ class StoreThemeRequest extends FormRequest
     {
         return [
             'name.required' => 'The theme name is required.',
-            'name.unique'   => 'This theme already exists.',
+            'name.unique' => 'This theme already exists.',
         ];
     }
 }

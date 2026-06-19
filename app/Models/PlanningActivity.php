@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\PlanningActivityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +10,8 @@ class PlanningActivity extends Model
 {
     use HasFactory;
 
-    protected $table      = 'plannings_activities';
+    protected $table = 'plannings_activities';
+
     protected $primaryKey = 'idplanningactivities';
 
     protected $fillable = [
@@ -23,7 +23,7 @@ class PlanningActivity extends Model
 
     protected $casts = [
         'datestart' => 'date',
-        'dateend'   => 'date',
+        'dateend' => 'date',
     ];
 
     public function getRouteKeyName(): string

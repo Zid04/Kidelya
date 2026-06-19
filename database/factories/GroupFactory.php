@@ -10,9 +10,9 @@ class GroupFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'        => $this->faker->words(2, true),
+            'name' => $this->faker->words(2, true),
             'description' => $this->faker->optional()->paragraph(),
-            'iduser'      => User::factory(),
+            'iduser' => User::factory(),
         ];
     }
 }

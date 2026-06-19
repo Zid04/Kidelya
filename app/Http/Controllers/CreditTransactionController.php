@@ -3,40 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\CreditTransaction;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CreditTransactionController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function index(Request $request): JsonResponse
     {
         $this->authorize('viewAny', CreditTransaction::class);
 
         $validated = $request->validate([
-            'user_id'     => 'nullable|exists:users,iduser',
+            'user_id' => 'nullable|exists:users,iduser',
             'activity_id' => 'nullable|exists:activities,idactivities',
-            'type'        => 'nullable|in:achat,conso',
+            'type' => 'nullable|in:achat,conso',
         ]);
 
         $query = CreditTransaction::with(['user', 'activity']);
 
-        if (!empty($validated['user_id'])) {
+        if (! empty($validated['user_id'])) {
             $query->where('user_id', $validated['user_id']);
         }
 
-        if (!empty($validated['activity_id'])) {
+        if (! empty($validated['activity_id'])) {
             $query->where('activity_id', $validated['activity_id']);
         }
 
-        if (!empty($validated['type'])) {
+        if (! empty($validated['type'])) {
             $query->where('type', $validated['type']);
         }
 
         return response()->json([
-            'data' => $query->orderBy('idcredittransaction', 'desc')->paginate(20)
+            'data' => $query->orderBy('idcredittransaction', 'desc')->paginate(20),
         ]);
     }
 
@@ -45,7 +45,7 @@ class CreditTransactionController extends Controller
         $this->authorize('view', $transaction);
 
         return response()->json([
-            'data' => $transaction->load(['user', 'activity'])
+            'data' => $transaction->load(['user', 'activity']),
         ]);
     }
 }

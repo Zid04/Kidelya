@@ -21,7 +21,7 @@ class GroupService
         $data['iduser'] = $user->iduser;
         $group = Group::create($data);
 
-        if (!empty($children)) {
+        if (! empty($children)) {
             $group->children()->sync($children);
         }
 

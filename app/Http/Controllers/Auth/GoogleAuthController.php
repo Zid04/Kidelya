@@ -22,7 +22,7 @@ class GoogleAuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
         } catch (\Exception $e) {
-            return redirect($frontendUrl . '/login?error=google_failed');
+            return redirect($frontendUrl.'/login?error=google_failed');
         }
 
         // Récupère ou crée l'utilisateur
@@ -30,8 +30,8 @@ class GoogleAuthController extends Controller
             ['email' => $googleUser->getEmail()],
             [
                 'firstname' => $googleUser->offsetGet('given_name') ?? $googleUser->getName(),
-                'lastname'  => $googleUser->offsetGet('family_name') ?? '',
-                'password'  => Hash::make(Str::random(32)),
+                'lastname' => $googleUser->offsetGet('family_name') ?? '',
+                'password' => Hash::make(Str::random(32)),
             ]
         );
 
@@ -42,6 +42,6 @@ class GoogleAuthController extends Controller
 
         $token = $user->createToken('google-auth')->plainTextToken;
 
-        return redirect($frontendUrl . '/auth/callback?token=' . urlencode($token));
+        return redirect($frontendUrl.'/auth/callback?token='.urlencode($token));
     }
 }

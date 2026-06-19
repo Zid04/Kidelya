@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Planning;
-use App\Models\ReportActivity;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use App\Services\PlanningService;
-
+use App\Http\Requests\Planning\AddActivityToPlanningRequest;
+use App\Http\Requests\Planning\AddChildToPlanningRequest;
+use App\Http\Requests\Planning\AddGroupToPlanningRequest;
+use App\Http\Requests\Planning\RemoveActivityFromPlanningRequest;
+use App\Http\Requests\Planning\RemoveChildFromPlanningRequest;
+use App\Http\Requests\Planning\RemoveGroupFromPlanningRequest;
 use App\Http\Requests\Planning\StorePlanningRequest;
 use App\Http\Requests\Planning\UpdatePlanningRequest;
-use App\Http\Requests\Planning\AddActivityToPlanningRequest;
-use App\Http\Requests\Planning\AddGroupToPlanningRequest;
-use App\Http\Requests\Planning\AddChildToPlanningRequest;
-
-use App\Http\Requests\Planning\RemoveActivityFromPlanningRequest;
-use App\Http\Requests\Planning\RemoveGroupFromPlanningRequest;
-use App\Http\Requests\Planning\RemoveChildFromPlanningRequest;
+use App\Models\Planning;
+use App\Models\ReportActivity;
+use App\Models\ReportPhoto;
+use App\Services\PlanningService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class PlanningController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function __construct(
         private PlanningService $planningService
     ) {}
@@ -32,7 +31,7 @@ class PlanningController extends Controller
         $this->authorize('viewAny', Planning::class);
 
         return response()->json([
-            'data' => $this->planningService->getAllForUser(auth()->user())
+            'data' => $this->planningService->getAllForUser(auth()->user()),
         ]);
     }
 
@@ -40,10 +39,10 @@ class PlanningController extends Controller
     {
         $this->authorize('create', Planning::class);
 
-        $user             = auth()->user();
+        $user = auth()->user();
         $activeSubscription = $user->activeSubscription()->with('plan')->first();
         // Plan gratuit : aucun abonnement actif, ou un abonnement dont le prix est 0.
-        $isFree           = !$activeSubscription || ($activeSubscription->plan->price ?? 0) == 0;
+        $isFree = ! $activeSubscription || ($activeSubscription->plan->price ?? 0) == 0;
 
         // Règle métier : les utilisateurs gratuits sont limités à 1 planning pour les inciter à passer à un abonnement payant.
         if ($isFree) {
@@ -57,7 +56,7 @@ class PlanningController extends Controller
 
         $validated = $request->validated();
         // idchild n'est pas une colonne directe de la table plannings — l'enfant doit être rattaché via la table pivot après la création.
-        $idchild   = $validated['idchild'] ?? null;
+        $idchild = $validated['idchild'] ?? null;
         unset($validated['idchild']);
 
         $planning = $this->planningService->create($validated, $user);
@@ -68,7 +67,7 @@ class PlanningController extends Controller
 
         return response()->json([
             'message' => 'Planning created successfully',
-            'data' => $planning
+            'data' => $planning,
         ], 201);
     }
 
@@ -77,7 +76,7 @@ class PlanningController extends Controller
         $this->authorize('view', $planning);
 
         return response()->json([
-            'data' => $planning->load(['children', 'activities', 'groups', 'report.photos'])
+            'data' => $planning->load(['children', 'activities', 'groups', 'report.photos']),
         ]);
     }
 
@@ -86,12 +85,12 @@ class PlanningController extends Controller
         $this->authorize('update', $planning);
 
         $data = $request->validate([
-            'comments'     => 'nullable|string',
-            'positive'     => 'nullable|string',
+            'comments' => 'nullable|string',
+            'positive' => 'nullable|string',
             'difficulties' => 'nullable|string',
             'improvements' => 'nullable|string',
-            'photos'       => 'nullable|array',
-            'photos.*'     => 'image|max:5120',
+            'photos' => 'nullable|array',
+            'photos.*' => 'image|max:5120',
         ]);
 
         unset($data['photos']);
@@ -107,13 +106,13 @@ class PlanningController extends Controller
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $file) {
                 $path = $file->store('reports', 'public');
-                \App\Models\ReportPhoto::create(['idreport' => $report->idreport, 'photourl' => $path]);
+                ReportPhoto::create(['idreport' => $report->idreport, 'photourl' => $path]);
             }
         }
 
         return response()->json([
             'message' => 'Rapport enregistré.',
-            'data'    => $planning->fresh()->load('report.photos'),
+            'data' => $planning->fresh()->load('report.photos'),
         ]);
     }
 
@@ -123,7 +122,7 @@ class PlanningController extends Controller
 
         return response()->json([
             'message' => 'Planning updated successfully',
-            'data' => $this->planningService->update($planning, $request->validated())
+            'data' => $this->planningService->update($planning, $request->validated()),
         ]);
     }
 
@@ -134,7 +133,7 @@ class PlanningController extends Controller
         $this->planningService->delete($planning);
 
         return response()->json([
-            'message' => 'Planning deleted successfully'
+            'message' => 'Planning deleted successfully',
         ]);
     }
 
@@ -145,7 +144,7 @@ class PlanningController extends Controller
         $this->planningService->attachActivity($planning, $request->activity_id, $request->datestart, $request->dateend);
 
         return response()->json([
-            'message' => 'Activity added to planning'
+            'message' => 'Activity added to planning',
         ]);
     }
 
@@ -156,7 +155,7 @@ class PlanningController extends Controller
         $this->planningService->attachGroup($planning, $request->group_id);
 
         return response()->json([
-            'message' => 'Group added to planning'
+            'message' => 'Group added to planning',
         ]);
     }
 
@@ -167,7 +166,7 @@ class PlanningController extends Controller
         $this->planningService->attachChild($planning, $request->child_id);
 
         return response()->json([
-            'message' => 'Child added to planning'
+            'message' => 'Child added to planning',
         ]);
     }
 
@@ -178,7 +177,7 @@ class PlanningController extends Controller
         $this->planningService->detachActivity($planning, $request->activity_id);
 
         return response()->json([
-            'message' => 'Activity removed from planning'
+            'message' => 'Activity removed from planning',
         ]);
     }
 
@@ -189,7 +188,7 @@ class PlanningController extends Controller
         $this->planningService->detachGroup($planning, $request->group_id);
 
         return response()->json([
-            'message' => 'Group removed from planning'
+            'message' => 'Group removed from planning',
         ]);
     }
 
@@ -200,7 +199,7 @@ class PlanningController extends Controller
         $this->planningService->detachChild($planning, $request->child_id);
 
         return response()->json([
-            'message' => 'Child removed from planning'
+            'message' => 'Child removed from planning',
         ]);
     }
 }

@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ideas', function (Blueprint $table) {
-    $table->id('ididea'); 
-    $table->string('title', 50);
-    $table->text('notes')->nullable(); 
+            $table->id('ididea');
+            $table->string('title', 50);
+            $table->text('notes')->nullable();
 
-    $table->foreignId('iduser')
-          ->constrained('users', 'iduser')
-          ->onDelete('cascade');
+            $table->foreignId('iduser')
+                ->constrained('users', 'iduser')
+                ->onDelete('cascade');
 
-    $table->timestamps();
-});
+            $table->timestamps();
+        });
 
     }
 

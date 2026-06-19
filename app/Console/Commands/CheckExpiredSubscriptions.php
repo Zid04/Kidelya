@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\UserSubscription;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class CheckExpiredSubscriptions extends Command
 {

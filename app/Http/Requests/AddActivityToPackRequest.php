@@ -22,7 +22,7 @@ class AddActivityToPackRequest extends FormRequest
     {
         return [
             'activity_id.required' => 'The activity is required.',
-            'activity_id.exists'   => 'The selected activity does not exist.',
+            'activity_id.exists' => 'The selected activity does not exist.',
         ];
     }
 }

@@ -18,11 +18,11 @@ class UpdateUserRequest extends FormRequest
 
         return [
             'firstname' => 'required|string|max:50',
-            'lastname'  => 'required|string|max:50',
-            'email'     => "required|email|max:255|unique:users,email,{$userId},iduser",
-            'password'  => ['nullable', 'confirmed', Password::defaults()],
+            'lastname' => 'required|string|max:50',
+            'email' => "required|email|max:255|unique:users,email,{$userId},iduser",
+            'password' => ['nullable', 'confirmed', Password::defaults()],
             'avatarurl' => 'nullable|url|max:2048',
-            'idrole'    => 'required|exists:roles,idrole',
+            'idrole' => 'required|exists:roles,idrole',
         ];
     }
 
@@ -30,10 +30,10 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'firstname.required' => 'The first name is required.',
-            'lastname.required'  => 'The last name is required.',
-            'email.required'     => 'The email address is required.',
-            'email.unique'       => 'This email address is already in use.',
-            'idrole.exists'      => 'The selected role does not exist.',
+            'lastname.required' => 'The last name is required.',
+            'email.required' => 'The email address is required.',
+            'email.unique' => 'This email address is already in use.',
+            'idrole.exists' => 'The selected role does not exist.',
         ];
     }
 }

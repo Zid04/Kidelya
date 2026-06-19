@@ -15,7 +15,7 @@ class StatsController extends Controller
         abort_unless(auth()->user()?->role?->type === 'Admin', 403);
 
         $month = now()->month;
-        $year  = now()->year;
+        $year = now()->year;
 
         // Revenus + nouveaux abonnés par jour (packs)
         $packByDay = DB::table('packs_user')
@@ -51,16 +51,16 @@ class StatsController extends Controller
         $days = collect();
         for ($i = 29; $i >= 0; $i--) {
             $date = now()->subDays($i)->toDateString();
-            $pack  = $packByDay[$date]  ?? null;
-            $plan  = $planByDay[$date]  ?? null;
+            $pack = $packByDay[$date] ?? null;
+            $plan = $planByDay[$date] ?? null;
             $churn = $churnByDay[$date] ?? null;
 
             $days->push([
-                'date'              => $date,
+                'date' => $date,
                 'new_subscriptions' => ($pack?->new_subs ?? 0) + ($plan?->new_subs ?? 0),
-                'revenue'           => round(($pack?->revenue ?? 0) + ($plan?->revenue ?? 0), 2),
-                'churned'           => $churn?->churned ?? 0,
-                'total_active'      => 0,
+                'revenue' => round(($pack?->revenue ?? 0) + ($plan?->revenue ?? 0), 2),
+                'churned' => $churn?->churned ?? 0,
+                'total_active' => 0,
             ]);
         }
 
@@ -71,9 +71,9 @@ class StatsController extends Controller
     {
         abort_unless(auth()->user()?->role?->type === 'Admin', 403);
 
-        $data = Cache::remember('stats_summary_' . now()->format('Ymd'), 300, function () {
+        $data = Cache::remember('stats_summary_'.now()->format('Ymd'), 300, function () {
             $month = now()->month;
-            $year  = now()->year;
+            $year = now()->year;
 
             $packActive = PackUser::where('status', 'active')->count();
             $planActive = UserSubscription::where('status', 'active')->count();
@@ -99,10 +99,10 @@ class StatsController extends Controller
                 ->whereMonth('updated_at', $month)->whereYear('updated_at', $year)->count();
 
             return [
-                'total_active'  => $packActive + $planActive,
+                'total_active' => $packActive + $planActive,
                 'revenue_month' => round($packRevenue + $planRevenue, 2),
-                'new_subs'      => $newPacks + $newPlans,
-                'churned'       => $churnedPacks + $churnedPlans,
+                'new_subs' => $newPacks + $newPlans,
+                'churned' => $churnedPacks + $churnedPlans,
             ];
         });
 

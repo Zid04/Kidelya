@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\PlanningFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +11,8 @@ class Planning extends Model
 {
     use HasFactory;
 
-    protected $table      = 'plannings';
+    protected $table = 'plannings';
+
     protected $primaryKey = 'idplanning';
 
     protected $fillable = [
@@ -45,7 +45,7 @@ class Planning extends Model
         return $this->belongsTo(ReportActivity::class, 'idreport', 'idreport');
     }
 
-public function activities(): BelongsToMany
+    public function activities(): BelongsToMany
     {
         return $this->belongsToMany(
             Activity::class,

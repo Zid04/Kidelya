@@ -17,8 +17,8 @@ class ContactController extends Controller
             "Nouvelle inscription newsletter : {$data['email']}",
             function ($mail) use ($data) {
                 $mail->to(config('mail.from.address'))
-                     ->subject('Nouvelle inscription newsletter')
-                     ->replyTo($data['email']);
+                    ->subject('Nouvelle inscription newsletter')
+                    ->replyTo($data['email']);
             }
         );
 
@@ -28,8 +28,8 @@ class ContactController extends Controller
     public function send(Request $request)
     {
         $data = $request->validate([
-            'name'    => 'required|string|max:100',
-            'email'   => 'required|email|max:150',
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:150',
             'subject' => 'required|string|max:200',
             'message' => 'required|string|max:5000',
         ]);
@@ -38,8 +38,8 @@ class ContactController extends Controller
             "Nom : {$data['name']}\nEmail : {$data['email']}\n\n{$data['message']}",
             function ($mail) use ($data) {
                 $mail->to(config('mail.from.address'))
-                     ->subject($data['subject'])
-                     ->replyTo($data['email'], $data['name']);
+                    ->subject($data['subject'])
+                    ->replyTo($data['email'], $data['name']);
             }
         );
 

@@ -22,7 +22,7 @@ class AddChildToPlanningRequest extends FormRequest
     {
         return [
             'child_id.required' => 'Child is required.',
-            'child_id.exists'   => 'Child not found.',
+            'child_id.exists' => 'Child not found.',
         ];
     }
 }

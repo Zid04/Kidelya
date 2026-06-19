@@ -10,6 +10,7 @@ class SubscriptionStat extends Model
     use HasFactory;
 
     protected $table = 'subscription_stats';
+
     protected $primaryKey = 'idstat';
 
     protected $fillable = [
@@ -22,11 +23,11 @@ class SubscriptionStat extends Model
     ];
 
     protected $casts = [
-        'date'              => 'date',
-        'total_active'      => 'integer',
-        'total_expired'     => 'integer',
+        'date' => 'date',
+        'total_active' => 'integer',
+        'total_expired' => 'integer',
         'new_subscriptions' => 'integer',
-        'churned'           => 'integer',
-        'revenue'           => 'decimal:2',
+        'churned' => 'integer',
+        'revenue' => 'decimal:2',
     ];
 }

@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests\Idea;
 
+use App\Models\Idea;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreIdeaRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', \App\Models\Idea::class);
+        return $this->user()->can('create', Idea::class);
     }
 
     public function rules(): array

@@ -10,29 +10,28 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    { 
+    {
         Schema::create('packs_user', function (Blueprint $table) {
-    $table->id('idpackuser');
+            $table->id('idpackuser');
 
-    $table->foreignId('idpack')
-          ->constrained('packs', 'idpack')
-          ->onDelete('cascade');
+            $table->foreignId('idpack')
+                ->constrained('packs', 'idpack')
+                ->onDelete('cascade');
 
-    $table->foreignId('iduser')
-          ->constrained('users', 'iduser')
-          ->onDelete('cascade');
+            $table->foreignId('iduser')
+                ->constrained('users', 'iduser')
+                ->onDelete('cascade');
 
-    $table->date('subscriptiondate');
-    $table->date('expirationdate');
+            $table->date('subscriptiondate');
+            $table->date('expirationdate');
 
-    $table->enum('status', ['active', 'inactive', 'canceled'])
-          ->default('inactive');
+            $table->enum('status', ['active', 'inactive', 'canceled'])
+                ->default('inactive');
 
-    $table->timestamps();
-});
+            $table->timestamps();
+        });
 
     }
-       
 
     /**
      * Reverse the migrations.

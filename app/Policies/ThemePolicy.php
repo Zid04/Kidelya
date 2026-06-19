@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Theme;
+use App\Models\User;
 
 class ThemePolicy
 {
@@ -24,11 +24,11 @@ class ThemePolicy
 
     public function update(User $user, Theme $theme): bool
     {
-        return true; 
+        return true;
     }
 
     public function delete(User $user, Theme $theme): bool
     {
-        return true; 
+        return true;
     }
 }

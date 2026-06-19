@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /*
@@ -14,7 +17,7 @@ use Tests\TestCase;
 */
 
 pest()->extend(TestCase::class)
-    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->use(RefreshDatabase::class)
     ->in('Feature', 'Unit');
 
 /*
@@ -47,8 +50,9 @@ expect()->extend('toBeOne', function () {
  * Crée un utilisateur avec un rôle spécifique ('Admin', 'User', 'Partner').
  * Utilisé dans tous les tests pour éviter la répétition de Role::create + factory.
  */
-function userWithRole(string $type): \App\Models\User
+function userWithRole(string $type): User
 {
-    $role = \App\Models\Role::create(['type' => $type]);
-    return \App\Models\User::factory()->create(['idrole' => $role->idrole]);
+    $role = Role::create(['type' => $type]);
+
+    return User::factory()->create(['idrole' => $role->idrole]);
 }

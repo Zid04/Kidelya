@@ -2,25 +2,26 @@
 
 namespace App\Http\Requests\Planning;
 
+use App\Models\Planning;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePlanningRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', \App\Models\Planning::class);
+        return $this->user()->can('create', Planning::class);
     }
 
     public function rules(): array
     {
         return [
-            'title'       => 'required|string|max:150',
-            'date'        => 'required|date',
-            'start_time'  => 'nullable|string',
-            'end_time'    => 'nullable|string',
-            'idchild'     => 'nullable|exists:children,idchildren',
+            'title' => 'required|string|max:150',
+            'date' => 'required|date',
+            'start_time' => 'nullable|string',
+            'end_time' => 'nullable|string',
+            'idchild' => 'nullable|exists:children,idchildren',
             'description' => 'nullable|string',
-            'location'    => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
         ];
     }
 
@@ -28,7 +29,7 @@ class StorePlanningRequest extends FormRequest
     {
         return [
             'title.required' => 'Le titre est requis.',
-            'date.required'  => 'La date est requise.',
+            'date.required' => 'La date est requise.',
         ];
     }
 }

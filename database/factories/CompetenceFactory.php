@@ -11,7 +11,7 @@ class CompetenceFactory extends Factory
         $competences = [
             'Créativité', 'Travail en équipe', 'Autonomie',
             'Communication', 'Concentration', 'Motricité fine',
-            'Motricité globale', 'Logique', 'Mémoire', 'Expression orale'
+            'Motricité globale', 'Logique', 'Mémoire', 'Expression orale',
         ];
 
         return [

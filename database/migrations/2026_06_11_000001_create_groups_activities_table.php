@@ -12,12 +12,12 @@ return new class extends Migration
             $table->id('idgroupactivities');
 
             $table->foreignId('idgroup')
-                  ->constrained('groups', 'idgroup')
-                  ->onDelete('cascade');
+                ->constrained('groups', 'idgroup')
+                ->onDelete('cascade');
 
             $table->foreignId('idactivities')
-                  ->constrained('activities', 'idactivities')
-                  ->onDelete('cascade');
+                ->constrained('activities', 'idactivities')
+                ->onDelete('cascade');
 
             $table->unique(['idgroup', 'idactivities']);
 

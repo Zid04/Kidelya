@@ -11,11 +11,11 @@ class PlanningFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'       => $this->faker->sentence(3),
+            'title' => $this->faker->sentence(3),
             'description' => $this->faker->optional()->paragraph(),
-            'location'    => $this->faker->city(),
-            'iduser'      => User::factory(),
-            'idreport'    => ReportActivity::factory(),
+            'location' => $this->faker->city(),
+            'iduser' => User::factory(),
+            'idreport' => ReportActivity::factory(),
         ];
     }
 }

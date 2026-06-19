@@ -12,20 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plannings_children', function (Blueprint $table) {
-    $table->id('idplanningchildren');
+            $table->id('idplanningchildren');
 
-    $table->foreignId('idplanning')
-          ->constrained('plannings', 'idplanning')
-          ->onDelete('cascade');
+            $table->foreignId('idplanning')
+                ->constrained('plannings', 'idplanning')
+                ->onDelete('cascade');
 
-    $table->foreignId('idchildren')
-          ->constrained('children', 'idchildren')
-          ->onDelete('cascade');
+            $table->foreignId('idchildren')
+                ->constrained('children', 'idchildren')
+                ->onDelete('cascade');
 
-    $table->timestamps();
+            $table->timestamps();
 
-    $table->unique(['idplanning', 'idchildren']);
-});
+            $table->unique(['idplanning', 'idchildren']);
+        });
 
     }
 

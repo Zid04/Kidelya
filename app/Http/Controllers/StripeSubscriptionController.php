@@ -25,11 +25,11 @@ class StripeSubscriptionController extends Controller
 
         $priceId = match ($plan->name) {
             'Monthly' => env('STRIPE_PRICE_MONTHLY'),
-            'Annual'  => env('STRIPE_PRICE_ANNUAL'),
-            default   => null,
+            'Annual' => env('STRIPE_PRICE_ANNUAL'),
+            default => null,
         };
 
-        if (!$priceId) {
+        if (! $priceId) {
             return response()->json(['error' => 'Plan non configuré dans Stripe. Vérifiez STRIPE_PRICE_MONTHLY / STRIPE_PRICE_ANNUAL.'], 400);
         }
 
@@ -39,19 +39,19 @@ class StripeSubscriptionController extends Controller
 
         $session = StripeSession::create([
             'payment_method_types' => ['card'],
-            'mode'                 => 'subscription',
-            'customer_email'       => $user->email,
-            'metadata'             => [
+            'mode' => 'subscription',
+            'customer_email' => $user->email,
+            'metadata' => [
                 'user_id' => $user->iduser,
                 'plan_id' => $plan->idplan,
-                'type'    => 'subscription',
+                'type' => 'subscription',
             ],
             'line_items' => [[
-                'price'    => $priceId,
+                'price' => $priceId,
                 'quantity' => 1,
             ]],
-            'success_url' => config('app.frontend_url') . '/payment/success?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url'  => config('app.frontend_url') . '/payment/failed',
+            'success_url' => config('app.frontend_url').'/payment/success?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => config('app.frontend_url').'/payment/failed',
         ]);
 
         return response()->json(['url' => $session->url]);
@@ -60,6 +60,7 @@ class StripeSubscriptionController extends Controller
     public function cancel(Request $request, SubscriptionService $service): JsonResponse
     {
         $service->cancel($request->user());
+
         return response()->json(['message' => 'Abonnement annulé.']);
     }
 }

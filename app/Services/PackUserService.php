@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Pack;
-use App\Models\User;
 use App\Models\PackUser;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -25,11 +25,11 @@ class PackUserService
 
             // Création de l'abonnement
             return PackUser::create([
-                'iduser'          => $user->iduser,
-                'idpack'          => $pack->idpack,
-                'subscriptiondate'=> $start,
-                'expirationdate'  => $end,
-                'status'          => 'active',
+                'iduser' => $user->iduser,
+                'idpack' => $pack->idpack,
+                'subscriptiondate' => $start,
+                'expirationdate' => $end,
+                'status' => 'active',
             ]);
         });
     }
@@ -56,7 +56,7 @@ class PackUserService
 
         $subscription->update([
             'expirationdate' => $newExpiration,
-            'status'         => 'active',
+            'status' => 'active',
         ]);
 
         return $subscription;

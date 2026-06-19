@@ -14,13 +14,13 @@ class UpdatePlanningRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => 'sometimes|string|max:150',
-            'date'        => 'sometimes|date',
-            'start_time'  => 'nullable|string',
-            'end_time'    => 'nullable|string',
-            'idchild'     => 'nullable|exists:children,idchildren',
+            'title' => 'sometimes|string|max:150',
+            'date' => 'sometimes|date',
+            'start_time' => 'nullable|string',
+            'end_time' => 'nullable|string',
+            'idchild' => 'nullable|exists:children,idchildren',
             'description' => 'nullable|string',
-            'location'    => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
         ];
     }
 }

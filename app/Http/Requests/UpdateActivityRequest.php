@@ -14,32 +14,32 @@ class UpdateActivityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'          => 'required|string|max:50',
-            'description'    => 'nullable|string',
-            'agemin'         => 'nullable|integer|min:2',
-            'agemax'         => 'nullable|integer|min:0|gte:agemin',
-            'duration'       => 'nullable|integer|min:1',
-            'season'         => 'nullable|string|max:50',
-            'location'       => 'nullable|string|max:100',
-            'photo'          => 'nullable|image|max:5120',
-            'photo_url'      => 'nullable|string|max:500',
-            'category'       => 'nullable|string|max:50',
-            'difficulty'     => 'nullable|in:facile,moyen,difficile',
-            'steps'               => 'nullable|array',
-            'steps.*.text'        => 'required|string|max:1000',
-            'steps.*.image'       => 'nullable|image|max:5120',
-            'steps.*.image_url'   => 'nullable|string|max:500',
-            'materials'      => 'nullable|array',
-            'materials.*'    => 'string|max:500',
-            'credit_price'   => 'sometimes|integer|min:0',
+            'title' => 'required|string|max:50',
+            'description' => 'nullable|string',
+            'agemin' => 'nullable|integer|min:2',
+            'agemax' => 'nullable|integer|min:0|gte:agemin',
+            'duration' => 'nullable|integer|min:1',
+            'season' => 'nullable|string|max:50',
+            'location' => 'nullable|string|max:100',
+            'photo' => 'nullable|image|max:5120',
+            'photo_url' => 'nullable|string|max:500',
+            'category' => 'nullable|string|max:50',
+            'difficulty' => 'nullable|in:facile,moyen,difficile',
+            'steps' => 'nullable|array',
+            'steps.*.text' => 'required|string|max:1000',
+            'steps.*.image' => 'nullable|image|max:5120',
+            'steps.*.image_url' => 'nullable|string|max:500',
+            'materials' => 'nullable|array',
+            'materials.*' => 'string|max:500',
+            'credit_price' => 'sometimes|integer|min:0',
             'is_purchasable' => 'sometimes|boolean',
-            'is_published'   => 'sometimes|boolean',
+            'is_published' => 'sometimes|boolean',
 
-            'themes'         => 'nullable|array',
-            'themes.*'       => 'integer|exists:themes,idtheme',
+            'themes' => 'nullable|array',
+            'themes.*' => 'integer|exists:themes,idtheme',
 
-            'competences'    => 'nullable|array',
-            'competences.*'  => 'integer|exists:competences,idcompetence',
+            'competences' => 'nullable|array',
+            'competences.*' => 'integer|exists:competences,idcompetence',
         ];
     }
 
@@ -47,8 +47,8 @@ class UpdateActivityRequest extends FormRequest
     {
         return [
             'title.required' => 'The title is required.',
-            'agemax.gte'     => 'The maximum age must be greater than or equal to the minimum age.',
-            'iduser.exists'  => 'The selected user does not exist.',
+            'agemax.gte' => 'The maximum age must be greater than or equal to the minimum age.',
+            'iduser.exists' => 'The selected user does not exist.',
         ];
     }
 }

@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ReportActivity;
-use Illuminate\Http\JsonResponse;
-use App\Services\ReportActivityService;
-
 use App\Http\Requests\ReportActivity\StoreReportActivityRequest;
 use App\Http\Requests\ReportActivity\UpdateReportActivityRequest;
+use App\Models\ReportActivity;
+use App\Services\ReportActivityService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
 
 class ReportActivityController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function __construct(
         private ReportActivityService $reportService
     ) {}
@@ -23,7 +22,7 @@ class ReportActivityController extends Controller
         $this->authorize('viewAny', ReportActivity::class);
 
         return response()->json([
-            'data' => $this->reportService->getAll()
+            'data' => $this->reportService->getAll(),
         ]);
     }
 
@@ -35,7 +34,7 @@ class ReportActivityController extends Controller
 
         return response()->json([
             'message' => 'Report created successfully',
-            'data' => $report
+            'data' => $report,
         ], 201);
     }
 
@@ -44,7 +43,7 @@ class ReportActivityController extends Controller
         $this->authorize('view', $reportActivity);
 
         return response()->json([
-            'data' => $reportActivity->load('planning')
+            'data' => $reportActivity->load('planning'),
         ]);
     }
 
@@ -54,7 +53,7 @@ class ReportActivityController extends Controller
 
         return response()->json([
             'message' => 'Report updated successfully',
-            'data' => $this->reportService->update($reportActivity, $request->validated())
+            'data' => $this->reportService->update($reportActivity, $request->validated()),
         ]);
     }
 
@@ -65,7 +64,7 @@ class ReportActivityController extends Controller
         $this->reportService->delete($reportActivity);
 
         return response()->json([
-            'message' => 'Report deleted successfully'
+            'message' => 'Report deleted successfully',
         ]);
     }
 }

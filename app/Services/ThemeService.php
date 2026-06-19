@@ -30,6 +30,7 @@ class ThemeService
     public function update(Theme $theme, array $data): Theme
     {
         $theme->update($data);
+
         return $theme->fresh();
     }
 
@@ -46,7 +47,7 @@ class ThemeService
      */
     public function attachActivity(Theme $theme, int $activityId): void
     {
-        if (!$theme->activities()->where('activities.idactivities', $activityId)->exists()) {
+        if (! $theme->activities()->where('activities.idactivities', $activityId)->exists()) {
             $theme->activities()->attach($activityId);
         }
     }

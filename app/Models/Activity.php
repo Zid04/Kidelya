@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +13,8 @@ class Activity extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table      = 'activities';
+    protected $table = 'activities';
+
     protected $primaryKey = 'idactivities';
 
     protected $fillable = [
@@ -27,10 +27,10 @@ class Activity extends Model
         'location',
         'photourl',
         'iduser',
-'steps',
-    'category',
-    'difficulty',
-    'materials',
+        'steps',
+        'category',
+        'difficulty',
+        'materials',
         'credit_price',
         'is_purchasable',
         'is_published',
@@ -38,17 +38,17 @@ class Activity extends Model
     ];
 
     protected $casts = [
-        'agemin'         => 'integer',
-        'agemax'         => 'integer',
-        'duration'       => 'integer',
+        'agemin' => 'integer',
+        'agemax' => 'integer',
+        'duration' => 'integer',
 
-        'credit_price'   => 'integer',
+        'credit_price' => 'integer',
         'is_purchasable' => 'boolean',
-        'is_published'   => 'boolean',
+        'is_published' => 'boolean',
         'included_in_subscription' => 'boolean',
 
-        'steps'          => 'array',
-        'materials'      => 'array',
+        'steps' => 'array',
+        'materials' => 'array',
     ];
 
     // ─── Accessors ────────────────────────────────────────────

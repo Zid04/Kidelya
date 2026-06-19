@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     use AuthorizesRequests;
+
     public function index(): JsonResponse
     {
         $this->authorize('viewAny', CartItem::class);
@@ -25,29 +26,29 @@ class CartController extends Controller
     {
         $validated = $request->validate([
             'idactivity' => 'nullable|exists:activities,idactivities',
-            'idpack'     => 'nullable|exists:packs,idpack',
-            'quantity'   => 'nullable|integer|min:1',
+            'idpack' => 'nullable|exists:packs,idpack',
+            'quantity' => 'nullable|integer|min:1',
         ]);
 
         $idactivity = $validated['idactivity'] ?? null;
-        $idpack     = $validated['idpack'] ?? null;
+        $idpack = $validated['idpack'] ?? null;
 
-        if (!$idactivity && !$idpack) {
+        if (! $idactivity && ! $idpack) {
             return response()->json(['message' => 'Aucun élément fourni'], 422);
         }
 
         $item = CartItem::firstOrCreate(
             [
-                'iduser'     => auth()->id(),
+                'iduser' => auth()->id(),
                 'idactivity' => $idactivity,
-                'idpack'     => $idpack,
+                'idpack' => $idpack,
             ],
             [
                 'quantity' => $validated['quantity'] ?? 1,
             ]
         );
 
-        if (!$item->wasRecentlyCreated) {
+        if (! $item->wasRecentlyCreated) {
             $item->increment('quantity', $validated['quantity'] ?? 1);
         }
 

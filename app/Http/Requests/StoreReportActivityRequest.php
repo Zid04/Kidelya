@@ -2,24 +2,25 @@
 
 namespace App\Http\Requests\ReportActivity;
 
+use App\Models\ReportActivity;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreReportActivityRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', \App\Models\ReportActivity::class);
+        return $this->user()->can('create', ReportActivity::class);
     }
 
     public function rules(): array
     {
         return [
-            'comments'     => 'nullable|string',
-            'photourl'     => 'nullable|url',
+            'comments' => 'nullable|string',
+            'photourl' => 'nullable|url',
             'improvements' => 'nullable|string',
-            'positive'     => 'nullable|string',
+            'positive' => 'nullable|string',
             'difficulties' => 'nullable|string',
-            'idplanning'   => 'required|exists:plannings,idplanning',
+            'idplanning' => 'required|exists:plannings,idplanning',
         ];
     }
 
@@ -27,7 +28,7 @@ class StoreReportActivityRequest extends FormRequest
     {
         return [
             'idplanning.required' => 'Planning is required.',
-            'idplanning.exists'   => 'Planning not found.',
+            'idplanning.exists' => 'Planning not found.',
         ];
     }
 }

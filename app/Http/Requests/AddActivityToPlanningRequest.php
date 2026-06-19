@@ -22,7 +22,7 @@ class AddActivityToPlanningRequest extends FormRequest
     {
         return [
             'activity_id.required' => 'Activity is required.',
-            'activity_id.exists'   => 'Activity not found.',
+            'activity_id.exists' => 'Activity not found.',
         ];
     }
 }

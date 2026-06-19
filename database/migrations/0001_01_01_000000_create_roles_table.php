@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_roles', function (Blueprint $table) {
-    $table->id('idrole');
-    $table->enum('type', ['Admin', 'User', 'Partner']);
-    $table->timestamps();
-});
+            $table->id('idrole');
+            $table->enum('type', ['Admin', 'User', 'Partner']);
+            $table->timestamps();
+        });
     }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
-{
-    Schema::dropIfExists('user_roles');
-}
+    {
+        Schema::dropIfExists('user_roles');
+    }
 };

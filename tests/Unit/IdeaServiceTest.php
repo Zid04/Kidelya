@@ -7,8 +7,8 @@ use App\Services\IdeaService;
 // ── Création ──────────────────────────────────────────────────────────────────
 
 it('crée une idée associée à l\'utilisateur', function () {
-    $user    = userWithRole('User');
-    $service = new IdeaService();
+    $user = userWithRole('User');
+    $service = new IdeaService;
 
     $idea = $service->create(['title' => 'Mon idée', 'notes' => 'Quelques notes'], $user);
 
@@ -18,8 +18,8 @@ it('crée une idée associée à l\'utilisateur', function () {
 });
 
 it('crée une idée sans notes', function () {
-    $user    = userWithRole('User');
-    $service = new IdeaService();
+    $user = userWithRole('User');
+    $service = new IdeaService;
 
     $idea = $service->create(['title' => 'Sans notes'], $user);
 
@@ -29,9 +29,9 @@ it('crée une idée sans notes', function () {
 // ── Liste ────────────────────────────────────────────────────────────────────
 
 it('retourne uniquement les idées de l\'utilisateur', function () {
-    $userA   = userWithRole('User');
-    $userB   = userWithRole('User');
-    $service = new IdeaService();
+    $userA = userWithRole('User');
+    $userB = userWithRole('User');
+    $service = new IdeaService;
 
     Idea::factory()->create(['iduser' => $userA->iduser]);
     Idea::factory()->create(['iduser' => $userA->iduser]);
@@ -45,9 +45,9 @@ it('retourne uniquement les idées de l\'utilisateur', function () {
 // ── Mise à jour ───────────────────────────────────────────────────────────────
 
 it('met à jour le titre d\'une idée', function () {
-    $user    = userWithRole('User');
-    $service = new IdeaService();
-    $idea    = Idea::factory()->create(['iduser' => $user->iduser, 'title' => 'Ancien']);
+    $user = userWithRole('User');
+    $service = new IdeaService;
+    $idea = Idea::factory()->create(['iduser' => $user->iduser, 'title' => 'Ancien']);
 
     $updated = $service->update($idea, ['title' => 'Nouveau']);
 
@@ -57,9 +57,9 @@ it('met à jour le titre d\'une idée', function () {
 // ── Suppression ───────────────────────────────────────────────────────────────
 
 it('supprime une idée', function () {
-    $user    = userWithRole('User');
-    $service = new IdeaService();
-    $idea    = Idea::factory()->create(['iduser' => $user->iduser]);
+    $user = userWithRole('User');
+    $service = new IdeaService;
+    $idea = Idea::factory()->create(['iduser' => $user->iduser]);
 
     $service->delete($idea);
 
@@ -69,11 +69,11 @@ it('supprime une idée', function () {
 // ── Conversion ────────────────────────────────────────────────────────────────
 
 it('convertit une idée en activité brouillon', function () {
-    $user    = userWithRole('User');
-    $service = new IdeaService();
-    $idea    = Idea::factory()->create([
-        'title'  => 'Idée à convertir',
-        'notes'  => 'Notes de l\'idée',
+    $user = userWithRole('User');
+    $service = new IdeaService;
+    $idea = Idea::factory()->create([
+        'title' => 'Idée à convertir',
+        'notes' => 'Notes de l\'idée',
         'iduser' => $user->iduser,
     ]);
 
@@ -88,9 +88,9 @@ it('convertit une idée en activité brouillon', function () {
 });
 
 it('supprime l\'idée après conversion', function () {
-    $user    = userWithRole('User');
-    $service = new IdeaService();
-    $idea    = Idea::factory()->create(['iduser' => $user->iduser]);
+    $user = userWithRole('User');
+    $service = new IdeaService;
+    $idea = Idea::factory()->create(['iduser' => $user->iduser]);
 
     $service->convertToActivity($idea, $user);
 

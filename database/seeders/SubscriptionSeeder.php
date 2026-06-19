@@ -18,13 +18,14 @@ class SubscriptionSeeder extends Seeder
         $packs = Pack::where('is_published', true)->get();
 
         if ($users->count() === 0 || $packs->count() === 0) {
-            $this->command->warn(" SubscriptionSeeder skipped: missing users or packs.");
+            $this->command->warn(' SubscriptionSeeder skipped: missing users or packs.');
+
             return;
         }
 
         // ── Abonnements globaux (Monthly / Annual) ──────────────────────────
         $monthlyPlan = SubscriptionPlan::where('name', 'Monthly')->first();
-        $annualPlan  = SubscriptionPlan::where('name', 'Annual')->first();
+        $annualPlan = SubscriptionPlan::where('name', 'Annual')->first();
 
         if ($monthlyPlan && $users->count() >= 1) {
             // user@kidelya.com → Monthly actif
@@ -32,8 +33,8 @@ class SubscriptionSeeder extends Seeder
                 ['iduser' => $users[0]->iduser, 'idplan' => $monthlyPlan->idplan],
                 [
                     'starts_at' => Carbon::now()->subDays(5),
-                    'ends_at'   => Carbon::now()->addDays(25),
-                    'status'    => 'active',
+                    'ends_at' => Carbon::now()->addDays(25),
+                    'status' => 'active',
                 ]
             );
         }
@@ -44,8 +45,8 @@ class SubscriptionSeeder extends Seeder
                 ['iduser' => $users[1]->iduser, 'idplan' => $annualPlan->idplan],
                 [
                     'starts_at' => Carbon::now()->subMonths(2),
-                    'ends_at'   => Carbon::now()->addMonths(10),
-                    'status'    => 'active',
+                    'ends_at' => Carbon::now()->addMonths(10),
+                    'status' => 'active',
                 ]
             );
         }
@@ -64,7 +65,7 @@ class SubscriptionSeeder extends Seeder
                 ],
                 [
                     'subscriptiondate' => Carbon::now()->subDays(5),
-                    'expirationdate'   => Carbon::now()->addDays($pack->duration),
+                    'expirationdate' => Carbon::now()->addDays($pack->duration),
                 ]
             );
 
@@ -78,7 +79,7 @@ class SubscriptionSeeder extends Seeder
                 ],
                 [
                     'subscriptiondate' => Carbon::now()->subDays(60),
-                    'expirationdate'   => Carbon::now()->subDays(30),
+                    'expirationdate' => Carbon::now()->subDays(30),
                 ]
             );
         }

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use Illuminate\Support\Facades\Route;
 
 // Redirige / vers le frontend utilisateur
 Route::get('/', function () {
@@ -10,7 +10,7 @@ Route::get('/', function () {
 
 // Route nommée 'dashboard' — requise par Fortify pour les redirections post-auth
 Route::get('dashboard', function () {
-    return redirect(config('app.frontend_url', 'http://localhost:5173') . '/dashboard');
+    return redirect(config('app.frontend_url', 'http://localhost:5173').'/dashboard');
 })->name('dashboard');
 
 // Google OAuth

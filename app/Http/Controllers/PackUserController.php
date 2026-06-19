@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PackUser;
 use App\Models\Pack;
+use App\Models\PackUser;
 use App\Models\User;
 use App\Models\UserSubscription;
 use App\Services\PackUserService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PackUserController extends Controller
 {
@@ -48,10 +48,10 @@ class PackUserController extends Controller
             ->get()
             ->map(function ($s) {
                 return [
-                    'idpackuser' => $s->idsubscription, 
+                    'idpackuser' => $s->idsubscription,
                     'user' => $s->user,
                     'pack' => [
-                        'title' => $s->plan->name,       
+                        'title' => $s->plan->name,
                         'tarification' => $s->plan->price,
                     ],
                     'subscriptiondate' => $s->starts_at,
@@ -64,7 +64,7 @@ class PackUserController extends Controller
         $all = $packSubs->merge($planSubs);
 
         return response()->json([
-            'data' => $all
+            'data' => $all,
         ]);
     }
 
@@ -76,7 +76,7 @@ class PackUserController extends Controller
         $this->authorize('view', $subscription);
 
         return response()->json([
-            'data' => $subscription->load(['user', 'pack'])
+            'data' => $subscription->load(['user', 'pack']),
         ]);
     }
 
@@ -99,7 +99,7 @@ class PackUserController extends Controller
 
         return response()->json([
             'message' => 'Subscription activated successfully',
-            'data'    => $subscription
+            'data' => $subscription,
         ], 201);
     }
 
@@ -114,7 +114,7 @@ class PackUserController extends Controller
 
         return response()->json([
             'message' => 'Subscription renewed successfully',
-            'data'    => $updated
+            'data' => $updated,
         ]);
     }
 
@@ -129,7 +129,7 @@ class PackUserController extends Controller
 
         return response()->json([
             'message' => 'Subscription deactivated successfully',
-            'data'    => $updated
+            'data' => $updated,
         ]);
     }
 }

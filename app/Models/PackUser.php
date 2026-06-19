@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\PackUserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +10,8 @@ class PackUser extends Model
 {
     use HasFactory;
 
-    protected $table      = 'packs_user';
+    protected $table = 'packs_user';
+
     protected $primaryKey = 'idpackuser';
 
     protected $fillable = [
@@ -24,8 +24,8 @@ class PackUser extends Model
 
     protected $casts = [
         'subscriptiondate' => 'date',
-        'expirationdate'   => 'date',
-        'status'           => 'string',
+        'expirationdate' => 'date',
+        'status' => 'string',
     ];
 
     public function getRouteKeyName(): string

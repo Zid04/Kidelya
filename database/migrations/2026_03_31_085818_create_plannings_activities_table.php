@@ -12,22 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plannings_activities', function (Blueprint $table) {
-    $table->id('idplanningactivities'); 
-    $table->date('datestart'); 
-    $table->date('dateend');   
+            $table->id('idplanningactivities');
+            $table->date('datestart');
+            $table->date('dateend');
 
-    $table->foreignId('idplanning')
-          ->constrained('plannings', 'idplanning')
-          ->onDelete('cascade');
+            $table->foreignId('idplanning')
+                ->constrained('plannings', 'idplanning')
+                ->onDelete('cascade');
 
-    $table->foreignId('idactivities')
-          ->constrained('activities', 'idactivities')
-          ->onDelete('cascade');
+            $table->foreignId('idactivities')
+                ->constrained('activities', 'idactivities')
+                ->onDelete('cascade');
 
-    $table->timestamps();
+            $table->timestamps();
 
-    $table->unique(['idplanning', 'idactivities']);
-});
+            $table->unique(['idplanning', 'idactivities']);
+        });
 
     }
 

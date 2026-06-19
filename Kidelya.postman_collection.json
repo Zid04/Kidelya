@@ -1,0 +1,2020 @@
+{
+  "info": {
+    "_postman_id": "kidelya-api-v1",
+    "name": "Kidelya API",
+    "description": "Collection générée depuis les routes Laravel de Kidelya",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/register", "host": ["{{base_url}}"], "path": ["api", "register"] }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const res = pm.response.json();",
+                  "  pm.environment.set(\"token\", res.token);",
+                  "  console.log(\"Token sauvegardé :\", res.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/login", "host": ["{{base_url}}"], "path": ["api", "login"] }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/logout", "host": ["{{base_url}}"], "path": ["api", "logout"] }
+          }
+        },
+        {
+          "name": "Admin Login",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/admin/login", "host": ["{{base_url}}"], "path": ["api", "admin", "login"] }
+          }
+        },
+        {
+          "name": "Admin Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Admin\",\n  \"lastname\": \"User\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/admin/register", "host": ["{{base_url}}"], "path": ["api", "admin", "register"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Me",
+      "item": [
+        {
+          "name": "Mon profil",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/users/me", "host": ["{{base_url}}"], "path": ["api", "users", "me"] }
+          }
+        },
+        {
+          "name": "Mes achats",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/me/purchases", "host": ["{{base_url}}"], "path": ["api", "me", "purchases"] }
+          }
+        },
+        {
+          "name": "Mes transactions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/me/transactions", "host": ["{{base_url}}"], "path": ["api", "me", "transactions"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Liste des users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/users", "host": ["{{base_url}}"], "path": ["api", "users"] }
+          }
+        },
+        {
+          "name": "Créer un user",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Jane\",\n  \"lastname\": \"Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/users", "host": ["{{base_url}}"], "path": ["api", "users"] }
+          }
+        },
+        {
+          "name": "Voir un user",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}"],
+              "variable": [{ "key": "user_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier un user",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Jane\",\n  \"lastname\": \"Updated\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}"],
+              "variable": [{ "key": "user_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un user",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}"],
+              "variable": [{ "key": "user_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Désactiver un user",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}/deactivate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}", "deactivate"],
+              "variable": [{ "key": "user_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Activer un user",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}/activate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}", "activate"],
+              "variable": [{ "key": "user_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Activities",
+      "item": [
+        {
+          "name": "Liste des activités",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/activities", "host": ["{{base_url}}"], "path": ["api", "activities"] }
+          }
+        },
+        {
+          "name": "Mes activités",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/activities/mine", "host": ["{{base_url}}"], "path": ["api", "activities", "mine"] }
+          }
+        },
+        {
+          "name": "Bibliothèque publique",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/activities/library", "host": ["{{base_url}}"], "path": ["api", "activities", "library"] }
+          }
+        },
+        {
+          "name": "Voir une activité (bibliothèque)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/activities/library/{{activity_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "library", "{{activity_id}}"],
+              "variable": [{ "key": "activity_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Créer une activité",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Mon activité\",\n  \"description\": \"Description de l'activité\",\n  \"duration\": 30,\n  \"age_min\": 3,\n  \"age_max\": 6\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/activities", "host": ["{{base_url}}"], "path": ["api", "activities"] }
+          }
+        },
+        {
+          "name": "Voir une activité",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}"],
+              "variable": [{ "key": "activity_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier une activité",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Titre modifié\",\n  \"description\": \"Description modifiée\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}"],
+              "variable": [{ "key": "activity_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer une activité",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}"],
+              "variable": [{ "key": "activity_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Publier une activité",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}/publish",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}", "publish"],
+              "variable": [{ "key": "activity_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Dépublier une activité",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}/unpublish",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}", "unpublish"],
+              "variable": [{ "key": "activity_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Compétences d'une activité",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}/competences",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}", "competences"],
+              "variable": [{ "key": "activity_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Attacher une compétence",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"competence_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}/competences",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}", "competences"],
+              "variable": [{ "key": "activity_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Détacher une compétence",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}/competences/{{competence_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}", "competences", "{{competence_id}}"],
+              "variable": [
+                { "key": "activity_id", "value": "1" },
+                { "key": "competence_id", "value": "1" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Thèmes d'une activité",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}/themes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}", "themes"],
+              "variable": [{ "key": "activity_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Attacher un thème",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"theme_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}/themes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}", "themes"],
+              "variable": [{ "key": "activity_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Détacher un thème",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/activities/{{activity_id}}/themes/{{theme_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "activities", "{{activity_id}}", "themes", "{{theme_id}}"],
+              "variable": [
+                { "key": "activity_id", "value": "1" },
+                { "key": "theme_id", "value": "1" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Themes",
+      "item": [
+        {
+          "name": "Liste des thèmes",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/themes", "host": ["{{base_url}}"], "path": ["api", "themes"] }
+          }
+        },
+        {
+          "name": "Créer un thème",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nature\",\n  \"description\": \"Activités en plein air\",\n  \"color\": \"#4CAF50\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/themes", "host": ["{{base_url}}"], "path": ["api", "themes"] }
+          }
+        },
+        {
+          "name": "Voir un thème",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/themes/{{theme_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "themes", "{{theme_id}}"],
+              "variable": [{ "key": "theme_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier un thème",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nature modifié\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/themes/{{theme_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "themes", "{{theme_id}}"],
+              "variable": [{ "key": "theme_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un thème",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/themes/{{theme_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "themes", "{{theme_id}}"],
+              "variable": [{ "key": "theme_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Ajouter une activité au thème",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/themes/{{theme_id}}/activities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "themes", "{{theme_id}}", "activities"],
+              "variable": [{ "key": "theme_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Retirer une activité du thème",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/themes/{{theme_id}}/activities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "themes", "{{theme_id}}", "activities"],
+              "variable": [{ "key": "theme_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Competences",
+      "item": [
+        {
+          "name": "Liste des compétences",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/competences", "host": ["{{base_url}}"], "path": ["api", "competences"] }
+          }
+        },
+        {
+          "name": "Créer une compétence",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Motricité fine\",\n  \"description\": \"Développement de la motricité fine\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/competences", "host": ["{{base_url}}"], "path": ["api", "competences"] }
+          }
+        },
+        {
+          "name": "Voir une compétence",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/competences/{{competence_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "competences", "{{competence_id}}"],
+              "variable": [{ "key": "competence_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier une compétence",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Motricité modifiée\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/competences/{{competence_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "competences", "{{competence_id}}"],
+              "variable": [{ "key": "competence_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer une compétence",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/competences/{{competence_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "competences", "{{competence_id}}"],
+              "variable": [{ "key": "competence_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Children",
+      "item": [
+        {
+          "name": "Liste des enfants",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/children", "host": ["{{base_url}}"], "path": ["api", "children"] }
+          }
+        },
+        {
+          "name": "Créer un enfant",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Léa\",\n  \"lastname\": \"Doe\",\n  \"birthdate\": \"2020-05-15\",\n  \"gender\": \"F\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/children", "host": ["{{base_url}}"], "path": ["api", "children"] }
+          }
+        },
+        {
+          "name": "Voir un enfant",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/children/{{child_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "children", "{{child_id}}"],
+              "variable": [{ "key": "child_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier un enfant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Léa modifiée\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/children/{{child_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "children", "{{child_id}}"],
+              "variable": [{ "key": "child_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un enfant",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/children/{{child_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "children", "{{child_id}}"],
+              "variable": [{ "key": "child_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Guardians",
+      "item": [
+        {
+          "name": "Liste des tuteurs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/guardians", "host": ["{{base_url}}"], "path": ["api", "guardians"] }
+          }
+        },
+        {
+          "name": "Créer un tuteur",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Marie\",\n  \"lastname\": \"Dupont\",\n  \"email\": \"marie@example.com\",\n  \"phone\": \"0600000000\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/guardians", "host": ["{{base_url}}"], "path": ["api", "guardians"] }
+          }
+        },
+        {
+          "name": "Voir un tuteur",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/guardians/{{guardian_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "guardians", "{{guardian_id}}"],
+              "variable": [{ "key": "guardian_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier un tuteur",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"0611111111\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/guardians/{{guardian_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "guardians", "{{guardian_id}}"],
+              "variable": [{ "key": "guardian_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un tuteur",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/guardians/{{guardian_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "guardians", "{{guardian_id}}"],
+              "variable": [{ "key": "guardian_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Ajouter un enfant au tuteur",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"child_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/guardians/{{guardian_id}}/children",
+              "host": ["{{base_url}}"],
+              "path": ["api", "guardians", "{{guardian_id}}", "children"],
+              "variable": [{ "key": "guardian_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Retirer un enfant du tuteur",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"child_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/guardians/{{guardian_id}}/children",
+              "host": ["{{base_url}}"],
+              "path": ["api", "guardians", "{{guardian_id}}", "children"],
+              "variable": [{ "key": "guardian_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Groups",
+      "item": [
+        {
+          "name": "Liste des groupes",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/groups", "host": ["{{base_url}}"], "path": ["api", "groups"] }
+          }
+        },
+        {
+          "name": "Créer un groupe",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Groupe des Petits\",\n  \"description\": \"Enfants de 3 à 5 ans\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/groups", "host": ["{{base_url}}"], "path": ["api", "groups"] }
+          }
+        },
+        {
+          "name": "Voir un groupe",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/groups/{{group_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "{{group_id}}"],
+              "variable": [{ "key": "group_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier un groupe",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Groupe modifié\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups/{{group_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "{{group_id}}"],
+              "variable": [{ "key": "group_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un groupe",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/groups/{{group_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "{{group_id}}"],
+              "variable": [{ "key": "group_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Ajouter un enfant au groupe",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"child_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups/{{group_id}}/children",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "{{group_id}}", "children"],
+              "variable": [{ "key": "group_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Retirer un enfant du groupe",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"child_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups/{{group_id}}/children",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "{{group_id}}", "children"],
+              "variable": [{ "key": "group_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Ajouter une activité au groupe",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups/{{group_id}}/activities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "{{group_id}}", "activities"],
+              "variable": [{ "key": "group_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Retirer une activité du groupe",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups/{{group_id}}/activities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "{{group_id}}", "activities"],
+              "variable": [{ "key": "group_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ideas",
+      "item": [
+        {
+          "name": "Liste des idées",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/ideas", "host": ["{{base_url}}"], "path": ["api", "ideas"] }
+          }
+        },
+        {
+          "name": "Créer une idée",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Idée de bricolage\",\n  \"description\": \"Fabriquer un nichoir\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/ideas", "host": ["{{base_url}}"], "path": ["api", "ideas"] }
+          }
+        },
+        {
+          "name": "Voir une idée",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/ideas/{{idea_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ideas", "{{idea_id}}"],
+              "variable": [{ "key": "idea_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier une idée",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Titre modifié\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/ideas/{{idea_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ideas", "{{idea_id}}"],
+              "variable": [{ "key": "idea_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer une idée",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/ideas/{{idea_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ideas", "{{idea_id}}"],
+              "variable": [{ "key": "idea_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Convertir en activité",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/ideas/{{idea_id}}/convert",
+              "host": ["{{base_url}}"],
+              "path": ["api", "ideas", "{{idea_id}}", "convert"],
+              "variable": [{ "key": "idea_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Packs",
+      "item": [
+        {
+          "name": "Liste des packs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/packs", "host": ["{{base_url}}"], "path": ["api", "packs"] }
+          }
+        },
+        {
+          "name": "Créer un pack",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pack Découverte\",\n  \"description\": \"10 activités pour débuter\",\n  \"price\": 9.99,\n  \"credits\": 10\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/packs", "host": ["{{base_url}}"], "path": ["api", "packs"] }
+          }
+        },
+        {
+          "name": "Voir un pack",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/packs/{{pack_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "packs", "{{pack_id}}"],
+              "variable": [{ "key": "pack_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier un pack",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pack modifié\",\n  \"price\": 12.99\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/packs/{{pack_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "packs", "{{pack_id}}"],
+              "variable": [{ "key": "pack_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un pack",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/packs/{{pack_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "packs", "{{pack_id}}"],
+              "variable": [{ "key": "pack_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Publier un pack",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/packs/{{pack_id}}/publish",
+              "host": ["{{base_url}}"],
+              "path": ["api", "packs", "{{pack_id}}", "publish"],
+              "variable": [{ "key": "pack_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Dépublier un pack",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/packs/{{pack_id}}/unpublish",
+              "host": ["{{base_url}}"],
+              "path": ["api", "packs", "{{pack_id}}", "unpublish"],
+              "variable": [{ "key": "pack_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Ajouter une activité au pack",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/packs/{{pack_id}}/activities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "packs", "{{pack_id}}", "activities"],
+              "variable": [{ "key": "pack_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Retirer une activité du pack",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/packs/{{pack_id}}/activities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "packs", "{{pack_id}}", "activities"],
+              "variable": [{ "key": "pack_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Packs publics - Liste",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/public/packs", "host": ["{{base_url}}"], "path": ["api", "public", "packs"] }
+          }
+        },
+        {
+          "name": "Packs publics - Voir",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/public/packs/{{pack_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "public", "packs", "{{pack_id}}"],
+              "variable": [{ "key": "pack_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Plannings",
+      "item": [
+        {
+          "name": "Liste des plannings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/plannings", "host": ["{{base_url}}"], "path": ["api", "plannings"] }
+          }
+        },
+        {
+          "name": "Créer un planning",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Planning Semaine 1\",\n  \"date\": \"2026-06-20\",\n  \"start_time\": \"09:00\",\n  \"end_time\": \"17:00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/plannings", "host": ["{{base_url}}"], "path": ["api", "plannings"] }
+          }
+        },
+        {
+          "name": "Voir un planning",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/plannings/{{planning_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "plannings", "{{planning_id}}"],
+              "variable": [{ "key": "planning_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier un planning",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Planning modifié\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/plannings/{{planning_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "plannings", "{{planning_id}}"],
+              "variable": [{ "key": "planning_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un planning",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/plannings/{{planning_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "plannings", "{{planning_id}}"],
+              "variable": [{ "key": "planning_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Ajouter une activité au planning",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/plannings/{{planning_id}}/activities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "plannings", "{{planning_id}}", "activities"],
+              "variable": [{ "key": "planning_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Retirer une activité du planning",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/plannings/{{planning_id}}/activities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "plannings", "{{planning_id}}", "activities"],
+              "variable": [{ "key": "planning_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Ajouter un groupe au planning",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"group_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/plannings/{{planning_id}}/groups",
+              "host": ["{{base_url}}"],
+              "path": ["api", "plannings", "{{planning_id}}", "groups"],
+              "variable": [{ "key": "planning_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Ajouter un enfant au planning",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"child_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/plannings/{{planning_id}}/children",
+              "host": ["{{base_url}}"],
+              "path": ["api", "plannings", "{{planning_id}}", "children"],
+              "variable": [{ "key": "planning_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Sauvegarder le rapport",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Séance bien déroulée\",\n  \"observations\": \"Les enfants ont bien participé\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/plannings/{{planning_id}}/report",
+              "host": ["{{base_url}}"],
+              "path": ["api", "plannings", "{{planning_id}}", "report"],
+              "variable": [{ "key": "planning_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Report Activities",
+      "item": [
+        {
+          "name": "Liste des rapports",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/report-activities", "host": ["{{base_url}}"], "path": ["api", "report-activities"] }
+          }
+        },
+        {
+          "name": "Créer un rapport",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1,\n  \"planning_id\": 1,\n  \"notes\": \"Très bien passé\",\n  \"rating\": 5\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/report-activities", "host": ["{{base_url}}"], "path": ["api", "report-activities"] }
+          }
+        },
+        {
+          "name": "Voir un rapport",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/report-activities/{{report_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "report-activities", "{{report_id}}"],
+              "variable": [{ "key": "report_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Modifier un rapport",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Notes modifiées\",\n  \"rating\": 4\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/report-activities/{{report_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "report-activities", "{{report_id}}"],
+              "variable": [{ "key": "report_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un rapport",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/report-activities/{{report_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "report-activities", "{{report_id}}"],
+              "variable": [{ "key": "report_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subscriptions",
+      "item": [
+        {
+          "name": "Plans disponibles (public)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/subscriptions/plans", "host": ["{{base_url}}"], "path": ["api", "subscriptions", "plans"] }
+          }
+        },
+        {
+          "name": "Liste des abonnements",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/subscriptions", "host": ["{{base_url}}"], "path": ["api", "subscriptions"] }
+          }
+        },
+        {
+          "name": "Voir un abonnement",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/subscriptions/{{subscription_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subscriptions", "{{subscription_id}}"],
+              "variable": [{ "key": "subscription_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Activer un abonnement (pack)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pack_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/subscriptions", "host": ["{{base_url}}"], "path": ["api", "subscriptions"] }
+          }
+        },
+        {
+          "name": "Renouveler un abonnement",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/subscriptions/{{subscription_id}}/renew",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subscriptions", "{{subscription_id}}", "renew"],
+              "variable": [{ "key": "subscription_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Désactiver un abonnement",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/subscriptions/{{subscription_id}}/deactivate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subscriptions", "{{subscription_id}}", "deactivate"],
+              "variable": [{ "key": "subscription_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Souscrire (Stripe)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan_id\": \"price_xxx\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/subscriptions/subscribe", "host": ["{{base_url}}"], "path": ["api", "subscriptions", "subscribe"] }
+          }
+        },
+        {
+          "name": "Annuler (Stripe)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/subscriptions/cancel", "host": ["{{base_url}}"], "path": ["api", "subscriptions", "cancel"] }
+          }
+        },
+        {
+          "name": "Statut (Stripe)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/subscriptions/status", "host": ["{{base_url}}"], "path": ["api", "subscriptions", "status"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stripe",
+      "item": [
+        {
+          "name": "Checkout pack",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pack_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/stripe/checkout", "host": ["{{base_url}}"], "path": ["api", "stripe", "checkout"] }
+          }
+        },
+        {
+          "name": "Checkout activité",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/stripe/activity-checkout", "host": ["{{base_url}}"], "path": ["api", "stripe", "activity-checkout"] }
+          }
+        },
+        {
+          "name": "Checkout abonnement",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan_id\": \"price_xxx\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/stripe/subscription/checkout", "host": ["{{base_url}}"], "path": ["api", "stripe", "subscription", "checkout"] }
+          }
+        },
+        {
+          "name": "Annuler abonnement",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/stripe/subscription/cancel", "host": ["{{base_url}}"], "path": ["api", "stripe", "subscription", "cancel"] }
+          }
+        },
+        {
+          "name": "Liste des paiements",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/stripe/payments", "host": ["{{base_url}}"], "path": ["api", "stripe", "payments"] }
+          }
+        },
+        {
+          "name": "Rembourser",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payment_intent_id\": \"pi_xxx\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/stripe/refund", "host": ["{{base_url}}"], "path": ["api", "stripe", "refund"] }
+          }
+        },
+        {
+          "name": "Liste des coupons",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/stripe/coupons", "host": ["{{base_url}}"], "path": ["api", "stripe", "coupons"] }
+          }
+        },
+        {
+          "name": "Créer un coupon",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"PROMO10\",\n  \"percent_off\": 10,\n  \"duration\": \"once\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/stripe/coupons", "host": ["{{base_url}}"], "path": ["api", "stripe", "coupons"] }
+          }
+        },
+        {
+          "name": "Supprimer un coupon",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/stripe/coupons/{{coupon_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "stripe", "coupons", "{{coupon_id}}"],
+              "variable": [{ "key": "coupon_id", "value": "PROMO10" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Credits",
+      "item": [
+        {
+          "name": "Liste des transactions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/credits", "host": ["{{base_url}}"], "path": ["api", "credits"] }
+          }
+        },
+        {
+          "name": "Voir une transaction",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/credits/{{transaction_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "credits", "{{transaction_id}}"],
+              "variable": [{ "key": "transaction_id", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stats",
+      "item": [
+        {
+          "name": "Toutes les stats",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/stats", "host": ["{{base_url}}"], "path": ["api", "stats"] }
+          }
+        },
+        {
+          "name": "Stats du jour",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/stats/today", "host": ["{{base_url}}"], "path": ["api", "stats", "today"] }
+          }
+        },
+        {
+          "name": "Résumé",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/stats/summary", "host": ["{{base_url}}"], "path": ["api", "stats", "summary"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Settings",
+      "item": [
+        {
+          "name": "Voir les paramètres",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/settings", "host": ["{{base_url}}"], "path": ["api", "settings"] }
+          }
+        },
+        {
+          "name": "Modifier les paramètres",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notifications_email\": true,\n  \"language\": \"fr\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/settings", "host": ["{{base_url}}"], "path": ["api", "settings"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Favorites",
+      "item": [
+        {
+          "name": "Liste des favoris",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/favorites", "host": ["{{base_url}}"], "path": ["api", "favorites"] }
+          }
+        },
+        {
+          "name": "Ajouter un favori",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/favorites/add", "host": ["{{base_url}}"], "path": ["api", "favorites", "add"] }
+          }
+        },
+        {
+          "name": "Retirer un favori",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/favorites/remove", "host": ["{{base_url}}"], "path": ["api", "favorites", "remove"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Voir le panier",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/cart", "host": ["{{base_url}}"], "path": ["api", "cart"] }
+          }
+        },
+        {
+          "name": "Ajouter au panier",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activity_id\": 1,\n  \"quantity\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/cart/add", "host": ["{{base_url}}"], "path": ["api", "cart", "add"] }
+          }
+        },
+        {
+          "name": "Modifier un article du panier",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 2\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cart/{{cart_item_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "{{cart_item_id}}"],
+              "variable": [{ "key": "cart_item_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un article du panier",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/api/cart/{{cart_item_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "{{cart_item_id}}"],
+              "variable": [{ "key": "cart_item_id", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Vider le panier",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/cart", "host": ["{{base_url}}"], "path": ["api", "cart"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/dashboard", "host": ["{{base_url}}"], "path": ["api", "dashboard"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "item": [
+        {
+          "name": "Envoyer un message",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"message\": \"Bonjour, j'ai une question...\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/contact", "host": ["{{base_url}}"], "path": ["api", "contact"] }
+          }
+        },
+        {
+          "name": "Newsletter",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/api/newsletter", "host": ["{{base_url}}"], "path": ["api", "newsletter"] }
+          }
+        }
+      ]
+    }
+  ]
+}

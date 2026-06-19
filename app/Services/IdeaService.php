@@ -23,8 +23,8 @@ class IdeaService
     public function create(array $data, $user): Idea
     {
         return Idea::create([
-            'title'  => $data['title'],
-            'notes'  => $data['notes'] ?? null,
+            'title' => $data['title'],
+            'notes' => $data['notes'] ?? null,
             'iduser' => $user->iduser,
         ]);
     }
@@ -35,6 +35,7 @@ class IdeaService
     public function update(Idea $idea, array $data): Idea
     {
         $idea->update($data);
+
         return $idea->fresh();
     }
 
@@ -52,12 +53,12 @@ class IdeaService
     public function convertToActivity(Idea $idea, $user): Activity
     {
         $activity = Activity::create([
-            'title'          => $idea->title,
-            'description'    => $idea->notes,
-            'iduser'         => $user->iduser,
-            'is_published'   => false,
+            'title' => $idea->title,
+            'description' => $idea->notes,
+            'iduser' => $user->iduser,
+            'is_published' => false,
             'is_purchasable' => false,
-            'credit_price'   => 0,
+            'credit_price' => 0,
         ]);
 
         $idea->delete();

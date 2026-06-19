@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Setting;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SettingController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function index(): JsonResponse
     {
         $settings = Setting::query()
@@ -20,18 +20,18 @@ class SettingController extends Controller
 
         return response()->json([
             'data' => array_merge($settings, [
-                'appearance' => request()->cookie('appearance', 'light')
-            ])
+                'appearance' => request()->cookie('appearance', 'light'),
+            ]),
         ]);
     }
 
     public function update(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'app_name'       => 'sometimes|string|max:100',
-            'contact_email'  => 'sometimes|email',
+            'app_name' => 'sometimes|string|max:100',
+            'contact_email' => 'sometimes|email',
             'stripe_enabled' => 'sometimes|string',
-            'appearance'     => 'sometimes|in:light,dark,system',
+            'appearance' => 'sometimes|in:light,dark,system',
         ]);
 
         foreach ($validated as $key => $value) {
@@ -53,9 +53,9 @@ class SettingController extends Controller
 
         return response()->json([
             'message' => 'Paramètres mis à jour avec succès',
-            'data'    => array_merge($settings, [
-                'appearance' => $validated['appearance'] ?? request()->cookie('appearance', 'light')
-            ])
+            'data' => array_merge($settings, [
+                'appearance' => $validated['appearance'] ?? request()->cookie('appearance', 'light'),
+            ]),
         ]);
     }
 }

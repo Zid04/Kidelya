@@ -15,7 +15,7 @@ class UpdateCompetenceRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:100|unique:competences,name,'
-                      . $this->route('competence')->idcompetence . ',idcompetence',
+                      .$this->route('competence')->idcompetence.',idcompetence',
         ];
     }
 
@@ -23,7 +23,7 @@ class UpdateCompetenceRequest extends FormRequest
     {
         return [
             'name.string' => 'Le nom doit être une chaîne.',
-            'name.max'    => 'Le nom ne doit pas dépasser 100 caractères.',
+            'name.max' => 'Le nom ne doit pas dépasser 100 caractères.',
             'name.unique' => 'Cette compétence existe déjà.',
         ];
     }

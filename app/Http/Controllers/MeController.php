@@ -23,18 +23,18 @@ class MeController extends Controller
 
         return response()->json([
             'data' => [
-                'id'             => $user->id,
-                'firstname'      => $user->firstname,
-                'lastname'       => $user->lastname,
-                'email'          => $user->email,
-                'idrole'         => $user->idrole,
+                'id' => $user->id,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'email' => $user->email,
+                'idrole' => $user->idrole,
                 'credit_balance' => $user->credit_balance,
-                'role'           => $user->role,
-                'plan'           => $subscription?->plan,
-                'subscription'   => $subscription ? [
+                'role' => $user->role,
+                'plan' => $subscription?->plan,
+                'subscription' => $subscription ? [
                     'starts_at' => $subscription->starts_at,
-                    'ends_at'   => $subscription->ends_at,
-                    'status'    => $subscription->status,
+                    'ends_at' => $subscription->ends_at,
+                    'status' => $subscription->status,
                 ] : null,
             ],
         ]);
@@ -57,11 +57,11 @@ class MeController extends Controller
                 ->get()
                 ->map(fn ($a) => [
                     'idactivities' => $a->idactivities,
-                    'title'        => $a->title,
-                    'photourl'     => $a->photourl,
-                    'agemin'       => $a->agemin,
-                    'agemax'       => $a->agemax,
-                    'duration'     => $a->duration,
+                    'title' => $a->title,
+                    'photourl' => $a->photourl,
+                    'agemin' => $a->agemin,
+                    'agemax' => $a->agemax,
+                    'duration' => $a->duration,
                     'credit_price' => $a->credit_price,
                 ])
                 ->values();
@@ -70,20 +70,20 @@ class MeController extends Controller
                 ->withCount('activities')
                 ->get()
                 ->map(fn ($p) => [
-                    'idpack'           => $p->idpack,
-                    'title'            => $p->title,
-                    'illustration'     => $p->illustration,
+                    'idpack' => $p->idpack,
+                    'title' => $p->title,
+                    'illustration' => $p->illustration,
                     'activities_count' => $p->activities_count,
-                    'tarification'     => $p->tarification,
+                    'tarification' => $p->tarification,
                 ])
                 ->values();
 
             return response()->json([
                 'data' => [
-                    'activities'              => $activities,
-                    'packs'                   => $packs,
-                    'recommended_activities'  => [],
-                    'recommended_packs'       => [],
+                    'activities' => $activities,
+                    'packs' => $packs,
+                    'recommended_activities' => [],
+                    'recommended_packs' => [],
                     'subscription_all_access' => true,
                 ],
             ]);
@@ -104,7 +104,7 @@ class MeController extends Controller
             ->toArray();
 
         // Activités issues des packs actifs
-        $packActivityIds = !empty($activePackIds)
+        $packActivityIds = ! empty($activePackIds)
             ? DB::table('packs_activities')
                 ->whereIn('idpack', $activePackIds)
                 ->pluck('idactivities')
@@ -119,11 +119,11 @@ class MeController extends Controller
             ->get()
             ->map(fn ($a) => [
                 'idactivities' => $a->idactivities,
-                'title'        => $a->title,
-                'photourl'     => $a->photourl,
-                'agemin'       => $a->agemin,
-                'agemax'       => $a->agemax,
-                'duration'     => $a->duration,
+                'title' => $a->title,
+                'photourl' => $a->photourl,
+                'agemin' => $a->agemin,
+                'agemax' => $a->agemax,
+                'duration' => $a->duration,
                 'credit_price' => $a->credit_price,
             ])
             ->values();
@@ -137,11 +137,11 @@ class MeController extends Controller
             ->with(['pack' => fn ($q) => $q->withCount('activities')])
             ->get()
             ->map(fn ($pu) => [
-                'idpack'           => $pu->pack?->idpack,
-                'title'            => $pu->pack?->title,
-                'illustration'     => $pu->pack?->illustration,
+                'idpack' => $pu->pack?->idpack,
+                'title' => $pu->pack?->title,
+                'illustration' => $pu->pack?->illustration,
                 'activities_count' => $pu->pack?->activities_count ?? 0,
-                'tarification'     => $pu->pack?->tarification,
+                'tarification' => $pu->pack?->tarification,
             ])
             ->filter(fn ($p) => $p['idpack'])
             ->values();
@@ -156,11 +156,11 @@ class MeController extends Controller
             ->get()
             ->map(fn ($a) => [
                 'idactivities' => $a->idactivities,
-                'title'        => $a->title,
-                'photourl'     => $a->photourl,
-                'agemin'       => $a->agemin,
-                'agemax'       => $a->agemax,
-                'duration'     => $a->duration,
+                'title' => $a->title,
+                'photourl' => $a->photourl,
+                'agemin' => $a->agemin,
+                'agemax' => $a->agemax,
+                'duration' => $a->duration,
                 'credit_price' => $a->credit_price,
             ]);
 
@@ -171,11 +171,11 @@ class MeController extends Controller
             ->limit(6)
             ->get()
             ->map(fn ($p) => [
-                'idpack'           => $p->idpack,
-                'title'            => $p->title,
-                'illustration'     => $p->illustration,
+                'idpack' => $p->idpack,
+                'title' => $p->title,
+                'illustration' => $p->illustration,
                 'activities_count' => $p->activities_count,
-                'tarification'     => $p->tarification,
+                'tarification' => $p->tarification,
             ]);
 
         return response()->json([
@@ -196,12 +196,12 @@ class MeController extends Controller
             ->with('activity')
             ->get()
             ->each(fn ($p) => $transactions->push([
-                'id'          => 'act-' . $p->idactivitypurchase,
-                'type'        => 'activity',
-                'title'       => $p->activity?->title ?? 'Activité',
-                'amount'      => 0,
-                'status'      => 'success',
-                'created_at'  => $p->purchased_at ?? $p->created_at,
+                'id' => 'act-'.$p->idactivitypurchase,
+                'type' => 'activity',
+                'title' => $p->activity?->title ?? 'Activité',
+                'amount' => 0,
+                'status' => 'success',
+                'created_at' => $p->purchased_at ?? $p->created_at,
                 'payment_ref' => null,
             ]));
 
@@ -209,16 +209,16 @@ class MeController extends Controller
             ->with('pack')
             ->get()
             ->each(fn ($pu) => $transactions->push([
-                'id'          => 'pack-' . $pu->idpackuser,
-                'type'        => 'pack',
-                'title'       => $pu->pack?->title ?? 'Pack',
-                'amount'      => (float) ($pu->pack?->tarification ?? 0),
-                'status'      => match ($pu->status) {
-                    'active'   => 'success',
+                'id' => 'pack-'.$pu->idpackuser,
+                'type' => 'pack',
+                'title' => $pu->pack?->title ?? 'Pack',
+                'amount' => (float) ($pu->pack?->tarification ?? 0),
+                'status' => match ($pu->status) {
+                    'active' => 'success',
                     'canceled' => 'refunded',
-                    default    => 'failed',
+                    default => 'failed',
                 },
-                'created_at'  => $pu->subscriptiondate ?? $pu->created_at,
+                'created_at' => $pu->subscriptiondate ?? $pu->created_at,
                 'payment_ref' => null,
             ]));
 
@@ -226,12 +226,12 @@ class MeController extends Controller
             ->with('plan')
             ->get()
             ->each(fn ($sub) => $transactions->push([
-                'id'          => 'sub-' . $sub->idsubscription,
-                'type'        => 'subscription',
-                'title'       => $sub->plan?->name ?? 'Abonnement',
-                'amount'      => (float) ($sub->plan?->price ?? 0),
-                'status'      => $sub->status === 'active' ? 'success' : 'refunded',
-                'created_at'  => $sub->starts_at ?? $sub->created_at,
+                'id' => 'sub-'.$sub->idsubscription,
+                'type' => 'subscription',
+                'title' => $sub->plan?->name ?? 'Abonnement',
+                'amount' => (float) ($sub->plan?->price ?? 0),
+                'status' => $sub->status === 'active' ? 'success' : 'refunded',
+                'created_at' => $sub->starts_at ?? $sub->created_at,
                 'payment_ref' => null,
             ]));
 

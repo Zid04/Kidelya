@@ -10,8 +10,8 @@ class IdeaFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'  => $this->faker->sentence(4),
-            'notes'  => $this->faker->optional()->paragraph(),
+            'title' => $this->faker->sentence(4),
+            'notes' => $this->faker->optional()->paragraph(),
             'iduser' => User::factory(),
         ];
     }

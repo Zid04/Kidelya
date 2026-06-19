@@ -3,8 +3,8 @@
 namespace App\Notifications;
 
 use App\Models\Pack;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class SubscriptionConfirmedNotification extends Notification
 {
@@ -23,7 +23,7 @@ class SubscriptionConfirmedNotification extends Notification
             ->subject("Abonnement confirmé — {$this->pack->name}")
             ->greeting("Bonjour {$notifiable->firstname} !")
             ->line("Votre abonnement au pack **{$this->pack->name}** est maintenant actif.")
-            ->line("Vous avez accès à toutes les activités incluses dans ce pack.")
+            ->line('Vous avez accès à toutes les activités incluses dans ce pack.')
             ->action('Accéder à mon espace', config('app.frontend_url'))
             ->line('Merci de votre confiance !');
     }

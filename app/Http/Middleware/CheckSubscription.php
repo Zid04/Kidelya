@@ -10,7 +10,7 @@ class CheckSubscription
     {
         $sub = $request->user()->subscription;
 
-        if (!$sub || $sub->isExpired()) {
+        if (! $sub || $sub->isExpired()) {
             return response()->json(['error' => 'Subscription required'], 403);
         }
 

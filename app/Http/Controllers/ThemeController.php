@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Theme;
-use Illuminate\Http\JsonResponse;
-use App\Services\ThemeService;
-
 use App\Http\Requests\Theme\StoreThemeRequest;
 use App\Http\Requests\Theme\UpdateThemeRequest;
-use Illuminate\Http\Request;
+use App\Models\Theme;
+use App\Services\ThemeService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ThemeController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function __construct(
         private ThemeService $themeService
     ) {}
@@ -22,7 +21,7 @@ class ThemeController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'data' => $this->themeService->getAll()
+            'data' => $this->themeService->getAll(),
         ]);
     }
 
@@ -32,14 +31,14 @@ class ThemeController extends Controller
 
         return response()->json([
             'message' => 'Theme created successfully',
-            'data' => $this->themeService->create($request->validated())
+            'data' => $this->themeService->create($request->validated()),
         ], 201);
     }
 
     public function show(Theme $theme): JsonResponse
     {
         return response()->json([
-            'data' => $theme->load('activities')
+            'data' => $theme->load('activities'),
         ]);
     }
 
@@ -49,7 +48,7 @@ class ThemeController extends Controller
 
         return response()->json([
             'message' => 'Theme updated successfully',
-            'data' => $this->themeService->update($theme, $request->validated())
+            'data' => $this->themeService->update($theme, $request->validated()),
         ]);
     }
 
@@ -60,7 +59,7 @@ class ThemeController extends Controller
         $this->themeService->delete($theme);
 
         return response()->json([
-            'message' => 'Theme deleted successfully'
+            'message' => 'Theme deleted successfully',
         ]);
     }
 
@@ -69,13 +68,13 @@ class ThemeController extends Controller
         $this->authorize('update', $theme);
 
         $request->validate([
-            'activity_id' => 'required|exists:activities,idactivities'
+            'activity_id' => 'required|exists:activities,idactivities',
         ]);
 
         $this->themeService->attachActivity($theme, $request->activity_id);
 
         return response()->json([
-            'message' => 'Activity added to theme'
+            'message' => 'Activity added to theme',
         ]);
     }
 
@@ -84,13 +83,13 @@ class ThemeController extends Controller
         $this->authorize('update', $theme);
 
         $request->validate([
-            'activity_id' => 'required|exists:activities,idactivities'
+            'activity_id' => 'required|exists:activities,idactivities',
         ]);
 
         $this->themeService->detachActivity($theme, $request->activity_id);
 
         return response()->json([
-            'message' => 'Activity removed from theme'
+            'message' => 'Activity removed from theme',
         ]);
     }
 }
