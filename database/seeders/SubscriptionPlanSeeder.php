@@ -21,7 +21,7 @@ class SubscriptionPlanSeeder extends Seeder
             ],
             [
                 'name' => 'Monthly',
-                'price' => 5.99,
+                'price' => 12.90,
                 'interval' => 'month',
                 'interval_count' => 1,
                 'has_all_packs' => true,
@@ -30,7 +30,7 @@ class SubscriptionPlanSeeder extends Seeder
             ],
             [
                 'name' => 'Annual',
-                'price' => 49.99,
+                'price' => 154.80,
                 'interval' => 'year',
                 'interval_count' => 1,
                 'has_all_packs' => true,

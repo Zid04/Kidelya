@@ -196,7 +196,9 @@ export default function DashboardUser() {
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {activities.slice(0, 3).map((a) => (
                   <article key={a.idactivities} className="overflow-hidden rounded-2xl border border-gray-100 bg-[#FFFEFA] shadow-sm">
-                    <div className="h-28 bg-gray-100" />
+                    {a.photourl
+                      ? <img src={a.photourl} alt={a.title} className="h-28 w-full object-cover" />
+                      : <div className="h-28 bg-gray-100" />}
                     <div className="p-3">
                       <div className="flex items-start justify-between gap-2">
                         <h3 className="text-sm font-black text-[#21164F]">{a.title}</h3>
@@ -224,7 +226,9 @@ export default function DashboardUser() {
                       to={`/packs/${p.idpack}`}
                       className="overflow-hidden rounded-2xl border border-gray-100 bg-[#FFFEFA] shadow-sm transition hover:-translate-y-0.5"
                     >
-                      <div className="h-24 bg-gray-100" />
+                      {p.illustration
+                        ? <img src={p.illustration} alt={p.title} className="h-24 w-full object-cover" />
+                        : <div className="h-24 bg-gray-100" />}
                       <div className="p-3">
                         <div className="flex items-start justify-between gap-2">
                           <h3 className="text-sm font-black text-[#21164F]">{p.title}</h3>

@@ -18,6 +18,7 @@ export interface DashboardActivity {
   category: string
   age_range: string
   created_at: string
+  photourl?: string | null
 }
 
 export interface DashboardPack {
@@ -25,6 +26,7 @@ export interface DashboardPack {
   title: string
   theme: string
   age_range: string
+  illustration?: string | null
 }
 
 export interface DashboardResponse {
