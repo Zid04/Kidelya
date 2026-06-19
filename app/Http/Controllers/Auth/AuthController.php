@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\WelcomeNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -66,6 +67,8 @@ class AuthController extends Controller
             'password' => Hash::make($data['password']),
             'idrole' => $userRole,
         ]);
+
+        $user->notify(new WelcomeNotification);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
