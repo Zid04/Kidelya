@@ -171,6 +171,7 @@ export default function Login({ status, canResetPassword, canRegister }: Props) 
               Se connecter
             </Button>
 
+            {/* Bouton Google temporairement désactivé
             <button
               type="button"
               onClick={() => {
@@ -187,6 +188,7 @@ export default function Login({ status, canResetPassword, canRegister }: Props) 
               </svg>
               Continuer avec Google
             </button>
+            */}
           </form>
 
           {canRegister && (

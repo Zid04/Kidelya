@@ -186,6 +186,7 @@ export default function Register() {
               Créer mon compte
             </Button>
 
+            {/* Bouton Google temporairement désactivé
             <button
               type="button"
               onClick={() => {
@@ -202,6 +203,7 @@ export default function Register() {
               </svg>
               Continuer avec Google
             </button>
+            */}
           </form>
 
           <div className="mt-5 flex items-center justify-center gap-2 text-xs text-[#273068]/60">
